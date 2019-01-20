@@ -38,12 +38,11 @@ SOFTWARE.
 
 
 //#define MULTITHREAD
-#define OBJ_NMB 5'000
+#define OBJ_NMB 10'000
 #define SCREEN_SIZE 800
-#define VELOCITY_ITERATIONS 8
+#define VELOCITY_ITERATIONS 10
 #define POSITION_ITERATIONS 3
 #define PHYSICS_UPDATE_DELTATIME 0.02f
-#define PHYSICS_CORES 4
 
 struct SquareObject
 {
@@ -60,7 +59,7 @@ struct SquareObject
 		b2BodyDef bodyDef;
 		bodyDef.position = sfge::pixel2meter(position);
 		bodyDef.type = b2_dynamicBody;
-
+		bodyDef.allowSleep = false;
 		body = world->CreateBody(&bodyDef);
 
 		b2FixtureDef fixtureDef;
@@ -74,9 +73,10 @@ struct SquareObject
 	}
 	void Update()
 	{
-		if(body)
+		if(body != nullptr)
 		{
-			rectangle.setPosition(sfge::meter2pixel(body->GetPosition()));
+			const auto pxPos = sfge::meter2pixel(body->GetPosition());
+			rectangle.setPosition(pxPos);
 		}
 	}
 	void Draw(sf::RenderWindow& window)
@@ -121,13 +121,13 @@ int main()
 #ifdef  MULTITHREAD
 	std::future<void> physicsHandler;
 #endif
-	const int gridSize = sqrt(OBJ_NMB);
+	const int gridSize = sqrtf(OBJ_NMB);
 	std::cout << "Initialize the objects\n";
 	//Initialise objects
 	for(int i = 0; i < OBJ_NMB; i++)
 	{
-		const float x = ((float)i / gridSize)/gridSize * SCREEN_SIZE;
-		const float y = (float)(i % gridSize)/gridSize * SCREEN_SIZE;
+		const float x = (static_cast<float>(i) / gridSize)/gridSize * SCREEN_SIZE;
+		const float y = static_cast<float>(i % gridSize)/gridSize * SCREEN_SIZE;
 		objects[i].Init(sf::Vector2f(x,y), sf::Vector2f(SCREEN_SIZE/gridSize/2.0f, SCREEN_SIZE/gridSize/2.0f), &world);
 	}
 	//Adding ground to the world
@@ -141,9 +141,9 @@ int main()
 	b2PolygonShape shape;
 	shape.SetAsBox(sfge::pixel2meter(800.0f), sfge::pixel2meter(50.0f));
 	groundFixtureDef.shape = &shape;
-
 	groundBody->CreateFixture(&groundFixtureDef);
 	std::cout << "Initialization DONE\n";
+
 	while (window.isOpen())
 	{
 		graphDt = graphClock.restart();

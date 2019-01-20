@@ -193,28 +193,6 @@ if(APPLE)
 		ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
 ENDIF()
 
-#SFGE COURSES
-SET(SFGE_COURSE_DIR ${CMAKE_SOURCE_DIR}/courses)
-file(GLOB COURSE_FILES ${SFGE_COURSE_DIR}/*.cpp )
-foreach(course_file ${COURSE_FILES} )
-    # I used a simple string replace, to cut off .cpp.
-    file(RELATIVE_PATH course_relative_path ${SFGE_COURSE_DIR} ${course_file})
-    string( REPLACE ".cpp" "" course_name ${course_relative_path} )
-    add_executable(${course_name} ${SFGE_COURSE_DIR}/${course_relative_path})
-    # Make sure YourLib is linked to each app
-    target_link_libraries(${course_name} PUBLIC SFGE_COMMON)
-	set_property(TARGET ${course_name} PROPERTY CXX_STANDARD 17)
-	IF(UNIX)
-		set_target_properties(${course_name} PROPERTIES COMPILE_FLAGS "-save-temps")
-	ENDIF(UNIX)
-	set_target_properties (${course_name} PROPERTIES
-    FOLDER Courses)
-  IF(APPLE)
-    set_target_properties(${course_name} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
-  ENDIF()
-endforeach()
 
 #SFGE TEST
 SET(SFGE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
@@ -272,12 +250,34 @@ execute_process(
 		RESULT_VARIABLE py_result
 )
 target_link_libraries(SFGE_COMMON PUBLIC ${TOOL_LIBRARIES})
-target_sources(SFGE PUBLIC ${CMAKE_SOURCE_DIR}/src/tools/tools_pch.cpp ${CMAKE_SOURCE_DIR}/include/tools/tools_pch.h)
-target_sources(SFGE_TEST PUBLIC ${CMAKE_SOURCE_DIR}/src/tools/tools_pch.cpp ${CMAKE_SOURCE_DIR}/include/tools/tools_pch.h)
+target_sources(SFGE_COMMON PUBLIC ${CMAKE_SOURCE_DIR}/src/tools/tools_pch.cpp ${CMAKE_SOURCE_DIR}/include/tools/tools_pch.h)
 
 #copy folder to build
 file(COPY data/ DESTINATION ${CMAKE_BINARY_DIR}/data/)
 file(COPY scripts/ DESTINATION ${CMAKE_BINARY_DIR}/scripts/)
+
+#SFGE COURSES
+SET(SFGE_COURSE_DIR ${CMAKE_SOURCE_DIR}/courses)
+file(GLOB COURSE_FILES ${SFGE_COURSE_DIR}/*.cpp )
+foreach(course_file ${COURSE_FILES} )
+    # I used a simple string replace, to cut off .cpp.
+    file(RELATIVE_PATH course_relative_path ${SFGE_COURSE_DIR} ${course_file} )
+    string( REPLACE ".cpp" "" course_name ${course_relative_path} )
+    add_executable(${course_name} ${SFGE_COURSE_DIR}/${course_relative_path})
+    # Make sure YourLib is linked to each app
+    target_link_libraries(${course_name} PUBLIC SFGE_COMMON)
+	set_property(TARGET ${course_name} PROPERTY CXX_STANDARD 17)
+	IF(UNIX)
+		set_target_properties(${course_name} PROPERTIES COMPILE_FLAGS "-save-temps")
+	ENDIF(UNIX)
+	set_target_properties (${course_name} PROPERTIES
+    FOLDER Courses)
+  IF(APPLE)
+    set_target_properties(${course_name} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+  ENDIF()
+endforeach()
 
 
 #write tool config file

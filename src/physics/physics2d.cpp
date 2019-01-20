@@ -177,7 +177,7 @@ float meter2pixel(float meter)
 
 b2Vec2 pixel2meter(Vec2f pixel)
 {
-	return b2Vec2(pixel.x, pixel.y);
+	return b2Vec2(pixel2meter(pixel.x), pixel2meter(pixel.y));
 }
 Vec2f meter2pixel(b2Vec2 meter)
 {
