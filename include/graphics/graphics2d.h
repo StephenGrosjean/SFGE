@@ -72,7 +72,6 @@ public:
 	*/
 	sf::RenderWindow* GetWindow();
 
-	AnimationManager* GetAnimationManager();
 	ShapeManager* GetShapeManager();
 	SpriteManager* GetSpriteManager();
 	TextureManager* GetTextureManager();
@@ -85,7 +84,6 @@ protected:
 	void CheckVersion() const;
 	TextureManager m_TextureManager{m_Engine};
 	SpriteManager m_SpriteManager{m_Engine};
-	AnimationManager m_AnimationManager{ m_Engine };
 	ShapeManager m_ShapeManager{m_Engine};
 	std::unique_ptr<sf::RenderWindow> m_Window;
 };
