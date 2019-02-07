@@ -161,6 +161,7 @@ void Engine::Start()
         m_SystemsContainer->transformManager.Update(dt.asSeconds());
         m_SystemsContainer->graphics2dManager.Update(dt.asSeconds());
         m_SystemsContainer->pythonEngine.Draw();
+        m_SystemsContainer->sceneManager.Draw();
         m_SystemsContainer->editor.Draw();
         m_SystemsContainer->graphics2dManager.Display();
 		const sf::Time graphicsDt = graphicsUpdateClock.getElapsedTime ();

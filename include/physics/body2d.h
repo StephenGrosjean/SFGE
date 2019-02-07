@@ -34,7 +34,7 @@ SOFTWARE.
 namespace sfge
 {
 
-class Body2d: public TransformRequiredComponent, public Offsetable
+class Body2d: public Offsetable
 {
 public:
 	Body2d();
@@ -58,7 +58,6 @@ struct Body2dInfo : ComponentInfo
 	void DrawOnInspector() override;
 	void AddVelocity(b2Vec2 velocity);
 	std::deque<b2Vec2>& GetVelocities();
-	Body2d* body = nullptr;
 private:
 	std::deque<b2Vec2> m_Velocities;
 	const size_t m_VelocitiesMaxSize = 120;

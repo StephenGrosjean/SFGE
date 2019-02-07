@@ -53,12 +53,12 @@ SOFTWARE.
 #define PHYSICS_UPDATE_DELTATIME 0.02f
 
 #define DT_AVG_NMB 60
-#define THREAD_POOL_NMB 7
+#define THREAD_POOL_NMB 3
 
-#define USE_B2
-#define OOP
-//#define ECS
-//#define THREAD_ECS
+//#define USE_B2
+//#define OOP
+#define ECS
+#define THREAD_ECS
 
 #ifdef USE_B2
 static b2World world(b2Vec2(0.0f, 0.0f));
@@ -86,7 +86,6 @@ namespace ECS
 	struct Transform 
 	{
 		sf::Vector2f position = sf::Vector2f();
-		sf::Vector2f size = sf::Vector2f();
 #ifndef USE_B2
 		sf::Vector2f velocity = sf::Vector2f();
 #endif
@@ -105,6 +104,9 @@ namespace ECS
 		{
 			rectVertexArrays.setPrimitiveType(sf::Quads);
 			rectVertexArrays.resize(GAMEOBJECTS_NMB << 2);
+			squareSize = sf::Vector2f(
+				GAMEOBJECT_SIZE + (rand() % (GAMEOBJECT_MARGIN * 2)) - GAMEOBJECT_MARGIN,
+				GAMEOBJECT_SIZE + (rand() % (GAMEOBJECT_MARGIN * 2)) - GAMEOBJECT_MARGIN);
 		}
 		unsigned int CreateEntity()
 		{
@@ -126,9 +128,7 @@ namespace ECS
 			//auto& rectangle = rectangles[entity];
 
 			transform.position = sf::Vector2f(rand() % WINDOW_SIZE_X, rand() % WINDOW_SIZE_Y);
-			transform.size = sf::Vector2f(
-				GAMEOBJECT_SIZE + (rand() % (GAMEOBJECT_MARGIN * 2)) - GAMEOBJECT_MARGIN,
-				GAMEOBJECT_SIZE + (rand() % (GAMEOBJECT_MARGIN * 2)) - GAMEOBJECT_MARGIN);
+
 			
 			sf::Color rectColor = (sf::Color(rand() % 256, rand() % 256, rand() % 256));
 			for(int i = 0; i < 4; i++)
@@ -191,33 +191,34 @@ namespace ECS
 	private:
 		void UpdateRange(float dt, int start, int end)
 		{
+			const auto squareSize = this->squareSize;
 			for (int i = start; i < end; i++)
 			{
-				if ((mask[i] & static_cast<unsigned int>(Component::COMPONENT_TRANSFORM)) == static_cast<unsigned int>(Component::COMPONENT_TRANSFORM))
+
+				auto& transform = transforms[i];
+				transform.position = transform.velocity * dt + transform.position;
+				if ((transform.position.x < 0&&transform.velocity.x < 0) ||
+					(transform.position.x > WINDOW_SIZE_X&&transform.velocity.x > 0))
 				{
-					auto& transform = transforms[i];
-					transform.position = transform.velocity * dt + transform.position;
-					if ((transform.position.x < 0&&transform.velocity.x < 0) || 
-						(transform.position.x > WINDOW_SIZE_X&&transform.velocity.x > 0))
-					{
-						transform.velocity.x = -transform.velocity.x;
-					}
-					
-					if ((transform.position.y < 0&&transform.velocity.y < 0) ||
-						(transform.position.y > WINDOW_SIZE_Y&&transform.velocity.y > 0))
-					{
-						transform.velocity.y = -transform.velocity.y;
-					}
-					rectVertexArrays[i * 4].position = transform.position - transform.size / 2.0f;
-					rectVertexArrays[i * 4 + 1].position = sf::Vector2f(transform.position.x + transform.size.x / 2.0f, 
-																  transform.position.y - transform.size.y/2.0f);
-					rectVertexArrays[i * 4 + 2].position = transform.position + transform.size / 2.0f;
-					rectVertexArrays[i * 4 + 3].position = sf::Vector2f(transform.position.x - transform.size.x / 2.0f, 
-																  transform.position.y + transform.size.y / 2.0f);
-					//rectangles[i].setPosition(transform.position);
+					transform.velocity.x = -transform.velocity.x;
 				}
+
+				if ((transform.position.y < 0&&transform.velocity.y < 0) ||
+					(transform.position.y > WINDOW_SIZE_Y&&transform.velocity.y > 0))
+				{
+					transform.velocity.y = -transform.velocity.y;
+				}
+				rectVertexArrays[i * 4].position = transform.position - squareSize / 2.0f;
+				rectVertexArrays[i * 4 + 1].position = sf::Vector2f(transform.position.x + squareSize.x / 2.0f,
+															  transform.position.y - squareSize.y/2.0f);
+				rectVertexArrays[i * 4 + 2].position = transform.position + squareSize / 2.0f;
+				rectVertexArrays[i * 4 + 3].position = sf::Vector2f(transform.position.x - squareSize.x / 2.0f,
+															  transform.position.y + squareSize.y / 2.0f);
+				//rectangles[i].setPosition(transform.position);
+
 			}
 		}
+		sf::Vector2f squareSize;
 
 	};
 

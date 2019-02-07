@@ -120,7 +120,7 @@ IF(UNIX)
 	if(NOT APPLE)
 		set(PYTHON_EXECUTABLE "/usr/bin/python3")
 	elseif(APPLE)
-		set(PYTHON_EXECUTABLE "/usr/local/bin/python3")
+		set(PYTHON_EXECUTABLE "/usr/local/bin/python3") #Homebrew
 	endif()
 	LIST(APPEND SFGE_LIBRARIES resolv)
 	

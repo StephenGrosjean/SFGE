@@ -46,7 +46,7 @@ enum class ShapeType
 	CONVEX,
 };
 
-class Shape : public Offsetable, public TransformRequiredComponent
+class Shape : public Offsetable
 {
 public:
   	Shape();
@@ -70,7 +70,6 @@ struct ShapeInfo : ComponentInfo
 {
 
 	void DrawOnInspector() override;
-	Shape* shapePtr;
 };
 
 }

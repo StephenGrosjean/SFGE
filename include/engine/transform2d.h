@@ -45,7 +45,6 @@ namespace editor
 struct Transform2dInfo : ComponentInfo
 {
 	void DrawOnInspector() override;
-	Transform2d* transform = nullptr;
 };
 }
 
@@ -60,15 +59,6 @@ public:
 	void Update(float dt) override;
 };
 
-class TransformRequiredComponent
-{
-public:
-	TransformRequiredComponent(Transform2d* transform);
-	void SetTransform(Transform2d* transform);
-	Transform2d* GetTransform();
-protected:
-	Transform2d * m_Transform = nullptr;
-};
 }
 
 #endif /* INCLUDE_ENGINE_TRANSFORM_H_ */

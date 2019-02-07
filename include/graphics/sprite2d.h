@@ -42,7 +42,7 @@ class Graphics2dManager;
 * \brief Sprite component used in the GameObject
 */
 class Sprite:
-	public LayerComponent, public TransformRequiredComponent, public Offsetable
+	public LayerComponent, public Offsetable
 {
 public:
 
@@ -67,7 +67,7 @@ namespace editor
 struct SpriteInfo : ComponentInfo
 {
 	void DrawOnInspector() override;
-	Sprite* sprite = nullptr;
+
 	std::string texturePath = "";
 	TextureId textureId = INVALID_TEXTURE;
 };

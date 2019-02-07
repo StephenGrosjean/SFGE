@@ -43,7 +43,7 @@ namespace sfge::ext
 
 
 //#define WITH_PHYSICS
-//#define WITH_VERTEXARRAY
+#define WITH_VERTEXARRAY
 //#define MULTI_THREAD
 
 class PlanetSystem : public System
@@ -91,7 +91,7 @@ private:
 #endif
 #ifdef MULTI_THREAD
 
-	  std::vector<sf::Vector2f> m_Positions{entitiesNmb};
+	  std::vector<Vec2f> m_Positions{entitiesNmb};
 
 #endif
 

@@ -28,7 +28,7 @@ SOFTWARE.
 
 namespace sfge
 {
-
+class Engine;
 enum class ComponentType : int;
 }
 //Editor components
@@ -74,7 +74,8 @@ struct SceneInfo : NamableEditorComponent, PathEditorComponent
 
 struct ComponentInfo : NamableEditorComponent, IDrawableInspector
 {
-
+Entity entity = INVALID_ENTITY;
+Engine* engine = nullptr;
 };
 
 }

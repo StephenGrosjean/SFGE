@@ -37,12 +37,17 @@ SOFTWARE.
 #include <engine/vector.h>
 
 
-//#define MULTITHREAD
+#define MULTITHREAD
 #define OBJ_NMB 10'000
 #define SCREEN_SIZE 800
 #define VELOCITY_ITERATIONS 10
 #define POSITION_ITERATIONS 3
 #define PHYSICS_UPDATE_DELTATIME 0.02f
+
+struct Prout
+{
+	std::vector<int> prout {10'000};
+};
 
 struct SquareObject
 {
@@ -54,8 +59,9 @@ struct SquareObject
 	{
 		rectangle.setPosition(position);
 		rectangle.setSize(size);
-		rectangle.setOrigin(rectangle.getSize() / 2.0f);
+		rectangle.setOrigin(rectangle.getSize() / 2.0f);//origin in center
 		rectangle.setFillColor(sf::Color(rand() % 255, rand() % 255, rand() % 255));
+
 		b2BodyDef bodyDef;
 		bodyDef.position = sfge::pixel2meter(position);
 		bodyDef.type = b2_dynamicBody;
@@ -96,14 +102,10 @@ struct Contact
 	SquareObject* o2;
 };
 
-void f1()
-{}
-
-void f2()
-{}
 
 int main()
 {
+
 
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Multithread test");
 	b2World world(b2Vec2(0.0f, 9.81f));
@@ -170,10 +172,17 @@ int main()
 				obj.Update();
 			}
 		}
+
+		if (physicsClock.getElapsedTime().asSeconds() > PHYSICS_UPDATE_DELTATIME && !world.IsLocked())
+		{
+			//Start physics before graphics
+			physicsHandler = std::async(std::launch::async, &b2World::Step, &world, PHYSICS_UPDATE_DELTATIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+			physicsDt = physicsClock.restart();
+		}
 #else
 		if (physicsClock.getElapsedTime().asSeconds() > PHYSICS_UPDATE_DELTATIME)
 		{
-			world.Step(PHYSICS_UPDATE_DELTATIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+			world.Step(PHYSICS_UPDATE_DELTATIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS); // Takes time
 			physicsDt = physicsClock.restart();
 			//Update objects
 			for (auto& obj : objects)
@@ -183,15 +192,7 @@ int main()
 		}
 
 #endif
-		
-#ifdef MULTITHREAD
-		if (physicsClock.getElapsedTime().asSeconds() > PHYSICS_UPDATE_DELTATIME && !world.IsLocked())
-		{
-			//Start physics before graphics
-			physicsHandler = std::async(&b2World::Step, &world, PHYSICS_UPDATE_DELTATIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-			physicsDt = physicsClock.restart();
-		}
-#endif
+
 		ImGui::Begin("Stats");
 		{
 			std::ostringstream oss;
