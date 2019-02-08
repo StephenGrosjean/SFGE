@@ -54,9 +54,9 @@ static std::set<std::string> imgExtensionSet
 };
 
 
-void TextureManager::Init()
+void TextureManager::OnEngineInit()
 {
-	System::Init();
+	System::OnEngineInit();
 	if(const auto config = m_Engine.GetConfig())
 	{
 		if(config->devMode)
@@ -182,7 +182,7 @@ bool TextureManager::HasValidExtension(std::string filename)
 	return true;
 }
 
-void TextureManager::Clear()
+void TextureManager::OnBeforeSceneLoad()
 {
 	for (auto& textureIdsRefCount : m_TextureIdsRefCounts)
 	{
@@ -190,7 +190,7 @@ void TextureManager::Clear()
 	}
 }
 
-void TextureManager::Collect()
+void TextureManager::OnAfterSceneLoad()
 {
 	std::list<TextureId> unusedTextureIds;
 	for (auto i = 0U; i < m_TextureIdsRefCounts.size(); i++)

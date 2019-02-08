@@ -127,17 +127,15 @@ void Engine::InitModules()
     }
     m_ThreadPool.resize(std::thread::hardware_concurrency ()-1);
 
-
-
-	m_SystemsContainer->entityManager.Init();
-	m_SystemsContainer->transformManager.Init();
-    m_SystemsContainer->graphics2dManager.Init();
-    m_SystemsContainer->audioManager.Init();
-    m_SystemsContainer->sceneManager.Init();
-    m_SystemsContainer->inputManager.Init();
-    m_SystemsContainer->pythonEngine.Init();
-    m_SystemsContainer->physicsManager.Init();
-    m_SystemsContainer->editor.Init();
+	m_SystemsContainer->entityManager.OnEngineInit();
+	m_SystemsContainer->transformManager.OnEngineInit();
+	m_SystemsContainer->graphics2dManager.OnEngineInit();
+	m_SystemsContainer->audioManager.OnEngineInit();
+	m_SystemsContainer->sceneManager.OnEngineInit();
+	m_SystemsContainer->inputManager.OnEngineInit();
+	m_SystemsContainer->pythonEngine.OnEngineInit();
+	m_SystemsContainer->physicsManager.OnEngineInit();
+	m_SystemsContainer->editor.OnEngineInit();
 
 	m_Window = m_SystemsContainer->graphics2dManager.GetWindow();
 	running = true;
@@ -178,30 +176,30 @@ void Engine::Start()
 			continue;
 		}
 
-        m_SystemsContainer->inputManager.Update(dt.asSeconds());
+		m_SystemsContainer->inputManager.OnUpdate(dt.asSeconds());
 		auto fixedUpdateTime = globalClock.getElapsedTime() - previousFixedUpdateTime;
 		if (fixedUpdateTime.asSeconds() > m_Config->fixedDeltaTime)
 		{
 			fixedUpdateClock.restart ();
-			m_SystemsContainer->physicsManager.FixedUpdate();
+			m_SystemsContainer->physicsManager.OnFixedUpdate();
 			previousFixedUpdateTime = globalClock.getElapsedTime();
-			m_SystemsContainer->pythonEngine.FixedUpdate();
-            m_SystemsContainer->sceneManager.FixedUpdate();
+			m_SystemsContainer->pythonEngine.OnFixedUpdate();
+			m_SystemsContainer->sceneManager.OnFixedUpdate();
 			deltaFixedUpdateTime = fixedUpdateClock.getElapsedTime ();
 			m_FrameData.frameFixedUpdate = deltaFixedUpdateTime;
 			isFixedUpdateFrame = true;
 		}
-        m_SystemsContainer->pythonEngine.Update(dt.asSeconds());
+		m_SystemsContainer->pythonEngine.OnUpdate(dt.asSeconds());
 
-        m_SystemsContainer->sceneManager.Update(dt.asSeconds());
+		m_SystemsContainer->sceneManager.OnUpdate(dt.asSeconds());
 
-        m_SystemsContainer->editor.Update(dt.asSeconds());
+		m_SystemsContainer->editor.OnUpdate(dt.asSeconds());
 		graphicsUpdateClock.restart ();
-        m_SystemsContainer->transformManager.Update(dt.asSeconds());
-        m_SystemsContainer->graphics2dManager.Update(dt.asSeconds());
-        m_SystemsContainer->pythonEngine.Draw();
-        m_SystemsContainer->sceneManager.Draw();
-        m_SystemsContainer->editor.Draw();
+        m_SystemsContainer->transformManager.OnUpdate(dt.asSeconds());
+		m_SystemsContainer->graphics2dManager.OnUpdate(dt.asSeconds());
+		m_SystemsContainer->pythonEngine.OnDraw();
+		m_SystemsContainer->sceneManager.OnDraw();
+		m_SystemsContainer->editor.OnDraw();
         m_SystemsContainer->graphics2dManager.Display();
 		const sf::Time graphicsDt = graphicsUpdateClock.getElapsedTime ();
 		dt = updateClock.restart();
@@ -233,27 +231,27 @@ void Engine::Destroy()
 
 void Engine::Clear() 
 {
-	m_SystemsContainer->entityManager.Clear();
-	m_SystemsContainer->graphics2dManager.Clear();
-	m_SystemsContainer->audioManager.Clear();
-	m_SystemsContainer->sceneManager.Clear();
-	m_SystemsContainer->inputManager.Clear();
-	m_SystemsContainer->pythonEngine.Clear();
-	m_SystemsContainer->editor.Clear();
-	m_SystemsContainer->physicsManager.Clear();
+	m_SystemsContainer->entityManager.OnBeforeSceneLoad();
+	m_SystemsContainer->graphics2dManager.OnBeforeSceneLoad();
+	m_SystemsContainer->audioManager.OnBeforeSceneLoad();
+	m_SystemsContainer->sceneManager.OnBeforeSceneLoad();
+	m_SystemsContainer->inputManager.OnBeforeSceneLoad();
+	m_SystemsContainer->pythonEngine.OnBeforeSceneLoad();
+	m_SystemsContainer->editor.OnBeforeSceneLoad();
+	m_SystemsContainer->physicsManager.OnBeforeSceneLoad();
 }
 
 void Engine::Collect() 
 {
 
-	m_SystemsContainer->entityManager.Collect();
-	m_SystemsContainer->graphics2dManager.Collect();
-	m_SystemsContainer->audioManager.Collect();
-	m_SystemsContainer->sceneManager.Collect();
-	m_SystemsContainer->inputManager.Collect();
-	m_SystemsContainer->pythonEngine.Collect();
-	m_SystemsContainer->editor.Collect();
-	m_SystemsContainer->physicsManager.Collect();
+	m_SystemsContainer->entityManager.OnAfterSceneLoad();
+	m_SystemsContainer->graphics2dManager.OnAfterSceneLoad();
+	m_SystemsContainer->audioManager.OnAfterSceneLoad();
+	m_SystemsContainer->sceneManager.OnAfterSceneLoad();
+	m_SystemsContainer->inputManager.OnAfterSceneLoad();
+	m_SystemsContainer->pythonEngine.OnAfterSceneLoad();
+	m_SystemsContainer->editor.OnAfterSceneLoad();
+	m_SystemsContainer->physicsManager.OnAfterSceneLoad();
 }
 
 

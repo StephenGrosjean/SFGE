@@ -41,7 +41,7 @@ class KeyboardManager : public System
 {
 public:
 	using System::System;
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 	bool IsKeyHeld(sf::Keyboard::Key key) const;
 	bool IsKeyDown(sf::Keyboard::Key key) const;
 	bool IsKeyUp(sf::Keyboard::Key key) const;
@@ -65,16 +65,16 @@ public:
 	/**
 	 * \brief Initialize the Input Manager
 	 */
-	void Init() override;
+	void OnEngineInit() override;
 	/**
 	 * \brief Update called each frame to report input status
 	 * \param dt Delta time since last frame
 	 */
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 	void Destroy() override;
 
-	void Clear() override;
-	void Collect() override;
+	void OnBeforeSceneLoad() override;
+	void OnAfterSceneLoad() override;
 
 	KeyboardManager& GetKeyboardManager();
 	MouseManager& GetMouseManager();

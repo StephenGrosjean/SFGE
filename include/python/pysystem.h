@@ -39,10 +39,10 @@ class PySystem : public System
 {
 public:
 	using System::System;
-	void Init() override;
-	void Update(float dt) override;
-	void FixedUpdate() override;
-	void Draw() override;
+	void OnEngineInit() override;
+	void OnUpdate(float dt) override;
+	void OnFixedUpdate() override;
+	void OnDraw() override;
 
 };
 
@@ -51,7 +51,7 @@ class PySystemManager : public System
 public:
 
 	using System::System;
-	void Init() override;
+	void OnEngineInit() override;
 
 	void Destroy() override;
 

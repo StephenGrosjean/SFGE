@@ -51,13 +51,13 @@ class PlanetSystem : public System
 public:
 	PlanetSystem(Engine& engine);
 
-	void Init() override;
+	void OnEngineInit() override;
 
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 
-	void FixedUpdate() override;
+	void OnFixedUpdate() override;
 
-	void Draw() override;
+	void OnDraw() override;
 
 private:
 

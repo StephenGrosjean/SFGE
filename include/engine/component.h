@@ -81,9 +81,9 @@ class ComponentManager:
   virtual T* AddComponent(Entity entity) = 0;
   virtual void DestroyComponent(Entity entity) = 0;
 
-  void Init() override
+  void OnEngineInit() override
   {
-    System::Init();
+	  System::OnEngineInit();
     m_EntityManager = m_Engine.GetEntityManager();
     m_EntityManager->AddDestroyObserver(this);
   }
@@ -141,9 +141,9 @@ public:
         }
       }
     }
-    virtual void Init() override
+    virtual void OnEngineInit() override
     {
-		ComponentManager<T, componentType>::Init();
+		ComponentManager<T, componentType>::OnEngineInit();
 		ComponentManager<T, componentType>::m_Engine.GetEditor()->AddDrawableObserver(this);
 		ComponentManager<T, componentType>::m_Engine.GetSceneManager()->AddComponentManager(this, componentType);
 	}
@@ -168,9 +168,9 @@ public:
         }
 	}
 
-	virtual void Init() override
+	virtual void OnEngineInit() override
 	{
-		BasicComponentManager<T,TInfo, componentType>::Init();
+		BasicComponentManager<T,TInfo, componentType>::OnEngineInit();
 		BasicComponentManager<T,TInfo, componentType>::m_EntityManager = System::m_Engine.GetEntityManager();
 		BasicComponentManager<T,TInfo, componentType>::m_EntityManager->AddResizeObserver(this);
 	}
@@ -229,9 +229,9 @@ class MultipleComponentManager :
 		BasicComponentManager<T,TInfo, componentType>::m_ComponentsInfo = std::vector<TInfo>{ INIT_ENTITY_NMB * MULTIPLE_COMPONENTS_MULTIPLIER };
 	}
 
-	void Init() override
+	void OnEngineInit() override
     {
-        BasicComponentManager<T,TInfo, componentType>::Init();
+        BasicComponentManager<T,TInfo, componentType>::OnEngineInit();
 		BasicComponentManager<T,TInfo, componentType>::m_EntityManager = BasicComponentManager<T,TInfo, componentType>::m_Engine.GetEntityManager();
 		BasicComponentManager<T,TInfo, componentType>::m_EntityManager->AddResizeObserver(this);
     }

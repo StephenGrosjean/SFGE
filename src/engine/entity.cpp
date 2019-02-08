@@ -35,12 +35,12 @@ void editor::EntityInfo::DrawOnInspector()
 
 }
 
-void EntityManager::Init()
+void EntityManager::OnEngineInit()
 {
-	Clear();
+	OnBeforeSceneLoad();
 }
 
-void EntityManager::Clear()
+void EntityManager::OnBeforeSceneLoad()
 {
 	m_MaskArray = std::vector<EntityMask>(INIT_ENTITY_NMB, INVALID_ENTITY);
 }

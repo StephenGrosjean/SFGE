@@ -55,7 +55,7 @@ class SceneManager : public System
 public:
 	SceneManager(Engine& engine);
 	~SceneManager() = default;
-	void Init() override;
+	void OnEngineInit() override;
 
 	void SearchScenes(std::string& dataDirname);
 	/**
@@ -82,12 +82,12 @@ public:
 
 	void AddComponentManager(IComponentFactory* componentFactory, ComponentType componentType);
 
-	void Update(float dt) override;
-	void FixedUpdate() override;
-	void Draw() override;
+	void OnUpdate(float dt) override;
+	void OnFixedUpdate() override;
+	void OnDraw() override;
 	void Destroy() override;
 
-	void Clear() override;
+	void OnBeforeSceneLoad() override;
 private:
 
 	void InitScenePySystems();

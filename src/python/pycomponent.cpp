@@ -471,9 +471,9 @@ int PyComponentManager::GetFreeComponentIndex()
 	}
 	return -1;
 }
-void PyComponentManager::Init()
+void PyComponentManager::OnEngineInit()
 {
-	MultipleComponentManager::Init();
+	MultipleComponentManager::OnEngineInit();
 	m_PythonEngine = m_Engine.GetPythonEngine();
 }
 
@@ -524,9 +524,9 @@ void PyComponentManager::Destroy()
 	m_ComponentsInfo.clear();
 	m_PythonInstances.clear();
 }
-void PyComponentManager::FixedUpdate()
+void PyComponentManager::OnFixedUpdate()
 {
-	System::FixedUpdate();
+	System::OnFixedUpdate();
 
 	rmt_ScopedCPUSample(PyComponentFixedUpdate,0);
 
@@ -539,9 +539,9 @@ void PyComponentManager::FixedUpdate()
 		}
 	}
 }
-void PyComponentManager::Update(float dt)
+void PyComponentManager::OnUpdate(float dt)
 {
-	System::Update(dt);
+	System::OnUpdate(dt);
 
 
 	rmt_ScopedCPUSample(PyComponentUpdate,0);

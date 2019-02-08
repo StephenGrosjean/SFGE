@@ -15,7 +15,7 @@
 namespace sfge
 {
 
-void PySystem::Init()
+void PySystem::OnEngineInit()
 {
 	try
 	{
@@ -24,7 +24,7 @@ void PySystem::Init()
 			void,
 			System,
 			"init",
-			Init,
+			OnEngineInit,
 
 			);
 	}
@@ -36,7 +36,7 @@ void PySystem::Init()
 	}
 }
 
-void PySystem::Update(float dt)
+void PySystem::OnUpdate(float dt)
 {
 
 	try
@@ -47,7 +47,7 @@ void PySystem::Update(float dt)
 			void,
 			System,
 			"update",
-			Update,
+			OnUpdate,
 			dt
 			);
 	}
@@ -59,7 +59,7 @@ void PySystem::Update(float dt)
 	}
 }
 
-void PySystem::FixedUpdate()
+void PySystem::OnFixedUpdate()
 {
 	try
 	{
@@ -68,7 +68,7 @@ void PySystem::FixedUpdate()
 			void,
 			System,
 			"fixed_update",
-			FixedUpdate,
+			OnFixedUpdate,
 			);
 	}
 	catch (std::runtime_error& e)
@@ -79,7 +79,7 @@ void PySystem::FixedUpdate()
 	}
 }
 
-void PySystem::Draw()
+void PySystem::OnDraw()
 {
 	try
 	{
@@ -89,7 +89,7 @@ void PySystem::Draw()
 			void,
 			System,
 			"draw",
-			Draw,
+			OnDraw,
 			);
 	}
 	catch (std::runtime_error& e)
@@ -100,9 +100,9 @@ void PySystem::Draw()
 	}
 }
 
-void PySystemManager::Init()
+void PySystemManager::OnEngineInit()
 {
-	System::Init();
+	System::OnEngineInit();
 	m_PythonEngine = m_Engine.GetPythonEngine();
 }
 

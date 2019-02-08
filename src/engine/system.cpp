@@ -11,15 +11,15 @@ System::System(Engine& engine) : m_Engine(engine)
 }
 
 
-void System::Init()
+void System::OnEngineInit()
 {
 	m_Initialized = true;
 }
 
 void System::Destroy()
 {
-	Clear();
-	Collect();
+	OnBeforeSceneLoad();
+	OnAfterSceneLoad();
 	m_Initialized = false;
 }
 

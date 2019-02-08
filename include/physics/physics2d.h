@@ -66,7 +66,7 @@ public:
 	/**
 	 * \brief Initialize the Physics Manager, but do not create a b2World
 	 */
-	void Init() override;
+	void OnEngineInit() override;
 
 	/**
 	* \brief Get The World
@@ -76,15 +76,15 @@ public:
 	 * \brief Called each frame to update the b2World if not in editor mode
 	 * @param dt Delta time since last frame
 	 */
-	void Update(float dt) override;
-	void FixedUpdate() override;
+	void OnUpdate(float dt) override;
+	void OnFixedUpdate() override;
 	/**
 	* \brief Called at the end of the program to Destroy a b2World, if it sill exists
 	*/
 	void Destroy() override;
 
-	void Clear() override;
-	void Collect() override;
+	void OnBeforeSceneLoad() override;
+	void OnAfterSceneLoad() override;
 
 
 	Body2dManager* GetBodyManager();

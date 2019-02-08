@@ -27,13 +27,13 @@ SOFTWARE.
 
 namespace sfge
 {
-void AudioManager::Init()
+void AudioManager::OnEngineInit()
 {
-	m_SoundManager.Init();
-	m_SoundBufferManager.Init();
+	m_SoundManager.OnEngineInit();
+	m_SoundBufferManager.OnEngineInit();
 	
 };
-void AudioManager::Update(float dt)
+void AudioManager::OnUpdate(float dt)
 {
 	(void)dt;
 };
@@ -53,19 +53,19 @@ SoundBufferManager* AudioManager::GetSoundBufferManager()
 	return &m_SoundBufferManager;
 }
 
-void AudioManager::Clear()
+void AudioManager::OnBeforeSceneLoad()
 {
-	m_SoundManager.Reset();
+	m_SoundManager.OnBeforeSceneLoad();
 }
 
-void AudioManager::Collect()
+void AudioManager::OnAfterSceneLoad()
 {
-	m_SoundManager.Collect();
+	m_SoundManager.OnAfterSceneLoad();
 }
 void AudioManager::Destroy()
 {
-	Clear();
-	Collect();
+	OnBeforeSceneLoad();
+	OnAfterSceneLoad();
 }
 
 

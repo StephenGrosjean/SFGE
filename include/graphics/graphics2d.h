@@ -44,13 +44,13 @@ public:
 	/**
 		* \brief Initialize the Graphics Manager
 		*/
-	void Init() override;
+	void OnEngineInit() override;
 
 	/**
 		* \brief Update the Graphics Manager and prepare for the rendering
 		* \param dt Delta time since last frame
 		*/
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 
 	void Display();
 	/**
@@ -58,9 +58,9 @@ public:
 	*/
 	void Destroy() override;
 
-	void Clear() override;
+	void OnBeforeSceneLoad() override;
 	
-	void Collect() override;
+	void OnAfterSceneLoad() override;
 
 
 	void DrawLine(sf::Vector2f from, sf::Vector2f to, sf::Color color=sf::Color::Red);

@@ -38,7 +38,7 @@ SOFTWARE.
 namespace sfge
 {
 
-void Graphics2dManager::Init()
+void Graphics2dManager::OnEngineInit()
 {
 	if (const auto configPtr = m_Engine.GetConfig())
 	{
@@ -60,21 +60,21 @@ void Graphics2dManager::Init()
 		Log::GetInstance()->Error("[Error] Config is null from Graphics Manager");
 		
 	}
-	m_TextureManager.Init();
-	m_ShapeManager.Init();
-	m_SpriteManager.Init();
+	m_TextureManager.OnEngineInit();
+	m_ShapeManager.OnEngineInit();
+	m_SpriteManager.OnEngineInit();
 
 }
 
-void Graphics2dManager::Update(float dt)
+void Graphics2dManager::OnUpdate(float dt)
 {
 	if (!m_Windowless)
 	{
 		rmt_ScopedCPUSample(Graphics2dUpdate,0)
 		m_Window->clear();
 
-		m_SpriteManager.Update(dt);
-		m_ShapeManager.Update(dt);
+		m_SpriteManager.OnUpdate(dt);
+		m_ShapeManager.OnUpdate(dt);
 
 		m_SpriteManager.DrawSprites(*m_Window);
 		m_ShapeManager.DrawShapes(*m_Window);
@@ -139,24 +139,24 @@ void checkVersion()
 
 void Graphics2dManager::Destroy()
 {
-	Clear();
-	Collect();
+	OnBeforeSceneLoad();
+	OnAfterSceneLoad();
 
 	m_Window = nullptr;
 	ImGui::SFML::Shutdown();
 }
 
-void Graphics2dManager::Clear()
+void Graphics2dManager::OnBeforeSceneLoad()
 {
-	m_TextureManager.Clear();
-	m_SpriteManager.Reset();
+	m_TextureManager.OnBeforeSceneLoad();
+	m_SpriteManager.OnBeforeSceneLoad();
 }
 
-void Graphics2dManager::Collect()
+void Graphics2dManager::OnAfterSceneLoad()
 {
 
-	m_TextureManager.Collect();
-	m_SpriteManager.Collect();
+	m_TextureManager.OnAfterSceneLoad();
+	m_SpriteManager.OnAfterSceneLoad();
 }
 
 }

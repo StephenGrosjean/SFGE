@@ -83,10 +83,10 @@ public:
 	using SingleComponentManager::SingleComponentManager; 
 	ShapeManager(ShapeManager&& shapeManager) = default;
 
-	void Init() override;
+	void OnEngineInit() override;
 	void DrawShapes(sf::RenderWindow &window);
-	void Update(float dt) override;
-	void Clear() override;
+	void OnUpdate(float dt) override;
+	void OnBeforeSceneLoad() override;
 
 	Shape* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity) override;

@@ -35,15 +35,15 @@ class ToolTest : public System
     /*
     * \brief Called at scene init (a good place to link to other Systems
     */
-    void Init() override;
+    void OnEngineInit() override;
     /*
     * \brief Called every graphic frame (dt depends on the use of VSync or not, controllable in the Configuration) 
     */
-    void Update(float dt) override;
+    void OnUpdate(float dt) override;
      /*
     * \brief Called every graphic frame after Update
     */
-    void Draw() override;
+    void OnDraw() override;
 };
 }
 #endif

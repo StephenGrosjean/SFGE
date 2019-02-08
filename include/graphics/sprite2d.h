@@ -82,12 +82,12 @@ class SpriteManager : public SingleComponentManager<Sprite, editor::SpriteInfo, 
 public:
 	using SingleComponentManager::SingleComponentManager;
 
-	void Init() override;
-	void Update(float dt) override;
+	void OnEngineInit() override;
+	void OnUpdate(float dt) override;
 	void DrawSprites(sf::RenderWindow &window);
 
-	void Reset();
-	void Collect() override;
+	void OnBeforeSceneLoad();
+	void OnAfterSceneLoad() override;
 	Sprite* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity) override;
 	void DestroyComponent(Entity entity) override;

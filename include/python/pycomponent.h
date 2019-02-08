@@ -103,9 +103,9 @@ public:
 
 	using MultipleComponentManager::MultipleComponentManager;
 	~PyComponentManager(){};
-	void Init() override;
-	void Update(float dt) override;
-	void FixedUpdate() override;
+	void OnEngineInit() override;
+	void OnUpdate(float dt) override;
+	void OnFixedUpdate() override;
 
 	void CreateComponent(json& componentJson, Entity entity) override;
 	virtual PyBehavior** AddComponent(Entity entity) override;

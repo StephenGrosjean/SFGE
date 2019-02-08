@@ -79,13 +79,13 @@ public:
 
 	~SoundBufferManager();
 
-	void Init() override;
+	void OnEngineInit() override;
 
 	void LoadSoundBuffers(std::string filename);
 
-	void Clear() override;
+	void OnBeforeSceneLoad() override;
 	
-	void Collect() override;
+	void OnAfterSceneLoad() override;
 
 	SoundBufferId LoadSoundBuffer(std::string filename);
 	sf::SoundBuffer* GetSoundBuffer(SoundBufferId soundBufferId);
@@ -118,15 +118,15 @@ public:
 	SoundManager(Engine& engine);
 	~SoundManager();
 
-    void Init() override;
+    void OnEngineInit() override;
 
 	Sound* AddComponent(Entity entity) override;
 
 	//TODO use similar construction as pycomponent
 	void CreateComponent(json& componentJson, Entity entity) override;
 	void DestroyComponent(Entity entity) override;
-	void Reset();
-	void Collect() override;
+	void OnBeforeSceneLoad();
+	void OnAfterSceneLoad() override;
 
 	Sound* GetComponentPtr(Entity entity) override;
 

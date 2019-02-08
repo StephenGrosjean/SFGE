@@ -33,7 +33,7 @@ SOFTWARE.
 
 namespace sfge::editor
 {
-void ToolsManager::Init()
+void ToolsManager::OnEngineInit()
 {
 	m_PySystemManager = &m_Engine.GetPythonEngine()->GetPySystemManager();
 
@@ -61,19 +61,19 @@ void ToolsManager::Init()
 
 }
 
-void ToolsManager::Update(float dt)
+void ToolsManager::OnUpdate(float dt)
 {
 	for(auto i = 0u; i < m_ToolSystems.size();i++)
 	{
 		if(m_ToolSystems[i] != INVALID_INSTANCE && m_WhichToolsIsActive[i])
 		{
 			auto* pySystem = m_PySystemManager->GetPySystemFromInstanceId(m_ToolSystems[i]);
-			pySystem->Update(dt);
+			pySystem->OnUpdate(dt);
 		}
 	}
 }
 
-void ToolsManager::Draw()
+void ToolsManager::OnDraw()
 {
 	ImGui::Begin("Tool Window");
 	for(auto i = 0u; i < m_ToolSystemsNames.size();i++)
@@ -104,7 +104,7 @@ void ToolsManager::Draw()
 		if(m_ToolSystems[i] != INVALID_INSTANCE && m_WhichToolsIsActive[i])
 		{
 			auto* pySystem = m_PySystemManager->GetPySystemFromInstanceId(m_ToolSystems[i]);
-			pySystem->Draw();
+			pySystem->OnDraw();
 		}
 	}
 

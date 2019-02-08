@@ -28,16 +28,16 @@ SOFTWARE.
 
 namespace sfge::tools
 {
-void ToolTest::Init()
+void ToolTest::OnEngineInit()
 {
 }
 
-void ToolTest::Update(float dt)
+void ToolTest::OnUpdate(float dt)
 {
 }
 
 
-void ToolTest::Draw()
+void ToolTest::OnDraw()
 {
 }
 }

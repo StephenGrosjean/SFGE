@@ -44,28 +44,28 @@ MouseManager& InputManager::GetMouseManager()
 	return m_MouseManager;
 }
 
-void InputManager::Init()
+void InputManager::OnEngineInit()
 {
 }
 
-void InputManager::Update(float dt)
+void InputManager::OnUpdate(float dt)
 {
-	m_KeyboardManager.Update(dt);
+	m_KeyboardManager.OnUpdate(dt);
 }
 
 void InputManager::Destroy()
 {
 }
 
-void InputManager::Clear()
+void InputManager::OnBeforeSceneLoad()
 {
 }
 
-void InputManager::Collect()
+void InputManager::OnAfterSceneLoad()
 {
 }
 
-void KeyboardManager::Update(float dt)
+void KeyboardManager::OnUpdate(float dt)
 {
 	(void) dt;
 	for (int i = 0; i < sf::Keyboard::KeyCount; i++)

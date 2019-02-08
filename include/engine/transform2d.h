@@ -56,7 +56,7 @@ public:
 	Transform2d* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity) override;
 	void DestroyComponent(Entity entity) override;
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 };
 
 }

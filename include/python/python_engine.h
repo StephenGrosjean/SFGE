@@ -57,7 +57,7 @@ public:
 	/**
 	* \brief Initialize the python interpreter
 	*/
-	void Init() override;
+	void OnEngineInit() override;
 
 
 	void InitScriptsInstances();
@@ -65,16 +65,16 @@ public:
 	* \brief Update the python interpreter, called only in play mode
 	* \param dt The delta time since last frame
 	*/
-	void Update(float dt) override;
-	void FixedUpdate() override;
-	void Draw() override;
+	void OnUpdate(float dt) override;
+	void OnFixedUpdate() override;
+	void OnDraw() override;
 	/**
 	* \brief Finalize the python interpreter
 	*/
 	void Destroy() override;
 
-	void Collect() override;
-	void Clear() override;
+	void OnAfterSceneLoad() override;
+	void OnBeforeSceneLoad() override;
 
 	ModuleId LoadPyModule(std::string moduleFilename);
 

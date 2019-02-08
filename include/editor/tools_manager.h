@@ -42,9 +42,9 @@ class ToolsManager : public System
 {
 public:
 	using System::System;
-    void Init() override;
-    void Update(float dt) override;
-    void Draw() override;
+    void OnEngineInit() override;
+    void OnUpdate(float dt) override;
+    void OnDraw() override;
 private:
 	std::vector<InstanceId> m_ToolSystems;
 	std::vector<std::string> m_ToolSystemsNames;

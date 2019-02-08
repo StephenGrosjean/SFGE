@@ -122,9 +122,9 @@ void editor::ShapeInfo::DrawOnInspector ()
 	}*/
 }
 
-void ShapeManager::Init()
+void ShapeManager::OnEngineInit()
 {
-	SingleComponentManager::Init();
+	SingleComponentManager::OnEngineInit();
 	m_Transform2dManager = m_Engine.GetTransform2dManager();
 }
 
@@ -142,7 +142,7 @@ void ShapeManager::DrawShapes(sf::RenderWindow &window)
 	}
 }
 
-void ShapeManager::Update(const float dt)
+void ShapeManager::OnUpdate(const float dt)
 {
 
 	rmt_ScopedCPUSample(ShapeUpdate,0)
@@ -156,7 +156,7 @@ void ShapeManager::Update(const float dt)
 	
 }
 
-void ShapeManager::Clear()
+void ShapeManager::OnBeforeSceneLoad()
 {
 	m_Components.clear ();
 	m_Components.resize (INIT_ENTITY_NMB);

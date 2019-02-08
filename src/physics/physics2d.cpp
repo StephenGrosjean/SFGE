@@ -32,7 +32,7 @@ namespace sfge
 const float Physics2dManager::pixelPerMeter = 100.0f;
 
 
-void Physics2dManager::Init()
+void Physics2dManager::OnEngineInit()
 {
 	b2Vec2 gravity;
 	if(const auto configPtr = m_Engine.GetConfig())
@@ -41,16 +41,16 @@ void Physics2dManager::Init()
 	m_ContactListener = std::make_unique<ContactListener>(m_Engine);
 	m_World->SetContactListener(m_ContactListener.get());
 
-	m_BodyManager.Init();
-	m_ColliderManager.Init();
+	m_BodyManager.OnEngineInit();
+	m_ColliderManager.OnEngineInit();
 }
 
-void Physics2dManager::Update(float dt)
+void Physics2dManager::OnUpdate(float dt)
 {
 	(void)dt;
 }
 
-void Physics2dManager::FixedUpdate()
+void Physics2dManager::OnFixedUpdate()
 {
 	rmt_ScopedCPUSample(Physics2dManager,0);
 	const auto config = m_Engine.GetConfig();
@@ -59,7 +59,7 @@ void Physics2dManager::FixedUpdate()
 		m_World->Step(config->fixedDeltaTime,
 			config->velocityIterations,
 			config->positionIterations);
-		m_BodyManager.FixedUpdate();
+		m_BodyManager.OnFixedUpdate();
 	}
 }
 
@@ -82,13 +82,13 @@ void Physics2dManager::Destroy()
 
 }
 
-void Physics2dManager::Clear()
+void Physics2dManager::OnBeforeSceneLoad()
 {
 	Destroy();
-	Init();
+	OnEngineInit();
 }
 
-void Physics2dManager::Collect()
+void Physics2dManager::OnAfterSceneLoad()
 {
 }
 

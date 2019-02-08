@@ -59,21 +59,21 @@ public:
 	/**
 	* \brief Initialize the SceneManager, get the Configuration from Engine and save the Scene lists from it
 	*/
-	void Init() override;
+	void OnEngineInit() override;
 	/**
 	* \brief Update the SceneManager, mostly updating the GameObjects of the current Scene and doing the transition when needed
 	* \param dt Delta time since last frame
 	*/
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 	void ProcessEvent(sf::Event& event) const;
-	void Draw() override;
+	void OnDraw() override;
 	/**
 	* \brief Finalize and delete everything created in the SceneManager
 	*/
 	void Destroy() override;
 
-	void Collect() override;
-	void Clear() override;
+	void OnAfterSceneLoad() override;
+	void OnBeforeSceneLoad() override;
 
 	void SetCurrentScene(std::unique_ptr<editor::SceneInfo> sceneInfo);
 

@@ -145,14 +145,14 @@ std::deque<b2Vec2>& editor::Body2dInfo::GetVelocities()
 
 
 
-void Body2dManager::Init()
+void Body2dManager::OnEngineInit()
 {
-	SingleComponentManager::Init();
+	SingleComponentManager::OnEngineInit();
 	m_Transform2dManager = m_Engine.GetTransform2dManager();
 	m_WorldPtr = m_Engine.GetPhysicsManager()->GetWorld();
 }
 
-void Body2dManager::FixedUpdate()
+void Body2dManager::OnFixedUpdate()
 {
 	for (auto i = 0u; i < m_Components.size(); i++)
 	{

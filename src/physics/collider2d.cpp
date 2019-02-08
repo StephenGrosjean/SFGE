@@ -59,9 +59,9 @@ void editor::ColliderInfo::DrawOnInspector()
 }
 
 
-void ColliderManager::Init()
+void ColliderManager::OnEngineInit()
 {
-	MultipleComponentManager::Init();
+	MultipleComponentManager::OnEngineInit();
 	m_BodyManager = m_Engine.GetPhysicsManager()->GetBodyManager();
 }
 

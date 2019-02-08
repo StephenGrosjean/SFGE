@@ -68,8 +68,8 @@ class Body2dManager : public SingleComponentManager<Body2d, editor::Body2dInfo, 
 {
 public:
 	using SingleComponentManager::SingleComponentManager;
-	void Init() override;
-	void FixedUpdate() override;
+	void OnEngineInit() override;
+	void OnFixedUpdate() override;
 	Body2d* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity) override;
 	void DestroyComponent(Entity entity) override;

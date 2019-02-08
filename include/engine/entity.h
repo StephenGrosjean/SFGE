@@ -67,9 +67,9 @@ class EntityManager : public System
 {
 public:
 	using System::System;
-	void Init() override;
+	void OnEngineInit() override;
 
-	void Clear() override;
+	void OnBeforeSceneLoad() override;
 
 	EntityMask GetMask(Entity entity);
 	Entity CreateEntity(Entity wantedEntity);

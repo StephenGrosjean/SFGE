@@ -56,7 +56,7 @@ public:
 	/**
 	 * \brief Load all the textures in the data in Shipping mode
 	 */
-	void Init() override;
+	void OnEngineInit() override;
 
 	/**
 	* \brief load the texture from the disk or the texture cache
@@ -71,9 +71,9 @@ public:
 	*/
 	sf::Texture* GetTexture(TextureId textureId);
 	
-	void Clear() override;
+	void OnBeforeSceneLoad() override;
 
-	void Collect() override;
+	void OnAfterSceneLoad() override;
 
 
 

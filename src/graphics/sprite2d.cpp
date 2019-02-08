@@ -95,9 +95,9 @@ void editor::SpriteInfo::DrawOnInspector()
 }
 
 
-void SpriteManager::Init()
+void SpriteManager::OnEngineInit()
 {
-	SingleComponentManager::Init();
+	SingleComponentManager::OnEngineInit();
 	m_GraphicsManager = m_Engine.GetGraphics2dManager();
 	m_Transform2dManager = m_Engine.GetTransform2dManager();
 
@@ -116,7 +116,7 @@ Sprite* SpriteManager::AddComponent(Entity entity)
 }
 
 
-void SpriteManager::Update(float dt)
+void SpriteManager::OnUpdate(float dt)
 {
 	(void) dt;
 	rmt_ScopedCPUSample(SpriteUpdate,0)
@@ -142,11 +142,11 @@ void SpriteManager::DrawSprites(sf::RenderWindow &window)
 	
 }
 
-void SpriteManager::Reset()
+void SpriteManager::OnBeforeSceneLoad()
 {
 }
 
-void SpriteManager::Collect()
+void SpriteManager::OnAfterSceneLoad()
 {
 	
 }

@@ -49,19 +49,19 @@ public:
 	/**
 	* \brief Initialize SoundManager class, SoundBuffer class and MusicManager class
 	*/
-	void Init() override;
+	void OnEngineInit() override;
 	/**
 	* \brief Update the audioManager, called only in play mode
 	* \ param dt The delta time since last frame
 	*/
-	void Update(float dt) override;
+	void OnUpdate(float dt) override;
 
 	SoundManager* GetSoundManager();
 	MusicManager* GetMusicManager();
 	SoundBufferManager* GetSoundBufferManager();
 	void Destroy() override;
-	void Clear() override;
-	void Collect() override;
+	void OnBeforeSceneLoad() override;
+	void OnAfterSceneLoad() override;
 protected:
 	SoundManager m_SoundManager {m_Engine};
 	SoundBufferManager m_SoundBufferManager{ m_Engine };

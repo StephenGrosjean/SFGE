@@ -60,7 +60,7 @@ class ColliderManager : public MultipleComponentManager<ColliderData, editor::Co
 {
 public:
 	using MultipleComponentManager::MultipleComponentManager;
-	void Init() override;
+	void OnEngineInit() override;
 	ColliderData* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity)override;
 	void DestroyComponent(Entity entity) override;

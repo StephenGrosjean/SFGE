@@ -55,8 +55,8 @@ void Transform2dManager::DestroyComponent(Entity entity)
 }
 
 
-void Transform2dManager::Update(float dt) {
-    System::Update(dt);
+void Transform2dManager::OnUpdate(float dt) {
+	System::OnUpdate(dt);
     for(auto& transform : m_Components)
 	{
     	if(transform.EulerAngle > 180.0f)

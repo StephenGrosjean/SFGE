@@ -51,7 +51,7 @@ Editor::Editor(Engine& engine):
 /**
 * \brief Initialize the SceneManager, get the Configuration from Engine and save the Scene lists from it
 */
-void Editor::Init()
+void Editor::OnEngineInit()
 {
 	m_GraphicsManager = m_Engine.GetGraphics2dManager();
 	m_EntityManager = m_Engine.GetEntityManager();
@@ -59,7 +59,7 @@ void Editor::Init()
 	m_Enable = m_Config == nullptr || m_Config->editor;
 	m_KeyboardManager = &m_Engine.GetInputManager()->GetKeyboardManager();
 	m_Window = m_GraphicsManager->GetWindow();
-	m_ToolWindow.Init();
+	m_ToolWindow.OnEngineInit();
 	Log::GetInstance()->Msg("Enabling Editor");
 	if(m_Window)
 	{
@@ -71,7 +71,7 @@ void Editor::Init()
 	}
 
 }
-void Editor::Update(float dt)
+void Editor::OnUpdate(float dt)
 {
 	if(m_KeyboardManager->IsKeyDown(enablingKey))
 	{
@@ -121,8 +121,8 @@ void Editor::Update(float dt)
 			}
 			ImGui::End();
 			m_ProfilerWindow.Update();
-			m_ToolWindow.Update(dt);
-			m_ToolWindow.Draw();
+			m_ToolWindow.OnUpdate(dt);
+			m_ToolWindow.OnDraw();
 		}
 		
 	}
@@ -141,7 +141,7 @@ void Editor::ProcessEvent(sf::Event& event) const
 	}
 }
 
-void Editor::Draw()
+void Editor::OnDraw()
 {
 	if (m_Enable)
 	{
@@ -165,11 +165,11 @@ void Editor::Destroy()
 	}
 }
 
-void Editor::Collect()
+void Editor::OnAfterSceneLoad()
 {
 }
 
-void Editor::Clear()
+void Editor::OnBeforeSceneLoad()
 {
 }
 

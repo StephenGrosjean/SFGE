@@ -40,7 +40,7 @@ PlanetSystem::PlanetSystem(Engine& engine):
 {
 }
 
-void PlanetSystem::Init()
+void PlanetSystem::OnEngineInit()
 {
 	m_Transform2DManager = m_Engine.GetTransform2dManager();
 	m_Body2DManager = m_Engine.GetPhysicsManager()->GetBodyManager();
@@ -108,7 +108,7 @@ void PlanetSystem::Init()
 	}
 }
 
-void PlanetSystem::Update(float dt)
+void PlanetSystem::OnUpdate(float dt)
 {
 	(void) dt;
 }
@@ -135,7 +135,7 @@ void PlanetSystem::UpdateRange(int startIndex, int endIndex)
 #endif
 }
 
-void PlanetSystem::FixedUpdate()
+void PlanetSystem::OnFixedUpdate()
 {
 	rmt_ScopedCPUSample(PlanetSystemFixedUpdate,0);
 #ifdef MULTI_THREAD
@@ -185,7 +185,7 @@ void PlanetSystem::FixedUpdate()
 
 }
 
-void PlanetSystem::Draw()
+void PlanetSystem::OnDraw()
 {
 	rmt_ScopedCPUSample(PlanetSystemDraw,0);
 #ifdef WITH_VERTEXARRAY

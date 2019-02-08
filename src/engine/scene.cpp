@@ -54,7 +54,7 @@ SceneManager::SceneManager(Engine& engine):
 {
 }
 
-void SceneManager::Init()
+void SceneManager::OnEngineInit()
 {
 	m_EntityManager = m_Engine.GetEntityManager();
 	if(auto config = m_Engine.GetConfig())
@@ -308,20 +308,20 @@ void SceneManager::AddComponentManager(IComponentFactory *componentFactory, Comp
 	const auto index = static_cast<int>(log2((double)componentType));
 	m_ComponentManager[index] = componentFactory;
 }
-void SceneManager::Update(float dt)
+void SceneManager::OnUpdate(float dt)
 {
 	rmt_ScopedCPUSample(PySceneSystemUpdate,0);
 	for(auto* pySystem: m_ScenePySystems)
 	{
-		pySystem->Update(dt);
+		pySystem->OnUpdate(dt);
 	}
 }
-void SceneManager::FixedUpdate()
+void SceneManager::OnFixedUpdate()
 {
 	rmt_ScopedCPUSample(PySceneSystemFixedUpdate,0);
 	for(auto* pySystem: m_ScenePySystems)
 	{
-		pySystem->FixedUpdate();
+		pySystem->OnFixedUpdate();
 	}
 }
 void SceneManager::Destroy()
@@ -335,20 +335,20 @@ void SceneManager::InitScenePySystems()
 	{
 		if(pySystem != nullptr)
 		{
-			pySystem->Init();
+			pySystem->OnEngineInit();
 		}
 	}
 }
-void SceneManager::Draw()
+void SceneManager::OnDraw()
 {
 	rmt_ScopedCPUSample(PySceneSystemDraw,0);
 	for(auto* pySystem: m_ScenePySystems)
 	{
-		pySystem->Draw();
+		pySystem->OnDraw();
 	}
 }
 
-	void SceneManager::Clear() {
+	void SceneManager::OnBeforeSceneLoad() {
 		Destroy();
 	}
 

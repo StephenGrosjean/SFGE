@@ -148,22 +148,17 @@ void Sound::SetBuffer(sf::SoundBuffer* buffer)
 	m_Sound.setBuffer(*buffer);
 }
 
-void SoundManager::Init()
+void SoundManager::OnEngineInit()
 {
-	BasicComponentManager::Init();
+	BasicComponentManager::OnEngineInit();
 	m_Components.resize(MAX_SOUND_CHANNELS);
 	m_ComponentsInfo.resize(MAX_SOUND_CHANNELS);
 	m_SoundBufferManager = m_Engine.GetAudioManager()->GetSoundBufferManager();
 }
-void SoundManager::Reset()
-{
+void SoundManager::OnBeforeSceneLoad() {}
 
-}
+void SoundManager::OnAfterSceneLoad() {}
 
-void SoundManager::Collect()
-{
-
-}
 Sound *SoundManager::GetComponentPtr(Entity entity)
 {
 	for(auto& sound : m_Components)
@@ -211,7 +206,7 @@ SoundBufferManager::~SoundBufferManager()
 	m_SoundBuffers.clear();
 }
 
-void SoundBufferManager::Init()
+void SoundBufferManager::OnEngineInit()
 {
 	if (const auto config = m_Engine.GetConfig())
 	{
@@ -263,7 +258,7 @@ bool SoundBufferManager::HasValidExtension(std::string filename)
 	return sndExtensionSet.find(extension) != sndExtensionSet.end();
 }
 
-void SoundBufferManager::Clear()
+void SoundBufferManager::OnBeforeSceneLoad()
 {
 	for (auto& soundBufferRefCount : m_SoundBufferCountRefs)
 	{
@@ -271,7 +266,7 @@ void SoundBufferManager::Clear()
 	}
 }
 
-void SoundBufferManager::Collect()
+void SoundBufferManager::OnAfterSceneLoad()
 {
 	std::list<SoundBufferId> unusedBufferIds;
 	for (auto i = 0U; i < m_SoundBufferCountRefs.size(); i++)

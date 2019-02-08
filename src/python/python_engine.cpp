@@ -76,10 +76,10 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	py::class_<System, PySystem> system(m, "System");
 	system
 		.def(py::init<Engine&>(), py::return_value_policy::reference)
-		.def("init", &System::Init)
-		.def("update", &System::Update)
-		.def("fixed_update", &System::FixedUpdate)
-		.def("draw", &System::Draw);
+		.def("init", &System::OnEngineInit)
+		.def("update", &System::OnUpdate)
+		.def("fixed_update", &System::OnFixedUpdate)
+		.def("draw", &System::OnDraw);
 
 	py::class_<SceneManager> sceneManager(m, "SceneManager");
 	sceneManager
@@ -387,13 +387,13 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	
 }
 
-void PythonEngine::Init()
+void PythonEngine::OnEngineInit()
 {
 
 	Log::GetInstance()->Msg("Initialise the python embed interpretor");
-	System::Init();
-	m_PyComponentManager.Init();
-	m_PySystemManager.Init();
+	System::OnEngineInit();
+	m_PyComponentManager.OnEngineInit();
+	m_PySystemManager.OnEngineInit();
 
 	py::initialize_interpreter();
 	//Adding reference to c++ engine modules
@@ -425,26 +425,26 @@ void PythonEngine::InitScriptsInstances()
 }
 
 
-void PythonEngine::Update(float dt)
+void PythonEngine::OnUpdate(float dt)
 {
 	rmt_ScopedCPUSample(PythonUpdate,0);
-	m_PyComponentManager.Update(dt);
-	m_PySystemManager.Update(dt);
+	m_PyComponentManager.OnUpdate(dt);
+	m_PySystemManager.OnUpdate(dt);
 }
 
-void PythonEngine::FixedUpdate()
+void PythonEngine::OnFixedUpdate()
 {
 
 	rmt_ScopedCPUSample(PythonFixedUpdate,0);
-	m_PyComponentManager.FixedUpdate();
-	m_PySystemManager.FixedUpdate();
+	m_PyComponentManager.OnFixedUpdate();
+	m_PySystemManager.OnFixedUpdate();
 }
 
-void PythonEngine::Draw()
+void PythonEngine::OnDraw()
 {
 	rmt_ScopedCPUSample(PythonDraw,0);
-	m_PyComponentManager.Draw();
-	m_PySystemManager.Draw();
+	m_PyComponentManager.OnDraw();
+	m_PySystemManager.OnDraw();
 }
 
 
@@ -458,7 +458,7 @@ void PythonEngine::Destroy()
 	py::finalize_interpreter();
 }
 
-void PythonEngine::Clear()
+void PythonEngine::OnBeforeSceneLoad()
 {
 
 }
@@ -533,7 +533,7 @@ ModuleId PythonEngine::LoadPyModule(std::string moduleFilename)
 
 
 
-void PythonEngine::Collect()
+void PythonEngine::OnAfterSceneLoad()
 {
 }
 
