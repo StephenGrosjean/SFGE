@@ -281,5 +281,9 @@ endforeach()
 
 
 #write tool config file
-string(REPLACE "\"\"" "\",\"" tools_list ${tools})
+
+list(LENGTH tools_list list_length)
+if(list_length)
+	string(REPLACE "\"\"" "\",\"" tools_list ${tools})
+endif()
 file (WRITE "${CMAKE_BINARY_DIR}/data/tools_config.json" "{\"tools\" : [${tools_list}], \"src_dir\": \"${CMAKE_SOURCE_DIR}\", \"bin_dir\": \"${CMAKE_BINARY_DIR}\"}")

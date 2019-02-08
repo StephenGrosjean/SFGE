@@ -33,12 +33,51 @@ SOFTWARE.
 #include <engine/globals.h>
 
 #include <utility/log.h>
-#include <engine/systems_container.h>
 
+#include <graphics/graphics2d.h>
+#include <audio/audio.h>
+#include <engine/scene.h>
+#include <input/input.h>
+#include <python/python_engine.h>
+#include <physics/physics2d.h>
+#include <editor/editor.h>
+#include <engine/entity.h>
+#include <engine/transform2d.h>
 
 
 namespace sfge
 {
+
+struct SystemsContainer
+{
+public:
+	SystemsContainer(Engine &engine) :
+		graphics2dManager(engine),
+		audioManager(engine),
+		sceneManager(engine),
+		inputManager(engine),
+		pythonEngine(engine),
+		physicsManager(engine),
+		editor(engine),
+		entityManager(engine),
+		transformManager(engine)
+	{
+
+	}
+	SystemsContainer(const SystemsContainer&) = delete;
+
+	Graphics2dManager graphics2dManager;
+	AudioManager audioManager;
+	SceneManager sceneManager;
+	InputManager inputManager;
+	PythonEngine pythonEngine;
+	Physics2dManager physicsManager;
+	Editor editor;
+	EntityManager entityManager;
+	Transform2dManager transformManager;
+
+};
+
 
 Engine::Engine()
 {

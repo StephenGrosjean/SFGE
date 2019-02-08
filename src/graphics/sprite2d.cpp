@@ -38,13 +38,11 @@ SOFTWARE.
 namespace sfge
 {
 
-Sprite::Sprite() :
-	TransformRequiredComponent(nullptr), Offsetable(sf::Vector2f())
+Sprite::Sprite() : Offsetable(sf::Vector2f())
 {
 }
 
-Sprite::Sprite(Transform2d* transform, sf::Vector2f offset)
-	: TransformRequiredComponent(transform), Offsetable(offset)
+Sprite::Sprite(Transform2d* transform, sf::Vector2f offset) : Offsetable(offset)
 {
 }
 void Sprite::Draw(sf::RenderWindow& window)
@@ -70,11 +68,11 @@ void Sprite::Init()
 void Sprite::Update()
 {
 	auto pos = m_Offset;
-	if(m_Transform != nullptr)
+	/*if(m_Transform != nullptr)
 	{
 		pos += m_Transform->Position;
 		sprite.setRotation(m_Transform->EulerAngle);
-	}
+	}*/
 	sprite.setPosition(pos);
 }
 
@@ -85,7 +83,7 @@ void editor::SpriteInfo::DrawOnInspector()
 	ImGui::Text("Sprite");
 	ImGui::LabelText("Texture Path", "%s", texturePath.c_str());
 	ImGui::InputInt("Texture Id", (int*)&textureId);
-	if(sprite)
+	/*if(sprite)
 	{
 		float offset[2] =
 		{
@@ -93,7 +91,7 @@ void editor::SpriteInfo::DrawOnInspector()
 			sprite->GetOffset().y
 		};
 		ImGui::InputFloat2("Offset", offset);
-	}
+	}*/
 }
 
 
@@ -110,8 +108,8 @@ Sprite* SpriteManager::AddComponent(Entity entity)
 	auto& sprite = GetComponentRef(entity);
 	auto& spriteInfo = GetComponentInfo(entity);
 
-	sprite.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
-	spriteInfo.sprite = &sprite;
+	//sprite.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
+	//spriteInfo.sprite = &sprite;
 
 	m_EntityManager->AddComponentType(entity, ComponentType::SPRITE2D);
 	return &sprite;
@@ -175,7 +173,7 @@ void SpriteManager::CreateComponent(json& componentJson, Entity entity)
 				}*/
 				texture = textureManager->GetTexture(textureId);
 				newSprite.SetTexture(texture);
-				newSprite.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
+				//newSprite.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
 				newSpriteInfo.textureId = textureId;
 			}
 			else

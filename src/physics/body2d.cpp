@@ -31,12 +31,11 @@ SOFTWARE.
 #include <engine/engine.h>
 namespace sfge
 {
-Body2d::Body2d() : TransformRequiredComponent(nullptr), Offsetable(sf::Vector2f())
+Body2d::Body2d() : Offsetable(sf::Vector2f())
 {
 }
 
-Body2d::Body2d(Transform2d *transform, Vec2f offset) :
-	TransformRequiredComponent(transform), Offsetable(offset)
+Body2d::Body2d(Transform2d *transform, Vec2f offset) : Offsetable(offset)
 {
 	
 }
@@ -88,7 +87,7 @@ b2Body * Body2d::GetBody()
 
 void editor::Body2dInfo::DrawOnInspector()
 {
-	const auto b2Body = body->GetBody();
+	/*const auto b2Body = body->GetBody();
 	ImGui::Separator();
 	ImGui::Text("Body2d");
 	if(b2Body != nullptr)
@@ -127,7 +126,7 @@ void editor::Body2dInfo::DrawOnInspector()
 			ImGui::PlotLines("Y", &yValues[0], yValues.size(), 0, "", -10.0f, 10.0f, ImVec2(0, 120));
 			ImGui::EndTooltip();
 		}
-	}
+	}*/
 }
 
 void editor::Body2dInfo::AddVelocity(b2Vec2 velocity)
@@ -185,7 +184,7 @@ Body2d* Body2dManager::AddComponent(Entity entity)
 		m_Components[entity - 1].SetBody(body);
 
 		auto& componentInfo = m_ComponentsInfo[entity-1];
-		componentInfo.body = &m_Components[entity - 1];
+		//componentInfo.body = &m_Components[entity - 1];
 		componentInfo.name = "Body";
 
 		m_EntityManager->AddComponentType(entity, ComponentType::BODY2D);
@@ -219,7 +218,7 @@ void Body2dManager::CreateComponent(json& componentJson, Entity entity)
 		auto* body = world->CreateBody(&bodyDef);
 		m_Components[entity - 1] = Body2d(transform, offset);
 		m_Components[entity - 1].SetBody(body);
-		m_ComponentsInfo[entity - 1].body = &m_Components[entity - 1];
+		//m_ComponentsInfo[entity - 1].body = &m_Components[entity - 1];
 	}
 }
 

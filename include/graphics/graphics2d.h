@@ -29,7 +29,6 @@ SOFTWARE.
 #include <graphics/shape2d.h>
 #include <graphics/texture.h>
 #include <graphics/sprite2d.h>
-#include <graphics/animation2d.h>
 
 namespace sfge
 {

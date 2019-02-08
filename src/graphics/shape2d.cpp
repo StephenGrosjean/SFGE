@@ -39,7 +39,7 @@ Shape::Shape (): Shape (nullptr, sf::Vector2f())
 
 }
 Shape::Shape(Transform2d * transform, const sf::Vector2f offset) : 
-	Offsetable(offset), TransformRequiredComponent(transform)
+	Offsetable(offset)
 {
 	
 }
@@ -68,9 +68,10 @@ void Shape::Update(float dt) const
 	(void) dt;
 	auto newPosition = m_Offset;
 
-	if(m_Transform != nullptr)
+	//TODO moves update to systems
+	//if(m_Transform != nullptr)
 	{
-		newPosition += m_Transform->Position;
+	//	newPosition += m_Transform->Position;
 	}
 
 	if(m_Shape != nullptr)
@@ -89,7 +90,7 @@ sf::Shape *Shape::GetShape ()
 
 void editor::ShapeInfo::DrawOnInspector ()
 {
-	if(shapePtr != nullptr && shapePtr->GetShape() != nullptr)
+	/*if(shapePtr != nullptr && shapePtr->GetShape() != nullptr)
 	{
 		ImGui::Separator();
 		ImGui::Text("Shape");
@@ -118,7 +119,7 @@ void editor::ShapeInfo::DrawOnInspector ()
 			};
 			ImGui::InputFloat2("Size", size);
 		}
-	}
+	}*/
 }
 
 void ShapeManager::Init()
@@ -167,7 +168,10 @@ void ShapeManager::Clear()
 Shape *ShapeManager::AddComponent (Entity entity)
 {
 	auto shapePtr = GetComponentPtr (entity);
-	GetComponentInfo (entity).shapePtr = shapePtr;
+	auto& shapeInfo = GetComponentInfo(entity);
+	shapeInfo.entity = entity;
+	shapeInfo.engine = &m_Engine;
+
 	m_Engine.GetEntityManager()->AddComponentType(entity, ComponentType::SHAPE2D);
 	return shapePtr;
 }
@@ -182,11 +186,11 @@ void ShapeManager::CreateComponent(json& componentJson, Entity entity)
 	}
 
 	auto& shape = m_Components[entity-1];
-	shape.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
+	//shape.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
 	shape.SetOffset(offset);
 
 	auto shapeInfo = editor::ShapeInfo();
-	shapeInfo.shapePtr = &shape;
+	//shapeInfo.shapePtr = &shape;
 
 	if (CheckJsonNumber(componentJson, "shape_type"))
 	{

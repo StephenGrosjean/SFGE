@@ -63,7 +63,6 @@ void Graphics2dManager::Init()
 	m_TextureManager.Init();
 	m_ShapeManager.Init();
 	m_SpriteManager.Init();
-	m_AnimationManager.Init();
 
 }
 
@@ -75,11 +74,9 @@ void Graphics2dManager::Update(float dt)
 		m_Window->clear();
 
 		m_SpriteManager.Update(dt);
-		m_AnimationManager.Update(dt);
 		m_ShapeManager.Update(dt);
 
 		m_SpriteManager.DrawSprites(*m_Window);
-		m_AnimationManager.DrawAnimations(*m_Window);
 		m_ShapeManager.DrawShapes(*m_Window);
 	}
 }
@@ -113,11 +110,6 @@ sf::RenderWindow* Graphics2dManager::GetWindow()
 SpriteManager* Graphics2dManager::GetSpriteManager()
 {
 	return &m_SpriteManager;
-}
-
-AnimationManager* Graphics2dManager::GetAnimationManager()
-{
-	return &m_AnimationManager;
 }
 
 TextureManager* Graphics2dManager::GetTextureManager()
