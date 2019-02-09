@@ -66,16 +66,27 @@ source_group("Utility"            FILES ${SFGE_UTILITY_SRC})
 List(APPEND SFGE_SRC  ${SFGE_AUDIO_SRC} ${SFGE_ENGINE_SRC} ${SFGE_EDITOR_SRC} ${SFGE_GRAPHICS_SRC}
 ${SFGE_INPUT_SRC} ${SFGE_PHYSICS_SRC}  ${SFGE_PYTHON_SRC} ${SFGE_UTILITY_SRC})
 
+if(MSVC)
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+endif()
+
+
 #SFML
 set(SFML_DIR ${EXTERNAL_DIR}/SFML)
 set(SFML_BUILD_EXAMPLES FALSE)
 set(BUILD_SHARED_LIBS FALSE)
-
+set(SFML_STATIC_LIBRARIES TRUE)
 add_subdirectory(${SFML_DIR})
 include_directories(${SFML_DIR}/include ${SFML_DIR}/src)
 
+message("SFML lib: ${SFML_LIBRARIES} ${SFML_DEPEDENCIES} ")
+
 LIST(APPEND SFGE_LIBRARIES
-		sfml-system sfml-audio sfml-window sfml-graphics  ${SFML_DEPEDENCIES})
+		sfml-audio sfml-graphics sfml-window sfml-system)
 
 
 #Google Test
