@@ -69,15 +69,13 @@ ${SFGE_INPUT_SRC} ${SFGE_PHYSICS_SRC}  ${SFGE_PYTHON_SRC} ${SFGE_UTILITY_SRC})
 #SFML
 set(SFML_DIR ${EXTERNAL_DIR}/SFML)
 set(SFML_BUILD_EXAMPLES FALSE)
+set(BUILD_SHARED_LIBS FALSE)
+
 add_subdirectory(${SFML_DIR})
 include_directories(${SFML_DIR}/include ${SFML_DIR}/src)
 
 LIST(APPEND SFGE_LIBRARIES
-	sfml-system
-	sfml-window
-	sfml-graphics
-	sfml-audio
-	sfml-network)
+		sfml-system sfml-audio sfml-window sfml-graphics  ${SFML_DEPEDENCIES})
 
 
 #Google Test

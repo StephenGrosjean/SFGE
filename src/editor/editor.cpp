@@ -161,7 +161,7 @@ void Editor::Destroy()
 {
 	if (m_Enable)
 	{
-		ImGui::Shutdown();
+		ImGui::SFML::Shutdown();
 	}
 }
 
