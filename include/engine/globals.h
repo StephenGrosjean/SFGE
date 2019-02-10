@@ -28,6 +28,11 @@
 #define SFGE_GLOBALS_H
 
 
+#if ((ULONG_MAX) == (UINT_MAX))
+#define IS64BIT
+#else
+#define IS32BIT
+#endif
 
 #define PATH_LIMIT 4096
 #define INIT_ENTITY_NMB 100

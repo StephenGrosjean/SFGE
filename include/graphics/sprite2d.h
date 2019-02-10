@@ -86,7 +86,7 @@ public:
 	void OnUpdate(float dt) override;
 	void DrawSprites(sf::RenderWindow &window);
 
-	void OnBeforeSceneLoad();
+	void OnBeforeSceneLoad() override;
 	void OnAfterSceneLoad() override;
 	Sprite* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity) override;

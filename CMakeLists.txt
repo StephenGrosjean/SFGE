@@ -191,7 +191,7 @@ include_directories(extensions/include/)
 
 file(GLOB_RECURSE SFGE_EXTENSIONS_SRC extensions/src/*.cpp extensions/include/*.h)
 source_group("Extensions"            FILES ${SFGE_EXTENSIONS_SRC})
-add_library(SFGE_COMMON STATIC ${SFGE_SRC} ${SFGE_EXTENSIONS_SRC})
+add_library(SFGE_COMMON STATIC ${SFGE_SRC} ${SFGE_EXTENSIONS_SRC} src/engine/memory.cpp)
 message("SFGE LIBRARIES : ${SFGE_LIBRARIES}")
 target_link_libraries(SFGE_COMMON PUBLIC ${SFGE_LIBRARIES})
 set_property(TARGET SFGE_COMMON PROPERTY CXX_STANDARD 17)
@@ -206,7 +206,7 @@ ENDIF()
 #SFGE TEST
 SET(SFGE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
 file(GLOB TEST_FILES ${SFGE_TEST_DIR}/*.cpp )
-add_executable(SFGE_TEST ${TEST_FILES} )
+add_executable(SFGE_TEST ${TEST_FILES} tests/test_memory.cpp)
 target_link_libraries(SFGE_TEST gtest gtest_main SFGE_COMMON)
 if(APPLE )
 	set_target_properties(SFGE_TEST PROPERTIES
