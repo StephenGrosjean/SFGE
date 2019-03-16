@@ -29,68 +29,6 @@ SOFTWARE.
 #include <gtest/gtest.h>
 #include <engine/component.h>
 
-
-TEST(System, TestPlanetPyComponent)
-{
-	const int entityNmb = 10'000;
-	sfge::Engine engine;
-
-	std::unique_ptr<sfge::Configuration> initConfig = std::make_unique<sfge::Configuration>();
-	initConfig->gravity.SetZero();
-	initConfig->devMode = false;
-	initConfig->maxFramerate = 0;
-	engine.Init(std::move(initConfig));
-
-	const auto config = engine.GetConfig();
-	json sceneJson = {
-		{ "name", "Test Planet Component" } };
-	json entitiesArray = json::array();
-	for (int i = 0; i < entityNmb; i++)
-	{
-		//Adding transform
-		json transformJson =
-		{
-			{ "position", { rand() % config->screenResolution.x, rand() % config->screenResolution.y } },
-			{ "angle", 0.0f },
-			{ "type", static_cast<int>(sfge::ComponentType::TRANSFORM2D) },
-		};
-
-		json spriteJson =
-		{
-			{ "path", "data/sprites/round.png" },
-			{ "type", static_cast<int>(sfge::ComponentType::SPRITE2D) }
-		};
-
-		json pyComponentJson =
-		{
-			{"type", static_cast<int>(sfge::ComponentType::PYCOMPONENT)},
-			{"script_path", "scripts/planet_component.py"}
-		};
-		json bodyJson =
-		{
-			{"type", static_cast<int>(sfge::ComponentType::BODY2D)},
-			{"body_type", b2_dynamicBody}
-		};
-		std::ostringstream oss;
-		oss << "Entity " << i;
-		const json entityJson =
-		{
-			{ "name", oss.str() },
-			{ "components",{
-				transformJson, spriteJson, bodyJson, pyComponentJson
-			}
-		}
-		};
-		entitiesArray.push_back(entityJson);
-	}
-	sceneJson["entities"] = entitiesArray;
-	auto* sceneManager = engine.GetSceneManager();
-	sceneManager->LoadSceneFromJson(sceneJson);
-
-	engine.Start();
-
-}
-
 TEST(System, TestPlanetPySystem)
 {
 	sfge::Engine engine;

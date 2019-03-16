@@ -211,15 +211,17 @@ void Body2dManager::CreateComponent(json& componentJson, Entity entity)
 		}
 
 		const auto offset = GetVectorFromJson(componentJson, "offset");
-
+		const auto velocity = GetVectorFromJson(componentJson, "velocity");
 
 		auto* transform = m_Transform2dManager->GetComponentPtr(entity);
 		const auto pos = transform->Position + offset;
 		bodyDef.position.Set(pixel2meter(pos.x), pixel2meter(pos.y));
 		
 		auto* body = world->CreateBody(&bodyDef);
+		body->SetLinearVelocity(pixel2meter(velocity));
 		m_Components[entity - 1] = Body2d(transform, offset);
 		m_Components[entity - 1].SetBody(body);
+
 
 		m_ComponentsInfo[entity - 1].bodyManager = this;
 		m_ComponentsInfo[entity - 1].SetEntity(entity);

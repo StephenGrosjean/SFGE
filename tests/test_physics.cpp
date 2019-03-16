@@ -102,3 +102,67 @@ TEST(Physics, TestBallFallingToGround)
 	engine.Start();
 
 }
+
+TEST(Physics, TestShapeContact)
+{
+	sfge::Engine engine;
+	auto config = std::make_unique<sfge::Configuration>();
+	config->gravity = b2Vec2(0.0f, 0.0f);
+	engine.Init(std::move(config));
+
+	auto* sceneManager = engine.GetSceneManager();
+
+	json sceneJson;
+	sceneJson["name"] = "Contacts";
+
+	const int entitiesNmb = 5;
+	json entities[entitiesNmb];
+
+	json shapes[] =
+	{
+		{
+			{"name","Rect Shape Component"},
+			{"type",sfge::ComponentType::SHAPE2D},
+			{"shape_type", sfge::ShapeType::RECTANGLE},
+			{"size",{100,100}}
+		}
+	};
+	json colliders[] =
+	{
+		{
+			{"name","Rect Collider"},
+			{"type", sfge::ComponentType::COLLIDER2D},
+			{"collider_type",sfge::ColliderType::BOX},
+			{"size",{100,100}},
+			{"sensor",true}
+		}
+	};
+
+	for (int i = 0; i < entitiesNmb; i++)
+	{
+		json& entityJson = entities[i];
+
+		json transformJson =
+		{
+			{"position",{ rand() % 800,rand() % 600 }},
+			{"type", sfge::ComponentType::TRANSFORM2D}
+		};
+
+		json rigidbody =
+		{
+			{"name", "Rigidbody"},
+			{"type", sfge::ComponentType::BODY2D},
+			{"body_type", b2_dynamicBody},
+			{"velocity", {rand() % 50, rand() % 50}}
+		};
+
+		entityJson["components"] = { transformJson, shapes[0], rigidbody, colliders[0] };
+
+	}
+	sceneJson["entities"] = entities;
+	sceneJson["systems"] = {
+		{ "script_path", "scripts/contact_debug_system.py" }
+	};
+	sceneManager->LoadSceneFromJson(sceneJson);
+	engine.Start();
+}

@@ -47,10 +47,6 @@ Sprite::Sprite(Transform2d* transform, sf::Vector2f offset) : Offsetable(offset)
 }
 void Sprite::Draw(sf::RenderWindow& window)
 {
-	/*sprite.setPosition(m_GameObject->GetTransform()->GetPosition()+m_Offset);
-	sprite.setScale(m_GameObject->GetTransform()->GetScale());
-	sprite.setRotation(m_GameObject->GetTransform()->GetEulerAngle());*/
-	
 	window.draw(sprite);
 }
 void Sprite::SetTexture(sf::Texture* newTexture)
@@ -67,13 +63,10 @@ void Sprite::Init()
 
 void Sprite::Update()
 {
-	auto pos = m_Offset;
-	/*if(m_Transform != nullptr)
-	{
-		pos += m_Transform->Position;
-		sprite.setRotation(m_Transform->EulerAngle);
-	}*/
-	sprite.setPosition(pos);
+	sprite.setPosition(transform.Position + m_Offset);
+	sprite.setScale(transform.Scale);
+	sprite.setRotation(transform.EulerAngle);
+
 }
 
 
@@ -119,11 +112,17 @@ Sprite* SpriteManager::AddComponent(Entity entity)
 void SpriteManager::OnUpdate(float dt)
 {
 	(void) dt;
-	rmt_ScopedCPUSample(SpriteUpdate,0)
+
+	rmt_ScopedCPUSample(SpriteUpdate, 0);
+	auto* transformManager = m_Engine.GetTransform2dManager();
 	for(auto i = 0u; i < m_Components.size();i++)
 	{
 		if(m_EntityManager->HasComponent(i+1, ComponentType::SPRITE2D))
 		{
+			if(m_EntityManager->HasComponent(i+1, ComponentType::TRANSFORM2D))
+			{
+				m_Components[i].transform = transformManager->GetComponentRef(i + 1);
+			}
 			m_Components[i].Update();
 		}
 	}

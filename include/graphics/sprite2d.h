@@ -53,11 +53,9 @@ public:
 	void Update();
 	void Draw(sf::RenderWindow& window);
 	void SetTexture(sf::Texture* newTexture);
-
-
-
-	
 protected:
+	friend class SpriteManager;
+	Transform2d transform;
 	sf::Sprite sprite;
 };
 
