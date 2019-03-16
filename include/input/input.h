@@ -50,9 +50,11 @@ private:
 	std::array<KeyPressedStatus, sf::Keyboard::Key::KeyCount> keyPressedStatusArray= {};
 };
 
-class MouseManager
+class MouseManager : public System
 {
 public:
+	using System::System;
+	sf::Vector2i GetPosition() const;
 	sf::Vector2i GetLocalPosition(sf::Window& window) const;
 };
 /**
@@ -81,7 +83,7 @@ public:
 
 protected:
 	KeyboardManager m_KeyboardManager{m_Engine};
-	MouseManager m_MouseManager;
+	MouseManager m_MouseManager{m_Engine};
 };
 
 

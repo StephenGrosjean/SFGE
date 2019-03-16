@@ -98,7 +98,7 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	mouseManager
 		.def_property_readonly("position", [](MouseManager* mouse){
 			//mouse->GetLocalPosition()
-			return Vec2f(0,0);
+			return Vec2f(mouse->GetPosition().x, mouse->GetPosition().y);
 		});
 
 	py::class_<KeyboardManager> keyboardManager(m, "KeyboardManager");
@@ -139,7 +139,8 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def("pixel2meter", [](sf::Vector2f v) {return pixel2meter(v); })
 		.def("pixel2meter", [](Vec2f v) {return pixel2meter(v); })
 		.def("meter2pixel", [](float v) {return meter2pixel(v); })
-		.def("meter2pixel", [](b2Vec2 v)->Vec2f {return meter2pixel(v); });
+		.def("meter2pixel", [](b2Vec2 v)->Vec2f {return meter2pixel(v); })
+		.def("raycast", &Physics2dManager::Raycast);
 
 	py::class_<Body2dManager> body2dManager(m, "Body2dManager");
 	body2dManager

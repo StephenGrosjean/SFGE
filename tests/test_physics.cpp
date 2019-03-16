@@ -182,10 +182,13 @@ TEST(Physics, TestShapeContact)
 	sceneJson["systems"] = json::array({
 		{
 			{ "script_path", "scripts/contact_debug_system.py" }
-			},
-			{
+		},
+		{
 			{ "script_path", "scripts/stay_onscreen_system.py" }
-			}
+		},
+		{
+			{ "script_path", "scripts/mouse_raycast_system.py" }
+		}
 	}
 	);
 	sceneManager->LoadSceneFromJson(sceneJson);

@@ -59,11 +59,12 @@ protected:
 class RaycastCallback : public b2RayCastCallback
 {
 public:
-	explicit RaycastCallback(Physics2dManager& physicsManager) : physics2dManager(physicsManager){}
+	float32 fraction;
+	b2Fixture* touchedFixture = nullptr;
 	float32 ReportFixture(	b2Fixture* fixture, const b2Vec2& point,
 									  const b2Vec2& normal, float32 fraction) override;
-private:
-	Physics2dManager& physics2dManager;
+
+
 };
 /**
  * \brief The Physics Manager use Box2D to simulate 2D physics

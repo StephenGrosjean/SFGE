@@ -30,6 +30,8 @@ SOFTWARE.
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include <graphics/graphics2d.h>
+
 namespace sfge
 {
 
@@ -98,5 +100,10 @@ bool KeyboardManager::IsKeyUp(sf::Keyboard::Key key) const
 sf::Vector2i MouseManager::GetLocalPosition(sf::Window& window) const
 {
 	return sf::Mouse::getPosition(window);
+}
+sf::Vector2i MouseManager::GetPosition() const
+{
+	auto* windowPtr = m_Engine.GetGraphics2dManager()->GetWindow();
+	return sf::Mouse::getPosition(*windowPtr);
 }
 }

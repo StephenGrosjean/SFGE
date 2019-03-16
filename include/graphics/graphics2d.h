@@ -63,7 +63,7 @@ public:
 	void OnAfterSceneLoad() override;
 
 
-	void DrawLine(sf::Vector2f from, sf::Vector2f to, sf::Color color=sf::Color::Red);
+	void DrawLine(Vec2f from, Vec2f to, sf::Color color=sf::Color::Red);
 
 	/**
 	* \brief Getter of the window created in GraphicsManager

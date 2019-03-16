@@ -104,9 +104,10 @@ ColliderManager* Physics2dManager::GetColliderManager()
 }
 float Physics2dManager::Raycast(Vec2f startPoint, Vec2f direction, float rayLength)
 {
-	RaycastCallback rayCastCallback{*this};
+	RaycastCallback rayCastCallback;
+	rayCastCallback.fraction = 1.0f;
 	m_World->RayCast(&rayCastCallback, pixel2meter(startPoint), pixel2meter(startPoint+direction*rayLength));
-	return 0.0f;
+	return rayCastCallback.fraction;
 }
 
 void ContactListener::BeginContact(b2Contact* contact)
@@ -115,11 +116,11 @@ void ContactListener::BeginContact(b2Contact* contact)
 	const auto colliderA = static_cast<ColliderData*>(contact->GetFixtureA()->GetUserData());
 	const auto colliderB = static_cast<ColliderData*>(contact->GetFixtureB()->GetUserData());
 
-	{
+	/*{
 		std::ostringstream oss;
 		oss << "Begin Contact between: " << colliderA->entity << " and: " << colliderB->entity;
 		Log::GetInstance()->Msg(oss.str());
-	}
+	}*/
 
 	auto& pySystems = pythonEngine->GetPySystemManager().GetPySystems();
 	for(size_t i = 0;i < pySystems.size();i++)
@@ -138,11 +139,11 @@ void ContactListener::EndContact(b2Contact* contact)
 	auto* colliderA = static_cast<ColliderData*>(contact->GetFixtureA()->GetUserData());
 	auto* colliderB = static_cast<ColliderData*>(contact->GetFixtureB()->GetUserData());
 
-	{
+	/*{
 		std::ostringstream oss;
 		oss << "End Contact between: " << colliderA->entity << " and: " << colliderB->entity;
 		Log::GetInstance()->Msg(oss.str());
-	}
+	}*/
 
 	auto& pySystems = pythonEngine->GetPySystemManager().GetPySystems();
 	for (size_t i = 0; i < pySystems.size(); i++)
@@ -195,8 +196,11 @@ ContactListener::ContactListener(Engine& engine):
 }
 float32 RaycastCallback::ReportFixture(b2Fixture *fixture, const b2Vec2 &point, const b2Vec2 &normal, float32 fraction)
 {
-	//TODO Debug Raycast
-
-	return fraction;
+	if(fraction < this->fraction)
+	{
+		this->fraction = fraction;
+		touchedFixture = fixture;
+	}
+	return 1.0f;
 }
 }

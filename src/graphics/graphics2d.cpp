@@ -91,7 +91,7 @@ void Graphics2dManager::Display()
 	}
 }
 
-void Graphics2dManager::DrawLine(sf::Vector2f from, sf::Vector2f to, sf::Color color)
+void Graphics2dManager::DrawLine(Vec2f from, Vec2f to, sf::Color color)
 {
 	sf::Vertex vertices[2] =
 	{

@@ -125,7 +125,7 @@ public:
 	//TODO use similar construction as pycomponent
 	void CreateComponent(json& componentJson, Entity entity) override;
 	void DestroyComponent(Entity entity) override;
-	void OnBeforeSceneLoad();
+	void OnBeforeSceneLoad() override;
 	void OnAfterSceneLoad() override;
 
 	Sound* GetComponentPtr(Entity entity) override;

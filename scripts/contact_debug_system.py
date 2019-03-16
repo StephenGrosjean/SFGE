@@ -25,7 +25,7 @@ class ContactDebugSystem(System):
                 shape.set_fill_color(Color.Magenta)
 
     def on_contact(self, c1, c2, enter):
-        print("Contact between {0} and {1} with enter: {2}".format(str(c1), str(c2), str(enter)))
+        # print("Contact between {0} and {1} with enter: {2}".format(str(c1), str(c2), str(enter)))
         if enter:
             self.contact_count[self.entities.index(c1.entity)] += 1
             self.contact_count[self.entities.index(c2.entity)] += 1
