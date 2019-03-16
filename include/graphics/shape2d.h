@@ -65,7 +65,7 @@ protected:
 	std::unique_ptr<sf::Shape> m_Shape = nullptr;
 	Entity entity = INVALID_ENTITY;
 };
-
+class ShapeManager;
 namespace editor
 {
 

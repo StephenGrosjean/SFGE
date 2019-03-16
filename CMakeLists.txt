@@ -219,6 +219,14 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 elseif()
 	SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -masm=intel" )
 endif()
+
+add_custom_command(TARGET SFGE_TEST POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
+add_custom_command(TARGET SFGE_TEST POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_SOURCE_DIR}/scripts ${CMAKE_BINARY_DIR}/scripts)
+
 #SFGE
 add_executable(SFGE src/main.cpp)
 
@@ -229,7 +237,12 @@ if(APPLE)
 		RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
 		RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
 ENDIF()
-
+add_custom_command(TARGET SFGE POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
+add_custom_command(TARGET SFGE POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_SOURCE_DIR}/scripts ${CMAKE_BINARY_DIR}/scripts)
 #SFGE TOOLS
 SET(SFGE_TOOLS_DIR ${CMAKE_SOURCE_DIR}/tools)
 file(GLOB TOOLS_DIR ${SFGE_TOOLS_DIR}/*)
@@ -266,28 +279,6 @@ target_sources(SFGE_COMMON PUBLIC ${CMAKE_SOURCE_DIR}/src/tools/tools_pch.cpp ${
 file(COPY data/ DESTINATION ${CMAKE_BINARY_DIR}/data/)
 file(COPY scripts/ DESTINATION ${CMAKE_BINARY_DIR}/scripts/)
 
-#SFGE COURSES
-SET(SFGE_COURSE_DIR ${CMAKE_SOURCE_DIR}/courses)
-file(GLOB COURSE_FILES ${SFGE_COURSE_DIR}/*.cpp )
-foreach(course_file ${COURSE_FILES} )
-    # I used a simple string replace, to cut off .cpp.
-    file(RELATIVE_PATH course_relative_path ${SFGE_COURSE_DIR} ${course_file} )
-    string( REPLACE ".cpp" "" course_name ${course_relative_path} )
-    add_executable(${course_name} ${SFGE_COURSE_DIR}/${course_relative_path})
-    # Make sure YourLib is linked to each app
-    target_link_libraries(${course_name} PUBLIC SFGE_COMMON)
-	set_property(TARGET ${course_name} PROPERTY CXX_STANDARD 17)
-	IF(UNIX)
-		set_target_properties(${course_name} PROPERTIES COMPILE_FLAGS "-save-temps")
-	ENDIF(UNIX)
-	set_target_properties (${course_name} PROPERTIES
-    FOLDER Courses)
-  IF(APPLE)
-    set_target_properties(${course_name} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
-  ENDIF()
-endforeach()
 
 
 #write tool config file

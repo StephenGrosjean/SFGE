@@ -102,7 +102,12 @@ ColliderManager* Physics2dManager::GetColliderManager()
 {
 	return &m_ColliderManager;
 }
-
+float Physics2dManager::Raycast(Vec2f startPoint, Vec2f direction, float rayLength)
+{
+	RaycastCallback rayCastCallback{*this};
+	m_World->RayCast(&rayCastCallback, pixel2meter(startPoint), pixel2meter(startPoint+direction*rayLength));
+	return 0.0f;
+}
 
 void ContactListener::BeginContact(b2Contact* contact)
 {
@@ -187,5 +192,11 @@ Vec2f meter2pixel(b2Vec2 meter)
 ContactListener::ContactListener(Engine& engine):
 	m_Engine(engine)
 {
+}
+float32 RaycastCallback::ReportFixture(b2Fixture *fixture, const b2Vec2 &point, const b2Vec2 &normal, float32 fraction)
+{
+	//TODO Debug Raycast
+
+	return fraction;
 }
 }

@@ -90,8 +90,17 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 
 	py::class_<InputManager> inputManager(m, "InputManager");
 	inputManager
-			.def(py::init<Engine&>(), py::return_value_policy::reference)
-		.def_property_readonly("keyboard", &InputManager::GetKeyboardManager, py::return_value_policy::reference);
+	    .def(py::init<Engine&>(), py::return_value_policy::reference)
+		.def_property_readonly("keyboard", &InputManager::GetKeyboardManager, py::return_value_policy::reference)
+		.def_property_readonly("mouse", &InputManager::GetMouseManager, py::return_value_policy::reference);
+
+	py::class_<MouseManager> mouseManager(m, "MouseManager");
+	mouseManager
+		.def_property_readonly("position", [](MouseManager* mouse){
+			//mouse->GetLocalPosition()
+			return Vec2f(0,0);
+		});
+
 	py::class_<KeyboardManager> keyboardManager(m, "KeyboardManager");
 	keyboardManager
 		.def("is_key_held", &KeyboardManager::IsKeyHeld)
@@ -140,6 +149,7 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	py::class_<Graphics2dManager> graphics2dManager(m, "Graphics2dManager");
 	graphics2dManager
 	    .def(py::init<Engine&>(), py::return_value_policy::reference)
+	    .def("draw_line", &Graphics2dManager::DrawLine)
 		.def_property_readonly("sprite_manager", &Graphics2dManager::GetSpriteManager, py::return_value_policy::reference)
 		.def_property_readonly("texture_manager", &Graphics2dManager::GetTextureManager, py::return_value_policy::reference)
 		.def_property_readonly("shape_manager", &Graphics2dManager::GetShapeManager, py::return_value_policy::reference);

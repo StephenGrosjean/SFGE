@@ -2,6 +2,17 @@ def auto_import():
     from scripts import *
 
 
+class Color:
+    Red = 0
+    Green = 0
+    Blue = 0
+    Yellow = 0
+    Black = 0
+    White = 0
+    Magenta = 0
+    Cyan = 0
+    Transparent = 0
+
 class Vector2f:
     """SFML and default SFGE Vector type when not working on the physic"""
     def __init__(self):
@@ -38,6 +49,10 @@ class Sprite:
         pass
 
     def load_texture(self, texture_name: str):
+        pass
+
+class Shape:
+    def set_fill_color(self, color: Color):
         pass
 
 class Timer:
@@ -78,6 +93,9 @@ class System:
         pass
     
     def update(self, dt):
+        pass
+
+    def fixed_update(self):
         pass
     
     def destroy(self):
@@ -153,9 +171,13 @@ class Physics2dManager(System):
     body2d_manager = None # type: Body2dManager
 
 
+class Configuration:
+    def __init__(self):
+        self.screen_size = Vec2f()
+
 class Engine:
     def __init__(self):
-        pass
+        self.config = Configuration()
 
 
 class Component:
@@ -209,22 +231,14 @@ class KeyboardManager:
     def is_key_up(self, key):
         pass
 
-
-class Color:
-    Red = 0
-    Green = 0
-    Blue = 0
-    Yellow = 0
-    Black = 0
-    White = 0
-    Magenta = 0
-    Cyan = 0
-    Transparent = 0
+class MouseManager:
+    def __init__(self):
+        self.position = Vec2f()
 
 
 class InputManager:
     keyboard = KeyboardManager()
-
+    mouse = MouseManager()
 
 engine = Engine()
 input_manager = InputManager()
