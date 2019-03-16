@@ -161,6 +161,10 @@ void SceneManager::LoadSceneFromJson(json& sceneJson, std::unique_ptr<editor::Sc
 					{
 						m_ScenePySystems.push_back(pySystem);
 					}
+					else
+					{
+						Log::GetInstance()->Error("[Python Error] Returned PySystem is null");
+					}
 				}
 				else
 				{

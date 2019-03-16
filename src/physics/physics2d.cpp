@@ -106,46 +106,46 @@ ColliderManager* Physics2dManager::GetColliderManager()
 
 void ContactListener::BeginContact(b2Contact* contact)
 {
-	auto pythonEngine = m_Engine.GetPythonEngine();
+	auto* pythonEngine = m_Engine.GetPythonEngine();
 	const auto colliderA = static_cast<ColliderData*>(contact->GetFixtureA()->GetUserData());
 	const auto colliderB = static_cast<ColliderData*>(contact->GetFixtureB()->GetUserData());
 
-	if (colliderA->fixture->IsSensor() or colliderB->fixture->IsSensor())
 	{
-		//Trigger
-		
-		//pythonEngine->GetPyComponentManager().OnTriggerEnter(colliderA->entity, colliderB);
-		//pythonEngine->GetPyComponentManager().OnTriggerEnter(colliderB->entity, colliderA);
-		
+		std::ostringstream oss;
+		oss << "Begin Contact between: " << colliderA->entity << " and: " << colliderB->entity;
+		Log::GetInstance()->Msg(oss.str());
 	}
-	else
+
+	auto& pySystems = pythonEngine->GetPySystemManager().GetPySystems();
+	for(size_t i = 0;i < pySystems.size();i++)
 	{
-		//Collision
-		//pythonEngine->GetPyComponentManager().OnCollisionEnter(colliderA->entity, colliderB);
-		//pythonEngine->GetPyComponentManager().OnCollisionEnter(colliderB->entity, colliderA);
-		
+		if(pySystems[i] != nullptr)
+		{
+			pySystems[i]->OnContact(colliderA, colliderB, true);
+		}
 	}
+		
 }
 
 void ContactListener::EndContact(b2Contact* contact)
 {
 	auto pythonEngine = m_Engine.GetPythonEngine();
-	auto colliderA = static_cast<ColliderData*>(contact->GetFixtureA()->GetUserData());
-	auto colliderB = static_cast<ColliderData*>(contact->GetFixtureB()->GetUserData());
+	auto* colliderA = static_cast<ColliderData*>(contact->GetFixtureA()->GetUserData());
+	auto* colliderB = static_cast<ColliderData*>(contact->GetFixtureB()->GetUserData());
 
-	if (colliderA->fixture->IsSensor() or colliderB->fixture->IsSensor())
 	{
-		//Trigger
-		//pythonEngine->GetPyComponentManager().OnTriggerExit(colliderA->entity, colliderB);
-		//pythonEngine->GetPyComponentManager().OnTriggerExit(colliderB->entity, colliderA);
-		
+		std::ostringstream oss;
+		oss << "End Contact between: " << colliderA->entity << " and: " << colliderB->entity;
+		Log::GetInstance()->Msg(oss.str());
 	}
-	else
+
+	auto& pySystems = pythonEngine->GetPySystemManager().GetPySystems();
+	for (size_t i = 0; i < pySystems.size(); i++)
 	{
-		//Collision
-		//pythonEngine->GetPyComponentManager().OnCollisionExit(colliderA->entity, colliderB);
-		//pythonEngine->GetPyComponentManager().OnCollisionExit(colliderB->entity, colliderA);
-		
+		if (pySystems[i] != nullptr)
+		{
+			pySystems[i]->OnContact(colliderA, colliderB, false);
+		}
 	}
 }
 

@@ -48,6 +48,7 @@
 #include <graphics/texture.h>
 #include <graphics/graphics2d.h>
 #include <physics/physics2d.h>
+#include <physics/collider2d.h>
 #include <python/pysystem.h>
 
 #include <SFML/Graphics/Texture.hpp>
@@ -78,7 +79,8 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def("init", &System::OnEngineInit)
 		.def("update", &System::OnUpdate)
 		.def("fixed_update", &System::OnFixedUpdate)
-		.def("draw", &System::OnDraw);
+		.def("draw", &System::OnDraw)
+		.def("on_contact", &System::OnContact);
 
 	py::class_<SceneManager> sceneManager(m, "SceneManager");
 	sceneManager
@@ -115,8 +117,10 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	    .def(py::init<Engine&>(), py::return_value_policy::reference)
 	    .def("create_entity", &EntityManager::CreateEntity)
 	    .def("destroy_entity", &EntityManager::DestroyEntity)
+		.def("get_entity", &EntityManager::GetEntityByName)
 	    .def("has_component", &EntityManager::HasComponent)
-		.def("resize", &EntityManager::ResizeEntityNmb);
+		.def("resize", &EntityManager::ResizeEntityNmb)
+		.def("get_entities_with_type", &EntityManager::GetEntitiesWithType);
 
 	py::class_<Physics2dManager> physics2dManager(m, "Physics2dManager");
 	physics2dManager
@@ -164,11 +168,13 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 			spriteInfo.name = "Sprite";
 			spriteInfo.textureId = textureId;
 			spriteInfo.texturePath = texturePath;
-		}, py::return_value_policy::reference);
+		}, py::return_value_policy::reference)
+		.def("get_component", &SpriteManager::GetComponentPtr, py::return_value_policy::reference);
 
 	py::class_<ShapeManager> shapeManager(m, "ShapeManager");
 	shapeManager
-		.def(py::init<Engine&>(), py::return_value_policy::reference);
+		.def(py::init<Engine&>(), py::return_value_policy::reference)
+		.def("get_component", &ShapeManager::GetComponentPtr, py::return_value_policy::reference);
 
 	py::class_<PythonEngine> pythonEngine(m, "PythonEngine");
 	pythonEngine
@@ -180,7 +186,6 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def("get_pysystem", &PySystemManager::GetPySystemFromClassName, py::return_value_policy::reference);
 
 	
-
 	py::enum_<ComponentType>(system, "ComponentType")
 		.value("PyComponent", ComponentType::PYCOMPONENT)
 		.value("Shape", ComponentType::SHAPE2D)

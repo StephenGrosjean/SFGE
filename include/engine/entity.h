@@ -79,9 +79,12 @@ public:
 	void RemoveComponentType(Entity entity, ComponentType componentType);
 	editor::EntityInfo& GetEntityInfo(Entity entity);
 
+	Entity GetEntityByName(std::string entityName) const;
 	void ResizeEntityNmb(size_t newSize);
 	void AddResizeObserver(ResizeObserver *resizeObserver);
 	void AddDestroyObserver(DestroyObserver *destroyObserver);
+
+	std::vector<Entity> GetEntitiesWithType(ComponentType componentType);
 
 private:
 	std::vector<EntityMask> m_MaskArray{ INIT_ENTITY_NMB };

@@ -29,6 +29,7 @@ namespace sfge
 {
 
 class Engine;
+struct ColliderData;
 /**
 * \brief Systems are classes used by the Engine to init and update features, new features can be added through PySystem
 */
@@ -70,6 +71,8 @@ public:
 	* \brief Called after we load a scene
 	*/
 	virtual void OnAfterSceneLoad() {}
+
+	virtual void OnContact(ColliderData* c1, ColliderData* c2, bool enter);
 
 	void SetEnable(bool enable);
 	bool GetEnable() const;

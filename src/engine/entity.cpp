@@ -108,6 +108,19 @@ editor::EntityInfo& EntityManager::GetEntityInfo(Entity entity)
 	return m_EntityInfos[entity - 1];
 }
 
+Entity EntityManager::GetEntityByName(std::string entityName) const
+{
+	const auto entityNmb = m_EntityInfos.size();
+	for(int i = 0; i < entityNmb; i++)
+	{
+		if(m_EntityInfos[i].name == entityName)
+		{
+			return i + 1;
+		}
+	}
+	return INVALID_ENTITY;
+}
+
 void EntityManager::ResizeEntityNmb(size_t newSize)
 {
 	m_MaskArray.resize(newSize);
@@ -129,6 +142,20 @@ void EntityManager::AddResizeObserver(ResizeObserver *resizeObserver)
 void EntityManager::AddDestroyObserver(DestroyObserver *destroyObserver)
 {
 	m_DestroyObservers.emplace(destroyObserver);
+}
+
+std::vector<Entity> EntityManager::GetEntitiesWithType(ComponentType componentType)
+{
+	std::vector<Entity> entitiesWithComponent;
+	entitiesWithComponent.reserve(m_MaskArray.size());
+	for(int i = 0; i<m_MaskArray.size();i++)
+	{
+		if(HasComponent(i+1, componentType))
+		{
+			entitiesWithComponent.push_back(i + 1);
+		}
+	}
+	return entitiesWithComponent;
 }
 
 }

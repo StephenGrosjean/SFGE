@@ -67,6 +67,12 @@ class Timer:
         pass
 
 
+class ColliderData:
+    def __init__(self):
+        self.body = Body2d()
+        self.collider = Collider()
+        self.entity = 0
+
 class System:
     def init(self):
         pass
@@ -75,6 +81,9 @@ class System:
         pass
     
     def destroy(self):
+        pass
+
+    def on_contact(self, c1:ColliderData, c2:ColliderData, enter:bool):
         pass
 
 class ComponentManager():
@@ -90,7 +99,11 @@ class ComponentManager():
 class SpriteManager(System):
     def add_component(self, entity):
         return Sprite()
-
+    def get_component(self, entity:int):
+        pass
+class ShapeManager(System):
+    def get_component(self, entity:int):
+        pass
 
 class TextureManager(System):
     pass    
@@ -100,6 +113,7 @@ class Graphics2dManager(System):
     def __init__(self):
         self.texture_manager = TextureManager()
         self.sprite_manager = SpriteManager()
+        self.shape_manager = ShapeManager()
 
 
 class SceneManager(System):
@@ -127,6 +141,9 @@ class EntityManager(System):
     def has_components(self, entity, component):
         pass
 
+    def get_entities_with_type(self, componentType):
+        pass
+
 
 class Body2dManager(System, ComponentManager):
     pass
@@ -147,30 +164,6 @@ class Component:
     Body = 0
     Sound = 0
     Transform2d = 0
-
-    def init(self):
-        pass
-
-    def update(self, dt):
-        pass
-
-    def fixed_update(self, dt):
-        pass
-
-    def on_trigger_enter(self, collider):
-        pass
-
-    def on_trigger_exit(self, collider):
-        pass
-
-    def on_collision_enter(self, collider):
-        pass
-
-    def on_collision_exit(self, collider):
-        pass
-
-    def get_component(self, type):
-        pass
 
 
 class Transform2d():
@@ -197,6 +190,8 @@ class Body2d:
     def apply_force(self, force:b2Vec2):
         pass
 
+def Collider:
+    pass
 
 class KeyboardManager:
     class Key:

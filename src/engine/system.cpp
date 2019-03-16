@@ -3,6 +3,7 @@
 //
 
 #include <engine/system.h>
+#include <physics/collider2d.h>
 
 namespace sfge
 {
@@ -23,6 +24,10 @@ void System::Destroy()
 	m_Initialized = false;
 }
 
+
+void System::OnContact(ColliderData* c1, ColliderData* c2, bool enter)
+{
+}
 
 void System::SetEnable(bool enable)
 {

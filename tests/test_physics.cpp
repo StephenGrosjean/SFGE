@@ -30,7 +30,9 @@ SOFTWARE.
 TEST(Physics, TestBallFallingToGround)
 {
 	sfge::Engine engine;
-	engine.Init();
+	auto config = std::make_unique<sfge::Configuration>();
+	config->devMode = false;
+	engine.Init(std::move(config));
 
 	auto* sceneManager = engine.GetSceneManager();
 
@@ -97,7 +99,10 @@ TEST(Physics, TestBallFallingToGround)
 	entityBody2["components"] = { transformJson2, rectShapeJson, rigidBodyJson2, rectColliderJson };
 
 	sceneJson["entities"] = { entityBody1, entityBody2 };
-
+	json contactDebugSystem = {
+		{ "script_path", "scripts/contact_debug_system.py" }
+	};
+	sceneJson["systems"] = json::array({ contactDebugSystem });
 	sceneManager->LoadSceneFromJson(sceneJson);
 	engine.Start();
 

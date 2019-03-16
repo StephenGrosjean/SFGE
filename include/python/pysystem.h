@@ -43,7 +43,7 @@ public:
 	void OnUpdate(float dt) override;
 	void OnFixedUpdate() override;
 	void OnDraw() override;
-
+	void OnContact(ColliderData* c1, ColliderData* c2, bool enter) override;
 };
 
 class PySystemManager : public System
@@ -60,7 +60,7 @@ public:
 	PySystem* GetPySystemFromInstanceId(InstanceId instanceId);
 
 	PySystem* GetPySystemFromClassName(std::string className);
-
+	std::vector<PySystem*>& GetPySystems();
 protected:
 	std::vector<PySystem*> m_PySystems{ INIT_ENTITY_NMB * MULTIPLE_COMPONENTS_MULTIPLIER };
 	std::vector<std::string> m_PySystemNames {INIT_ENTITY_NMB * MULTIPLE_COMPONENTS_MULTIPLIER};

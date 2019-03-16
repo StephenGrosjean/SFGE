@@ -4,6 +4,8 @@
 
 #include <sstream>
 
+
+#include <physics/collider2d.h>
 #include <python/pysystem.h>
 #include <python/python_engine.h>
 #include <pybind11/operators.h>
@@ -41,7 +43,6 @@ void PySystem::OnUpdate(float dt)
 
 	try
 	{
-
 		//py::gil_scoped_release release;
 		PYBIND11_OVERLOAD_NAME(
 			void,
@@ -96,6 +97,30 @@ void PySystem::OnDraw()
 	{
 		std::stringstream oss;
 		oss << "Python error on PySystem Draw\n" << e.what();
+		Log::GetInstance()->Error(oss.str());
+	}
+}
+
+void PySystem::OnContact(ColliderData* c1, ColliderData* c2, bool enter)
+{
+	try
+	{
+
+		//py::gil_scoped_release release;
+		PYBIND11_OVERLOAD_NAME(
+			void,
+			System,
+			"on_contact",
+			OnContact,
+			c1,
+			c2,
+			enter
+			);
+	}
+	catch (std::runtime_error& e)
+	{
+		std::stringstream oss;
+		oss << "Python error on PySystem Contact\n" << e.what();
 		Log::GetInstance()->Error(oss.str());
 	}
 }
@@ -211,5 +236,10 @@ PySystem *PySystemManager::GetPySystemFromClassName(std::string className)
 		}
 	}
 	return nullptr;
+}
+
+std::vector<PySystem*>& PySystemManager::GetPySystems()
+{
+	return m_PySystems;
 }
 }
