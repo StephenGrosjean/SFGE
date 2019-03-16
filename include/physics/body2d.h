@@ -46,10 +46,12 @@ public:
 	b2BodyType GetType();
 	float GetMass();
 	void SetBody(b2Body* body);
-	b2Body* GetBody();
+	b2Body* GetBody() const;
 private:
 	b2Body * m_Body = nullptr;
 };
+
+class BodyManager;
 
 namespace editor
 {
@@ -58,6 +60,8 @@ struct Body2dInfo : ComponentInfo
 	void DrawOnInspector() override;
 	void AddVelocity(b2Vec2 velocity);
 	std::deque<b2Vec2>& GetVelocities();
+
+	Body2dManager* bodyManager = nullptr;
 private:
 	std::deque<b2Vec2> m_Velocities;
 	const size_t m_VelocitiesMaxSize = 120;

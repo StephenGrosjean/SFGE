@@ -68,7 +68,7 @@ public:
 protected:
 
   	int GetFreeComponentIndex() override;
-	Body2dManager* m_BodyManager;
+	Body2dManager* m_BodyManager = nullptr;
 };
 
 }

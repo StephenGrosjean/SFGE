@@ -114,15 +114,15 @@ void ContactListener::BeginContact(b2Contact* contact)
 	{
 		//Trigger
 		
-		pythonEngine->GetPyComponentManager().OnTriggerEnter(colliderA->entity, colliderB);
-		pythonEngine->GetPyComponentManager().OnTriggerEnter(colliderB->entity, colliderA);
+		//pythonEngine->GetPyComponentManager().OnTriggerEnter(colliderA->entity, colliderB);
+		//pythonEngine->GetPyComponentManager().OnTriggerEnter(colliderB->entity, colliderA);
 		
 	}
 	else
 	{
 		//Collision
-		pythonEngine->GetPyComponentManager().OnCollisionEnter(colliderA->entity, colliderB);
-		pythonEngine->GetPyComponentManager().OnCollisionEnter(colliderB->entity, colliderA);
+		//pythonEngine->GetPyComponentManager().OnCollisionEnter(colliderA->entity, colliderB);
+		//pythonEngine->GetPyComponentManager().OnCollisionEnter(colliderB->entity, colliderA);
 		
 	}
 }
@@ -136,15 +136,15 @@ void ContactListener::EndContact(b2Contact* contact)
 	if (colliderA->fixture->IsSensor() or colliderB->fixture->IsSensor())
 	{
 		//Trigger
-		pythonEngine->GetPyComponentManager().OnTriggerExit(colliderA->entity, colliderB);
-		pythonEngine->GetPyComponentManager().OnTriggerExit(colliderB->entity, colliderA);
+		//pythonEngine->GetPyComponentManager().OnTriggerExit(colliderA->entity, colliderB);
+		//pythonEngine->GetPyComponentManager().OnTriggerExit(colliderB->entity, colliderA);
 		
 	}
 	else
 	{
 		//Collision
-		pythonEngine->GetPyComponentManager().OnCollisionExit(colliderA->entity, colliderB);
-		pythonEngine->GetPyComponentManager().OnCollisionExit(colliderB->entity, colliderA);
+		//pythonEngine->GetPyComponentManager().OnCollisionExit(colliderA->entity, colliderB);
+		//pythonEngine->GetPyComponentManager().OnCollisionExit(colliderB->entity, colliderA);
 		
 	}
 }

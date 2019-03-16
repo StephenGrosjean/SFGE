@@ -48,7 +48,6 @@
 #include <graphics/texture.h>
 #include <graphics/graphics2d.h>
 #include <physics/physics2d.h>
-#include <python/pycomponent.h>
 #include <python/pysystem.h>
 
 #include <SFML/Graphics/Texture.hpp>
@@ -173,35 +172,16 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 
 	py::class_<PythonEngine> pythonEngine(m, "PythonEngine");
 	pythonEngine
-	    .def(py::init<Engine&>(), py::return_value_policy::reference)
-		.def("load_pycomponent", [](PythonEngine* pythonEngineInstance, Entity entity, std::string scriptPath){
-			auto moduleId = pythonEngineInstance->LoadPyModule(scriptPath);
-			auto pyComponentId = pythonEngineInstance->GetPyComponentManager().LoadPyComponent(moduleId, entity);
-			pythonEngineInstance->SpreadClasses();
-			return py::cast(pythonEngineInstance->GetPyComponentManager().GetPyComponentFromInstanceId(pyComponentId));
-		}, py::return_value_policy::reference);
+		.def(py::init<Engine&>(), py::return_value_policy::reference);
 
 	py::class_<PySystemManager, System> pySystemManager(m, "pySystemManager");
 	pySystemManager
 		.def(py::init<Engine&>(), py::return_value_policy::reference)
 		.def("get_pysystem", &PySystemManager::GetPySystemFromClassName, py::return_value_policy::reference);
 
-	py::class_<Behavior, PyBehavior> component(m, "Component");
-	component
-		.def(py::init<Engine&, Entity>(), py::return_value_policy::reference)
-		.def("init", &Behavior::Init)
-		.def("update", &Behavior::Update)
-		.def("fixed_update", &Behavior::FixedUpdate)
-		.def_property_readonly("entity", &Behavior::GetEntity)
-		.def("get_component", &Behavior::GetComponent)
-		.def("get_component", &Behavior::GetPyComponent)
-		.def("on_trigger_enter", &Behavior::OnTriggerEnter)
-		.def("on_collision_enter", &Behavior::OnCollisionEnter)
-		.def("on_trigger_exit", &Behavior::OnTriggerExit)
-		.def("on_collision_exit", &Behavior::OnCollisionExit)
-	;
+	
 
-	py::enum_<ComponentType>(component, "ComponentType")
+	py::enum_<ComponentType>(system, "ComponentType")
 		.value("PyComponent", ComponentType::PYCOMPONENT)
 		.value("Shape", ComponentType::SHAPE2D)
 		.value("Body", ComponentType::BODY2D)
@@ -392,7 +372,6 @@ void PythonEngine::OnEngineInit()
 
 	Log::GetInstance()->Msg("Initialise the python embed interpretor");
 	System::OnEngineInit();
-	m_PyComponentManager.OnEngineInit();
 	m_PySystemManager.OnEngineInit();
 
 	py::initialize_interpreter();
@@ -421,14 +400,12 @@ void PythonEngine::OnEngineInit()
 
 void PythonEngine::InitScriptsInstances()
 {
-	m_PyComponentManager.InitPyComponents();
 }
 
 
 void PythonEngine::OnUpdate(float dt)
 {
 	rmt_ScopedCPUSample(PythonUpdate,0);
-	m_PyComponentManager.OnUpdate(dt);
 	m_PySystemManager.OnUpdate(dt);
 }
 
@@ -436,14 +413,12 @@ void PythonEngine::OnFixedUpdate()
 {
 
 	rmt_ScopedCPUSample(PythonFixedUpdate,0);
-	m_PyComponentManager.OnFixedUpdate();
 	m_PySystemManager.OnFixedUpdate();
 }
 
 void PythonEngine::OnDraw()
 {
 	rmt_ScopedCPUSample(PythonDraw,0);
-	m_PyComponentManager.OnDraw();
 	m_PySystemManager.OnDraw();
 }
 
@@ -451,7 +426,6 @@ void PythonEngine::OnDraw()
 void PythonEngine::Destroy()
 {
 	System::Destroy();
-	m_PyComponentManager.Destroy();
 	m_PySystemManager.Destroy();
 	m_PyModuleObjs.clear();
 	Log::GetInstance()->Msg("Finalize the python embed interpretor");
@@ -521,11 +495,13 @@ ModuleId PythonEngine::LoadPyModule(std::string moduleFilename)
 			return moduleId;
 		}
 	}
-    {
+	/*
+	{
         std::ostringstream oss;
-        oss << "[Error]: Could not load " << moduleName << " because it is not a regular file.\n";
-        Log::GetInstance()->Msg(oss.str());
+        oss << "[Python Error]: Could not load " << moduleName << " because it is not a regular file.\n";
+        Log::GetInstance()->Error(oss.str());
     }
+	*/
 	return INVALID_MODULE;
 }
 

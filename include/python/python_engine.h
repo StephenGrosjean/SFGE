@@ -31,7 +31,6 @@
 #include <engine/system.h>
 #include <utility/python_utility.h>
 #include <engine/component.h>
-#include <python/pycomponent.h>
 #include <python/pysystem.h>
 
 namespace sfge
@@ -79,7 +78,6 @@ public:
 	ModuleId LoadPyModule(std::string moduleFilename);
 
 
-	PyComponentManager& GetPyComponentManager(){ return m_PyComponentManager; }
 	PySystemManager& GetPySystemManager(){ return m_PySystemManager; }
 
 	void ExecutePythonCommand(std::string pythonCommand);
@@ -106,7 +104,6 @@ private:
 
 	ModuleId m_IncrementalModuleId = 1U;
 
-	PyComponentManager m_PyComponentManager{m_Engine};
 	PySystemManager m_PySystemManager{m_Engine};
 
 };

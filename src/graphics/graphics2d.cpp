@@ -143,7 +143,6 @@ void Graphics2dManager::Destroy()
 	OnAfterSceneLoad();
 
 	m_Window = nullptr;
-	ImGui::SFML::Shutdown();
 }
 
 void Graphics2dManager::OnBeforeSceneLoad()

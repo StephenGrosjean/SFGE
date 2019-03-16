@@ -63,20 +63,13 @@ void Shape::SetFillColor(sf::Color color) const
 		m_Shape->setFillColor(color);
 }
 
-void Shape::Update(float dt) const
+void Shape::Update() const
 {
-	(void) dt;
-	auto newPosition = m_Offset;
-
-	//TODO moves update to systems
-	//if(m_Transform != nullptr)
-	{
-	//	newPosition += m_Transform->Position;
-	}
-
 	if(m_Shape != nullptr)
 	{
-		m_Shape->setPosition(newPosition);
+		m_Shape->setPosition(transform.Position + m_Offset);
+		m_Shape->setRotation(transform.EulerAngle);
+		m_Shape->setScale(transform.Scale);
 	}
 }
 void Shape::SetShape (std::unique_ptr<sf::Shape> shape)
@@ -90,7 +83,8 @@ sf::Shape *Shape::GetShape ()
 
 void editor::ShapeInfo::DrawOnInspector ()
 {
-	/*if(shapePtr != nullptr && shapePtr->GetShape() != nullptr)
+	auto* shapePtr = shapeManager->GetComponentPtr(m_Entity);
+	if(shapePtr != nullptr && shapePtr->GetShape() != nullptr)
 	{
 		ImGui::Separator();
 		ImGui::Text("Shape");
@@ -119,7 +113,7 @@ void editor::ShapeInfo::DrawOnInspector ()
 			};
 			ImGui::InputFloat2("Size", size);
 		}
-	}*/
+	}
 }
 
 void ShapeManager::OnEngineInit()
@@ -145,12 +139,18 @@ void ShapeManager::DrawShapes(sf::RenderWindow &window)
 void ShapeManager::OnUpdate(const float dt)
 {
 
-	rmt_ScopedCPUSample(ShapeUpdate,0)
+	(void)dt;
+	rmt_ScopedCPUSample(ShapeUpdate, 0);
+	auto* transformManager = m_Engine.GetTransform2dManager();
 	for (auto i = 0u; i < m_Components.size(); i++)
 	{
 		if (m_EntityManager->HasComponent(i + 1, ComponentType::SHAPE2D))
 		{
-			m_Components[i].Update(dt);
+			if(m_EntityManager->HasComponent(i+1, ComponentType::TRANSFORM2D))
+			{
+				m_Components[i].transform = transformManager->GetComponentRef(i + 1);
+			}
+			m_Components[i].Update();
 		}
 	}
 	
@@ -169,8 +169,8 @@ Shape *ShapeManager::AddComponent (Entity entity)
 {
 	auto shapePtr = GetComponentPtr (entity);
 	auto& shapeInfo = GetComponentInfo(entity);
-	shapeInfo.entity = entity;
-	shapeInfo.engine = &m_Engine;
+	shapeInfo.SetEntity(entity);
+	shapeInfo.shapeManager = this;
 
 	m_Engine.GetEntityManager()->AddComponentType(entity, ComponentType::SHAPE2D);
 	return shapePtr;
@@ -186,11 +186,11 @@ void ShapeManager::CreateComponent(json& componentJson, Entity entity)
 	}
 
 	auto& shape = m_Components[entity-1];
-	//shape.SetTransform(m_Transform2dManager->GetComponentPtr(entity));
 	shape.SetOffset(offset);
 
-	auto shapeInfo = editor::ShapeInfo();
-	//shapeInfo.shapePtr = &shape;
+	auto& shapeInfo = m_ComponentsInfo[entity - 1];
+	shapeInfo.shapeManager = this;
+	shapeInfo.SetEntity(entity);
 
 	if (CheckJsonNumber(componentJson, "shape_type"))
 	{
@@ -210,7 +210,7 @@ void ShapeManager::CreateComponent(json& componentJson, Entity entity)
 			circleShape->setRadius (radius);
 			circleShape->setOrigin (radius, radius);
 			shape.SetShape (std::move(circleShape));
-			shape.Update (0.0f);
+			shape.Update ();
 		}
 			break;
 		case ShapeType::RECTANGLE:
@@ -229,7 +229,7 @@ void ShapeManager::CreateComponent(json& componentJson, Entity entity)
 			rect->setSize (size);
 			rect->setOrigin (size.x/2.0f, size.y/2.0f);
             shape.SetShape (std::move (rect));
-            shape.Update (0.0f);
+            shape.Update ();
 			
 		}
 			break;

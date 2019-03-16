@@ -13,8 +13,7 @@ namespace sfge
 {
 void editor::Transform2dInfo::DrawOnInspector()
 {
-	auto* transformManager = engine->GetTransform2dManager();
-	auto* transform = transformManager->GetComponentPtr(entity);
+	auto* transform = transformManager->GetComponentPtr(m_Entity);
 	float pos[2] = { transform->Position.x, transform->Position.y };
 	ImGui::Separator();
 	ImGui::Text("Transform");
@@ -31,8 +30,8 @@ Transform2d* Transform2dManager::AddComponent(Entity entity)
 	auto& transform = GetComponentRef(entity);
 	m_Engine.GetEntityManager()->AddComponentType(entity, ComponentType::TRANSFORM2D);
 	auto& transformInfo = GetComponentInfo(entity);
-	transformInfo.entity = entity;
-	transformInfo.engine = &m_Engine;
+	transformInfo.SetEntity(entity);
+	transformInfo.transformManager = this;
 	return &transform;
 }
 

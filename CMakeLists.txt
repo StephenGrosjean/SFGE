@@ -90,6 +90,7 @@ LIST(APPEND SFGE_LIBRARIES
 
 
 #Google Test
+enable_testing()
 set(GOOGLE_TEST_DIR ${EXTERNAL_DIR}/googletest)
 add_subdirectory(${GOOGLE_TEST_DIR})
 include_directories(${GOOGLE_TEST_DIR}/include)

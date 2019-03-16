@@ -56,10 +56,12 @@ public:
   	virtual ~Shape();
 	void Draw(sf::RenderWindow& window) const;
 	void SetFillColor(sf::Color color) const;
-	void Update(float dt) const;
+	void Update() const;
 	void SetShape(std::unique_ptr<sf::Shape> shape);
 	sf::Shape* GetShape();
 protected:
+	friend class ShapeManager;
+	Transform2d transform;
 	std::unique_ptr<sf::Shape> m_Shape = nullptr;
 	Entity entity = INVALID_ENTITY;
 };
@@ -71,6 +73,7 @@ struct ShapeInfo : ComponentInfo
 {
 
 	void DrawOnInspector() override;
+	ShapeManager* shapeManager;
 };
 
 }

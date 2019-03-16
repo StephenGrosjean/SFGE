@@ -45,6 +45,7 @@ namespace editor
 struct Transform2dInfo : ComponentInfo
 {
 	void DrawOnInspector() override;
+	Transform2dManager* transformManager;
 };
 }
 

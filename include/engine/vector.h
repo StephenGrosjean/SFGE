@@ -24,7 +24,9 @@
 
 #ifndef SFGE_VECTOR_H
 #define SFGE_VECTOR_H
+
 #include <SFML/System/Vector2.hpp>
+
 namespace sfge
 {
 
