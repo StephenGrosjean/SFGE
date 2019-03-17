@@ -102,7 +102,11 @@ TEST(Physics, TestBallFallingToGround)
 	json contactDebugSystem = {
 		{ "script_path", "scripts/contact_debug_system.py" }
 	};
-	sceneJson["systems"] = json::array({ contactDebugSystem });
+	json raycastDebugJson =
+	{
+		{ "script_path", "scripts/mouse_raycast_system.py" }
+	};
+	sceneJson["systems"] = json::array({ contactDebugSystem, raycastDebugJson });
 	sceneManager->LoadSceneFromJson(sceneJson);
 	engine.Start();
 

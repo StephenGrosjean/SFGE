@@ -49,6 +49,8 @@ std::ifstream::pos_type CalculateFileSize(const std::string& filename);
 bool CreateDirectory(const std::string& dirname);
 
 bool RemoveDirectory(const std::string& dirname, bool removeAll=true);
+
+const std::string LoadFile(std::string path);
 }
 
 #endif

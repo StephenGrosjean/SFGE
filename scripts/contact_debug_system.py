@@ -1,12 +1,12 @@
 from SFGE import *
-
+from typing import List
 shape_manager = graphics2d_manager.shape_manager
 
 
 class ContactDebugSystem(System):
 
-    entities: list
-    contact_count: list
+    entities: List[int]
+    contact_count: List[int]
 
     def init(self):
         self.entities = entity_manager.get_entities_with_type(System.Shape)

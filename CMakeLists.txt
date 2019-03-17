@@ -50,6 +50,7 @@ file(GLOB_RECURSE SFGE_INPUT_SRC src/input/*.cpp include/input/*.h)
 file(GLOB_RECURSE SFGE_PHYSICS_SRC src/physics/*.cpp include/physics/*.h)
 file(GLOB_RECURSE SFGE_PYTHON_SRC src/python/*.cpp include/python/*.h)
 file(GLOB_RECURSE SFGE_UTILITY_SRC src/utility/*.cpp include/utility/*.h)
+file(GLOB SFGE_PYSYSTEMS_SCRIPTS scripts/*.py)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 SET_SOURCE_FILES_PROPERTIES( ${SFGE_SRC} PROPERTIES
@@ -62,15 +63,17 @@ source_group("Graphics"            FILES ${SFGE_GRAPHICS_SRC})
 source_group("Input"            FILES ${SFGE_INPUT_SRC})
 source_group("Physics"            FILES ${SFGE_PHYSICS_SRC})
 source_group("Python"            FILES ${SFGE_PYTHON_SRC})
+source_group("PySystems Scripts" FILES ${SFGE_PYSYSTEMS_SCRIPTS})
 source_group("Utility"            FILES ${SFGE_UTILITY_SRC})
 List(APPEND SFGE_SRC  ${SFGE_AUDIO_SRC} ${SFGE_ENGINE_SRC} ${SFGE_EDITOR_SRC} ${SFGE_GRAPHICS_SRC}
-${SFGE_INPUT_SRC} ${SFGE_PHYSICS_SRC}  ${SFGE_PYTHON_SRC} ${SFGE_UTILITY_SRC})
+${SFGE_INPUT_SRC} ${SFGE_PHYSICS_SRC}  ${SFGE_PYTHON_SRC} ${SFGE_UTILITY_SRC} ${SFGE_PYSYSTEMS_SCRIPTS})
 
 if(MSVC)
     add_compile_options(
         $<$<CONFIG:>:/MT> #---------|
         $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-        $<$<CONFIG:Release>:/MT> #--|
+        $<$<CONFIG:RelWithDebInfo>:/MTd>
+		$<$<CONFIG:Release>:/MT> #--|
     )
 endif()
 
@@ -106,7 +109,16 @@ include_directories(${IMGUI_ROOT} ${SFML_IMGUI})
 LIST(APPEND SFGE_LIBRARIES
 	imgui-sfml)
 
-
+#glew
+set(GLEW_DIR ${EXTERNAL_DIR}/glew)
+	add_compile_definitions(GLEW_STATIC)
+	include_directories(${GLEW_DIR}/include)
+	add_subdirectory(${GLEW_DIR})
+	LIST(APPEND SFGE_LIBRARIES
+			glew)
+#glm
+set(GLM_DIR ${EXTERNAL_DIR}/glm)
+include_directories(${GLM_DIR})
 #BOX2D
 set(BOX2D_DIR ${EXTERNAL_DIR}/Box2D)
 
@@ -279,6 +291,13 @@ target_sources(SFGE_COMMON PUBLIC ${CMAKE_SOURCE_DIR}/src/tools/tools_pch.cpp ${
 file(COPY data/ DESTINATION ${CMAKE_BINARY_DIR}/data/)
 file(COPY scripts/ DESTINATION ${CMAKE_BINARY_DIR}/scripts/)
 
+if(MSVC)
+if(NOT CMAKE_CL_64)
+file(COPY externals/SFML/extlibs/bin/x86/openal32.dll DESTINATION ${CMAKE_BINARY_DIR}/)
+else()
+file(COPY externals/SFML/extlibs/bin/x64/openal32.dll DESTINATION ${CMAKE_BINARY_DIR}/)
+endif()
+endif()
 
 
 #write tool config file
