@@ -36,6 +36,7 @@ SOFTWARE.
 #include <audio/sound.h>
 #include <audio/audio.h>
 #include <graphics/graphics2d.h>
+#include <graphics/graphics3d.h>
 #include <physics/physics2d.h>
 #include <python/python_engine.h>
 #include <engine/config.h>
@@ -88,8 +89,34 @@ void Editor::OnUpdate(float dt)
 			//GameObject window
 			ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f), ImGuiCond_FirstUseEver);
 			ImGui::SetNextWindowSize(ImVec2(150.0f, configPtr->screenResolution.y), ImGuiCond_FirstUseEver);
-			ImGui::Begin("Entities");
-			
+			ImGui::Begin("Game Objects");
+
+			auto& systems = m_Engine.GetSceneManager()->GetSceneSystems();
+
+			for(auto* pySystem : systems)
+			{
+				pySystem->OnEditorDraw();
+			}
+
+			auto* graphics3dManager = m_Engine.GetGraphics3dManager();
+			auto& drawingPrograms = graphics3dManager->GetDrawingPrograms();
+			if (!drawingPrograms.empty())
+			{
+				ImGui::Separator();
+				ImGui::Text("Graphics 3d Programs");
+				ImGui::Separator();
+				for (int i = 0; i < drawingPrograms.size();i++)
+				{
+					auto* drawingProgram = drawingPrograms[i];
+					if(ImGui::Selectable(drawingProgram->GetProgramName().c_str(), selectedDrawingProgram == i))
+					{
+						selectedDrawingProgram = i;
+					}
+				}
+			}
+			ImGui::Separator();
+			ImGui::Text("Entities");
+			ImGui::Separator();
 			for (auto i = 0u; i < configPtr->currentEntitiesNmb; i++)
 			{
 				if(m_EntityManager->GetMask(i+1) != INVALID_ENTITY)
@@ -118,6 +145,10 @@ void Editor::OnUpdate(float dt)
 				  drawableComponentManager->DrawOnInspector(selectedEntity);
                 }
 
+			}
+			if(selectedDrawingProgram != -1)
+			{
+				drawingPrograms[selectedDrawingProgram]->OnEditorDraw();
 			}
 			ImGui::End();
 			m_ProfilerWindow.Update();

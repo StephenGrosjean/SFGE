@@ -101,6 +101,11 @@ void PySystem::OnDraw()
 	}
 }
 
+void PySystem::OnEditorDraw()
+{
+
+}
+
 void PySystem::OnContact(ColliderData* c1, ColliderData* c2, bool enter)
 {
 	try

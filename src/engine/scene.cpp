@@ -356,4 +356,8 @@ void SceneManager::OnDraw()
 		Destroy();
 	}
 
+std::vector<PySystem*>& SceneManager::GetSceneSystems()
+{
+	return m_ScenePySystems;
+}
 }

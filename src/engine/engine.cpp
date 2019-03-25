@@ -35,6 +35,7 @@ SOFTWARE.
 #include <utility/log.h>
 
 #include <graphics/graphics2d.h>
+#include <graphics/graphics3d.h>
 #include <audio/audio.h>
 #include <engine/scene.h>
 #include <input/input.h>
@@ -53,6 +54,7 @@ struct SystemsContainer
 public:
 	SystemsContainer(Engine &engine) :
 		graphics2dManager(engine),
+		graphics3dManager(engine),
 		audioManager(engine),
 		sceneManager(engine),
 		inputManager(engine),
@@ -67,6 +69,7 @@ public:
 	SystemsContainer(const SystemsContainer&) = delete;
 
 	Graphics2dManager graphics2dManager;
+	Graphics3dManager graphics3dManager;
 	AudioManager audioManager;
 	SceneManager sceneManager;
 	InputManager inputManager;
@@ -112,6 +115,7 @@ void Engine::Init(std::unique_ptr<Configuration> config)
 
 void Engine::InitModules()
 {
+	m_EngineClock.restart();
 	if (m_Config == nullptr)
 	{
 		Log::GetInstance()->Error("[Error] Game tool_engine Configuration");
@@ -130,6 +134,7 @@ void Engine::InitModules()
 	m_SystemsContainer->entityManager.OnEngineInit();
 	m_SystemsContainer->transformManager.OnEngineInit();
 	m_SystemsContainer->graphics2dManager.OnEngineInit();
+	m_SystemsContainer->graphics3dManager.OnEngineInit();
 	m_SystemsContainer->audioManager.OnEngineInit();
 	m_SystemsContainer->sceneManager.OnEngineInit();
 	m_SystemsContainer->inputManager.OnEngineInit();
@@ -169,12 +174,18 @@ void Engine::Start()
 				running = false;
 				m_Window->close();
 			}
+
+			if(event.type == sf::Event::Resized)
+			{
+				glViewport(0, 0, event.size.width, event.size.height);
+			}
 			
 		}
 		if (!running)
 		{
 			continue;
 		}
+
 
 		m_SystemsContainer->inputManager.OnUpdate(dt.asSeconds());
 		auto fixedUpdateTime = globalClock.getElapsedTime() - previousFixedUpdateTime;
@@ -194,12 +205,23 @@ void Engine::Start()
 		m_SystemsContainer->sceneManager.OnUpdate(dt.asSeconds());
 
 		m_SystemsContainer->editor.OnUpdate(dt.asSeconds());
-		graphicsUpdateClock.restart ();
         m_SystemsContainer->transformManager.OnUpdate(dt.asSeconds());
 		m_SystemsContainer->graphics2dManager.OnUpdate(dt.asSeconds());
+		
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+
+		graphicsUpdateClock.restart();
+
+		m_Window->popGLStates();
+		m_SystemsContainer->graphics3dManager.OnDraw();
+		m_Window->pushGLStates();
+		m_SystemsContainer->graphics2dManager.OnDraw();
+
 		m_SystemsContainer->pythonEngine.OnDraw();
 		m_SystemsContainer->sceneManager.OnDraw();
 		m_SystemsContainer->editor.OnDraw();
+
         m_SystemsContainer->graphics2dManager.Display();
 		const sf::Time graphicsDt = graphicsUpdateClock.getElapsedTime ();
 		dt = updateClock.restart();
@@ -265,6 +287,11 @@ Graphics2dManager* Engine::GetGraphics2dManager()
 	return m_SystemsContainer?&m_SystemsContainer->graphics2dManager:nullptr;
 }
 
+Graphics3dManager* Engine::GetGraphics3dManager()
+{
+	return m_SystemsContainer ? &m_SystemsContainer->graphics3dManager : nullptr;
+}
+
 AudioManager* Engine::GetAudioManager()
 {
 	return m_SystemsContainer ? &m_SystemsContainer->audioManager : nullptr;
@@ -315,4 +342,8 @@ ProfilerFrameData& Engine::GetProfilerFrameData()
     return m_FrameData;
 }
 
+float Engine::GetTimeSinceInit()
+{
+	return m_EngineClock.getElapsedTime().asSeconds();
+}
 }

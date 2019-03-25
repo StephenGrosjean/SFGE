@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 #include <sstream>
-
+#include <graphics/graphics3d.h>
 #include <graphics/graphics2d.h>
 #include <engine/engine.h>
 #include <utility/log.h>
@@ -45,13 +45,24 @@ void Graphics2dManager::OnEngineInit()
 		m_Windowless = configPtr->windowLess;
 		if (!m_Windowless)
 		{
+			sf::ContextSettings settings;
+			settings.depthBits = 24;
+			settings.stencilBits = 8;
+			settings.antialiasingLevel = 4;
+			settings.majorVersion = 4;
+			settings.minorVersion = 6;
 			m_Window = std::make_unique<sf::RenderWindow>(
 				sf::VideoMode(configPtr->screenResolution.x, configPtr->screenResolution.y),
-				"SFGE 0.1");
+				configPtr->windowName, sf::Style::Default, settings);
 			if (configPtr->maxFramerate)
 			{
 				m_Window->setFramerateLimit(configPtr->maxFramerate);
 				CheckVersion();
+			}
+			GLenum err = glewInit();
+			if (GLEW_OK != err)
+			{
+				std::cerr << "Error loading GLEW: " << glewGetErrorString(err) << "\n";
 			}
 		}
 	}
@@ -76,6 +87,14 @@ void Graphics2dManager::OnUpdate(float dt)
 		m_SpriteManager.OnUpdate(dt);
 		m_ShapeManager.OnUpdate(dt);
 
+		
+	}
+}
+
+void Graphics2dManager::OnDraw()
+{
+	if(!m_Windowless)
+	{
 		m_SpriteManager.DrawSprites(*m_Window);
 		m_ShapeManager.DrawShapes(*m_Window);
 	}

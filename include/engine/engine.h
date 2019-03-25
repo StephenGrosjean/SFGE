@@ -36,6 +36,8 @@ SOFTWARE.
 
 #include <editor/profiler.h>
 #include <Remotery.h>
+
+#include <SFML/System/Clock.hpp>
 namespace sf
 {
 class RenderWindow;
@@ -49,6 +51,7 @@ namespace sfge
 
 struct Configuration;
 class Graphics2dManager;
+class Graphics3dManager;
 class AudioManager;
 class SceneManager;
 class InputManager;
@@ -95,6 +98,7 @@ public:
 	Configuration * GetConfig() const;
 
 	Graphics2dManager* GetGraphics2dManager();
+	Graphics3dManager* GetGraphics3dManager();
 	AudioManager* GetAudioManager();
 	SceneManager* GetSceneManager();
 	InputManager* GetInputManager();
@@ -106,6 +110,7 @@ public:
 
 	ctpl::thread_pool& GetThreadPool();
 	ProfilerFrameData& GetProfilerFrameData();
+	float GetTimeSinceInit();
 	bool running = false;
 protected:
 	void InitModules();
@@ -113,7 +118,7 @@ protected:
 	sf::RenderWindow* m_Window = nullptr;
 	std::unique_ptr<Configuration> m_Config;
 
-
+	sf::Clock m_EngineClock;
 	Remotery* rmt;
 	//
 	std::unique_ptr<SystemsContainer> m_SystemsContainer;

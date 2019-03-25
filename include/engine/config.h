@@ -35,6 +35,7 @@ SOFTWARE.
 //tool_engine include
 #include <utility/json_utility.h>
 #include <engine/globals.h>
+#include "SFML/Graphics/Color.hpp"
 
 namespace sfge
 {
@@ -65,9 +66,11 @@ struct Configuration
 	int positionIterations = 2;
 	size_t currentEntitiesNmb = INIT_ENTITY_NMB;
 
-
+	std::string windowName = "SFGE 1.1";
 	std::string scriptsDirname = "scripts/";
 	std::string dataDirname = "data/";
+
+	sf::Color bgColor = sf::Color::Black;
 	/**
 	* \brief Used to load the overall Configuration of the GameEngine at start
 	*/

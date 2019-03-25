@@ -59,6 +59,8 @@ public:
 	virtual void OnFixedUpdate() {}
 
 	virtual void OnDraw(){}
+
+	virtual void OnEditorDraw(){}
 	/**
 	* \brief Used instead of the destructor to delete all heap created structure and finalize
 	*/

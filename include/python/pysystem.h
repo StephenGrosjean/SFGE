@@ -43,6 +43,7 @@ public:
 	void OnUpdate(float dt) override;
 	void OnFixedUpdate() override;
 	void OnDraw() override;
+	void OnEditorDraw() override;
 	void OnContact(ColliderData* c1, ColliderData* c2, bool enter) override;
 };
 

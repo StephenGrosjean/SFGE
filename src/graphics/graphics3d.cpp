@@ -27,6 +27,8 @@ SOFTWARE.
 #include <graphics/graphics3d.h>
 #include "utility/file_utility.h"
 #include "utility/log.h"
+#include <imgui.h>
+#include <glm/vec2.hpp>
 
 namespace sfge
 {
@@ -86,11 +88,140 @@ void Shader::Init(std::string vertexShaderPath, std::string fragmentShaderPath)
 
 void Shader::Bind()
 {
-	glUseProgram(shaderProgram);
+	if(shaderProgram != 0)
+		glUseProgram(shaderProgram);
 }
 
 int Shader::GetProgram()
 {
 	return shaderProgram;
+}
+
+void Shader::SetBool(const std::string& attributeName, bool value) const
+{
+	glUniform1i(glGetUniformLocation(shaderProgram, attributeName.c_str()), (int)value);
+}
+
+void Shader::SetInt(const std::string& attributeName, int value) const
+{
+	glUniform1i(glGetUniformLocation(shaderProgram, attributeName.c_str()), value);
+}
+
+void Shader::SetFloat(const std::string& attributeName, float value) const
+{
+	glUniform1f(glGetUniformLocation(shaderProgram, attributeName.c_str()), value);
+}
+
+// ------------------------------------------------------------------------
+void  Shader::SetVec2(const std::string &name, const glm::vec2 &value) const
+{
+	glUniform2fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &value[0]);
+}
+void  Shader::SetVec2(const std::string &name, float x, float y) const
+{
+	glUniform2f(glGetUniformLocation(shaderProgram, name.c_str()), x, y);
+}
+// ------------------------------------------------------------------------
+void  Shader::SetVec3(const std::string &name, const glm::vec3 &value) const
+{
+	glUniform3fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &value[0]);
+}
+void  Shader::SetVec3(const std::string &name, float x, float y, float z) const
+{
+	glUniform3f(glGetUniformLocation(shaderProgram, name.c_str()), x, y, z);
+}
+// ------------------------------------------------------------------------
+void  Shader::SetVec4(const std::string &name, const glm::vec4 &value) const
+{
+	glUniform4fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &value[0]);
+}
+void  Shader::SetVec4(const std::string &name, float x, float y, float z, float w)
+{
+	glUniform4f(glGetUniformLocation(shaderProgram, name.c_str()), x, y, z, w);
+}
+// ------------------------------------------------------------------------
+void  Shader::SetMat2(const std::string &name, const glm::mat2 &mat) const
+{
+	glUniformMatrix2fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+// ------------------------------------------------------------------------
+void  Shader::SetMat3(const std::string &name, const glm::mat3 &mat) const
+{
+	glUniformMatrix3fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+// ------------------------------------------------------------------------
+void  Shader::SetMat4(const std::string &name, const glm::mat4 &mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+void Graphics3dManager::AddDrawingProgam(DrawingProgram* drawingProgram)
+{
+	m_DrawingPrograms.push_back(drawingProgram);
+}
+
+void Graphics3dManager::OnEngineInit()
+{
+	for (auto* drawingProgram : m_DrawingPrograms)
+	{
+		drawingProgram->OnEngineInit();
+	}
+}
+
+void Graphics3dManager::OnDraw()
+{
+
+	for(auto* drawingProgram : m_DrawingPrograms)
+	{
+		drawingProgram->OnDraw();
+	}
+}
+
+std::vector<DrawingProgram*>& Graphics3dManager::GetDrawingPrograms()
+{
+	return m_DrawingPrograms;
+}
+
+void DrawingProgram::OnEditorDraw()
+{
+	ImGui::Separator();
+	ImGui::Text("Shaders Data");
+	ImGui::Separator();
+	for (int i = 0; i < shaders.size(); i++)
+	{
+		GLint count;
+
+		GLint size; // size of the variable
+		GLenum type; // type of the variable (float, vec3 or mat4, etc)
+
+		const GLsizei bufSize = 16; // maximum name length
+		GLchar name[bufSize]; // variable name in GLSL
+		GLsizei length; // name length
+
+		auto* shader = shaders[i];
+		ImGui::Text("Shader %d", i);
+		glGetProgramiv(shader->GetProgram(), GL_ACTIVE_ATTRIBUTES, &count);
+
+		for (int j = 0; j < count; j++)
+		{
+			glGetActiveAttrib(shader->GetProgram(), (GLuint)j, bufSize, &length, &size, &type, name);
+
+			ImGui::Text("Attribute #%d Type: %u Name: %s", j, type, name);
+		}
+
+		glGetProgramiv(shader->GetProgram(), GL_ACTIVE_UNIFORMS, &count);
+
+		for (int j = 0; j < count; j++)
+		{
+			glGetActiveUniform(shader->GetProgram(), (GLuint)j, bufSize, &length, &size, &type, name);
+
+			ImGui::Text("Uniform #%d Type: %u Name: %s", j, type, name);
+		}
+	}
+}
+
+const std::string& DrawingProgram::GetProgramName()
+{
+	return programName;
 }
 }

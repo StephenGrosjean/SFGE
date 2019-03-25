@@ -51,7 +51,7 @@ public:
 		* \param dt Delta time since last frame
 		*/
 	void OnUpdate(float dt) override;
-
+	void OnDraw() override;
 	void Display();
 	/**
 	* \brief Destroy the window and other

@@ -88,6 +88,7 @@ public:
 	void Destroy() override;
 
 	void OnBeforeSceneLoad() override;
+	std::vector<PySystem*>& GetSceneSystems();
 private:
 
 	void InitScenePySystems();
