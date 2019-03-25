@@ -3,9 +3,11 @@
 #endif
 #include <cmath>
 
-#include <engine.h>
-#include <graphics.h>
+#include <engine/engine.h>
+#include <input/input.h>
+#include <graphics/graphics3d.h>
 
+#include <SFML/Graphics/Texture.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -16,20 +18,19 @@ const float pixelPerUnit = 100.0f;
 //#define ORTHOGRAPHIC
 #define CAMERA_CONTROLS
 
-class HelloCameraDrawingProgram : public DrawingProgram
+class HelloCameraDrawingProgram : public sfge::DrawingProgram
 {
 public:
+	using sfge::DrawingProgram::DrawingProgram;
 	~HelloCameraDrawingProgram() override;
-    void Init() override;
-    void Draw() override;
+    void OnEngineInit() override;
+    void OnDraw() override;
 	void Destroy() override;
 private:
 	void ProcessInput();
-public:
-    
-private:
-    Shader shaderProgram;
+	sfge::Shader shaderProgram;
 	unsigned int VBO, VAO;
+	sf::Texture sfTextureWall;
 	unsigned int textureWall;
 	float vertices[5*36] = 
 	{
@@ -120,19 +121,19 @@ HelloCameraDrawingProgram::~HelloCameraDrawingProgram()
 {
 }
 
-void HelloCameraDrawingProgram::Init()
+void HelloCameraDrawingProgram::OnEngineInit()
 {
 	programName = "HelloCamera";
 	shaders.push_back(&shaderProgram);
-    shaderProgram.Init("shaders/hello_camera/camera.vert", "shaders/hello_camera/camera.frag");
+    shaderProgram.Init("data/shaders/05_hello_camera/camera.vert", "data/shaders/05_hello_camera/camera.frag");
 
 #ifdef CAMERA_CONTROLS
-	Engine* engine = Engine::GetPtr();
-	auto& config = engine->GetConfiguration();
-	lastX = config.screenWidth/2.0f;
-	lastY = config.screenHeight/2.0f;
+	auto* config = m_Engine.GetConfig();
+	lastX = config->screenResolution.x/2.0f;
+	lastY = config->screenResolution.y/2.0f;
 #endif
-	textureWall = CreateTexture("data/sprites/wall.dds");
+	sfTextureWall.loadFromFile("data/sprites/wall.jpg");
+	textureWall = sfTextureWall.getNativeHandle();
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
@@ -152,12 +153,11 @@ void HelloCameraDrawingProgram::Init()
 
 }
 
-void HelloCameraDrawingProgram::Draw()
+void HelloCameraDrawingProgram::OnDraw()
 {
 	ProcessInput();
 
-	Engine* engine = Engine::GetPtr();
-	auto& config = engine->GetConfiguration();
+	auto* config = m_Engine.GetConfig();
 
 	glEnable(GL_DEPTH_TEST);
 	
@@ -178,7 +178,7 @@ void HelloCameraDrawingProgram::Draw()
 		(float)config.screenSizeY / pixelPerUnit/2.0f, 
 		0.1f, 100.0f);
 #else
-	glm::mat4 projection = glm::perspective(glm::radians(fov), (float)config.screenWidth / config.screenHeight, 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(fov), (float)config->screenResolution.x / config->screenResolution.y, 0.1f, 100.0f);
 #endif
 
 	shaderProgram.Bind();
@@ -194,7 +194,7 @@ void HelloCameraDrawingProgram::Draw()
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[i]);
-		model = glm::rotate(model, (float)engine->GetTimeSinceInit() * glm::radians(50.0f) + cubeInitialAngle[i], glm::vec3(0.5f, 1.0f, 0.0f));
+		model = glm::rotate(model, (float)m_Engine.GetTimeSinceInit() * glm::radians(50.0f) + cubeInitialAngle[i], glm::vec3(0.5f, 1.0f, 0.0f));
 		
 		const int modelLoc = glGetUniformLocation(shaderProgram.GetProgram(), "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -212,48 +212,29 @@ void HelloCameraDrawingProgram::Destroy()
 
 void HelloCameraDrawingProgram::ProcessInput()
 {
-	Engine* engine = Engine::GetPtr();
-	auto& inputManager = engine->GetInputManager();
-	float dt = engine->GetDeltaTime();
+	auto* inputManager = m_Engine.GetInputManager();
+	auto& keyboardManager = inputManager->GetKeyboardManager();
+	
+	float dt = m_Engine.GetDeltaTime();
 	float cameraSpeed = 1.0f;
-#ifdef USE_SFML2
-	if (inputManager.GetButton(sf::Keyboard::W))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::W))
 	{
 		cameraPos += cameraSpeed * cameraFront * dt;
 	}
-	if (inputManager.GetButton(sf::Keyboard::S))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::S))
 	{
 		cameraPos -= cameraSpeed * cameraFront * dt;
 	}
-	if (inputManager.GetButton(sf::Keyboard::A))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::A))
 	{
 		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed * dt;
 	}
-	if (inputManager.GetButton(sf::Keyboard::D))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::D))
 	{
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed* dt;
 	}
-#endif
-
-#ifdef USE_SDL2
-	if(inputManager.GetButton(SDLK_w))
-	{
-		cameraPos += cameraSpeed * cameraFront * dt;
-	}
-	if (inputManager.GetButton(SDLK_s))
-	{
-		cameraPos -= cameraSpeed * cameraFront * dt;
-	}
-	if (inputManager.GetButton(SDLK_a))
-	{
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed * dt;
-	}
-	if (inputManager.GetButton(SDLK_d))
-	{
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed* dt;
-	}
-#endif
-	auto mousePos = inputManager.GetMousePosition();
+	auto& mouseManager = inputManager->GetMouseManager();
+	auto mousePos = mouseManager.GetPosition();
 
 	float xoffset = mousePos.x - lastX;
 	float yoffset = lastY - mousePos.y; // reversed since y-coordinates go from bottom to top
@@ -281,7 +262,7 @@ void HelloCameraDrawingProgram::ProcessInput()
 
 	
 	if (fov >= 1.0f && fov <= 45.0f)
-		fov -= inputManager.GetMouseWheelDelta() * engine->GetDeltaTime() * fovScroolSpeed;
+		fov -= mouseManager.GetWheelDelta() * m_Engine.GetDeltaTime() * fovScroolSpeed;
 	if (fov <= 1.0f)
 		fov = 1.0f;
 	if (fov >= 45.0f)
@@ -291,17 +272,22 @@ void HelloCameraDrawingProgram::ProcessInput()
 
 int main(int argc, char** argv)
 {
-    Engine engine;
+	sfge::Engine engine;
 
-    auto& config = engine.GetConfiguration();
-    config.screenWidth = 1024;
-    config.screenHeight = 1024;
-	config.windowName = "Hello Camera";
+	auto* graphics3dManager = engine.GetGraphics3dManager();
+	HelloCameraDrawingProgram helloCamera(engine);
+	graphics3dManager->AddDrawingProgam(&helloCamera);
 
-    engine.AddDrawingProgram(new HelloCameraDrawingProgram());
+	{
+		auto config = std::make_unique<sfge::Configuration>();
+		config->screenResolution.x = 1024;
+		config->screenResolution.y = 1024;
+		config->windowName = "Hello Camera";
 
-    engine.Init();
-    engine.GameLoop();
+		engine.Init(std::move(config));
+	}
+
+    engine.Start();
 
     return EXIT_SUCCESS;
 }

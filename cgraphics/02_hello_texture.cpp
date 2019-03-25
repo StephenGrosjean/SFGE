@@ -124,7 +124,7 @@ int main(int argc, char** argv)
 		auto config = std::make_unique<sfge::Configuration>();
 		config->screenResolution.x = 1024;
 		config->screenResolution.y = 1024;
-		//config.bgColor = sf::Color::Black;
+		config->bgColor = sf::Color::Black;
 		config->windowName = "Hello Texture";
 
 		engine.Init(std::move(config));

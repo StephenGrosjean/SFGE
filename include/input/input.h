@@ -56,6 +56,7 @@ public:
 	using System::System;
 	sf::Vector2i GetPosition() const;
 	sf::Vector2i GetLocalPosition(sf::Window& window) const;
+	float GetWheelDelta();
 };
 /**
 * \brief Handles Input like the Keyboard, the Joystick or the Mouse

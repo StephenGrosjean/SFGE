@@ -1,22 +1,25 @@
-#include <engine.h>
-#include <graphics.h>
+#include <engine/engine.h>
+#include <graphics/graphics3d.h>
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "SFML/Graphics/Texture.hpp"
 
 #define CUBE_SAMPLE
 
-class HelloCoordsDrawingProgram : public DrawingProgram
+class HelloCoordsDrawingProgram : public sfge::DrawingProgram
 {
 public:
-	void Init() override;
-	void Draw() override;
+	using sfge::DrawingProgram::DrawingProgram;
+	void OnEngineInit() override;
+	void OnDraw() override;
 	void Destroy() override;
 private:
-	Shader shaderProgram;
+	sfge::Shader shaderProgram;
 
 	unsigned VAO;
+	sf::Texture sfTextureWall;
 	unsigned textureWall;
 
 #ifdef CUBE_SAMPLE
@@ -101,15 +104,16 @@ private:
 #endif
 };
 
-void HelloCoordsDrawingProgram::Init()
+void HelloCoordsDrawingProgram::OnEngineInit()
 {
 	programName = "HelloCoords";
 
 	shaders.push_back(&shaderProgram);
 	shaderProgram.Init(
-		"shaders/hello_coords/coords.vert",
-		"shaders/hello_coords/coords.frag");
-	textureWall = CreateTexture("data/sprites/wall.dds");
+		"data/shaders/04_hello_coords/coords.vert",
+		"data/shaders/04_hello_coords/coords.frag");
+	sfTextureWall.loadFromFile("data/sprites/wall.jpg");
+	textureWall = sfTextureWall.getNativeHandle();
 
 #ifdef CUBE_SAMPLE
 	glGenBuffers(1, &VBO);//like new VBO
@@ -155,19 +159,18 @@ void HelloCoordsDrawingProgram::Init()
 	
 }
 
-void HelloCoordsDrawingProgram::Draw()
+void HelloCoordsDrawingProgram::OnDraw()
 {
 
 	glEnable(GL_DEPTH_TEST);
-	Engine* engine = Engine::GetPtr();
-	Configuration& config = engine->GetConfiguration();
+	auto* config = m_Engine.GetConfig();
 
 	glm::mat4 view = glm::mat4(1.0f);
 	// note that we're translating the scene in the reverse direction of where we want to move
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), (float)config.screenWidth / config.screenHeight, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), (float)config->screenResolution.x / config->screenResolution.y, 0.1f, 100.0f);
 
 	shaderProgram.Bind();
 	glBindTexture(GL_TEXTURE_2D, textureWall);
@@ -182,8 +185,8 @@ void HelloCoordsDrawingProgram::Draw()
 	{
 		glm::mat4 model = glm::mat4(1.0f); //model transform matrix
 		model = glm::translate(model, cubePositions[i]);
-		model = glm::rotate(model, glm::radians(engine->GetTimeSinceInit()*45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(engine->GetTimeSinceInit()*45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(m_Engine.GetTimeSinceInit()*45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(m_Engine.GetTimeSinceInit()*45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		int modelLoc = glGetUniformLocation(shaderProgram.GetProgram(), "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -213,20 +216,22 @@ void HelloCoordsDrawingProgram::Destroy()
 
 int main(int argc, char** argv)
 {
-	Engine engine;
+	sfge::Engine engine;
 
-	auto& config = engine.GetConfiguration();
-	config.screenWidth = 1024;
-	config.screenHeight = 1024;
-#ifdef USE_SFML2
-	config.bgColor = sf::Color::Black;
-#endif
-	config.windowName = "Hello Coords";
+	HelloCoordsDrawingProgram helloCoords(engine);
+	auto* graphics3dManager = engine.GetGraphics3dManager();
+	graphics3dManager->AddDrawingProgam(&helloCoords);
+	{
+		auto config = std::make_unique<sfge::Configuration>();
+		config->screenResolution.x = 1024;
+		config->screenResolution.y = 1024;
+		config->bgColor = sf::Color::Black;
+		config->windowName = "Hello Coords";
 
-	engine.AddDrawingProgram(new HelloCoordsDrawingProgram());
+		engine.Init(std::move(config));
+	}
 
-	engine.Init();
 
-	engine.GameLoop();
+	engine.Start();
 	return EXIT_SUCCESS;
 }

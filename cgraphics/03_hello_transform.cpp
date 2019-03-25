@@ -1,17 +1,20 @@
-#include <engine.h>
-#include <graphics.h>
+#include <engine/engine.h>
+
+#include "graphics/graphics3d.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "SFML/Graphics/Texture.hpp"
 
 #define ROTATE_OVER_TIME
 
-class HelloTransformDrawingProgram : public DrawingProgram
+class HelloTransformDrawingProgram : public sfge::DrawingProgram
 {
 public:
-    void Init() override;
-    void Draw() override;
+	using sfge::DrawingProgram::DrawingProgram;
+    void OnEngineInit() override;
+    void OnDraw() override;
     void Destroy() override;
 private:
 
@@ -33,14 +36,15 @@ private:
             1, 2, 3    // second triangle
     };
 
-    Shader shaderProgram;
+	sfge::Shader shaderProgram;
     unsigned VBO[2];
     unsigned EBO;
     unsigned VAO;
+	sf::Texture sfTextureWall;
     unsigned textureWall;
 };
 
-void HelloTransformDrawingProgram::Init()
+void HelloTransformDrawingProgram::OnEngineInit()
 {
     programName = "HelloTransform";
 
@@ -50,11 +54,11 @@ void HelloTransformDrawingProgram::Init()
     glGenBuffers(1, &EBO);
 
     shaderProgram.Init(
-            "shaders/hello_transform/transform.vert",
-            "shaders/hello_transform/transform.frag"
+            "data/shaders/03_hello_transform/transform.vert",
+            "data/shaders/03_hello_transform/transform.frag"
     );
-
-    textureWall = CreateTexture("data/sprites/wall.dds");
+	sfTextureWall.loadFromFile("data/sprites/wall.dds");
+	textureWall = sfTextureWall.getNativeHandle();
     glGenVertexArrays(1, &VAO); //like: new VAO()
     // 1. bind Vertex Array Object
     glBindVertexArray(VAO);//Now use our VAO
@@ -75,7 +79,7 @@ void HelloTransformDrawingProgram::Init()
     glBindVertexArray(0);
 }
 
-void HelloTransformDrawingProgram::Draw()
+void HelloTransformDrawingProgram::OnDraw()
 {
     glm::mat4 trans = glm::mat4(1.0f);
 #ifndef ROTATE_OVER_TIME
@@ -83,7 +87,7 @@ void HelloTransformDrawingProgram::Draw()
     trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 #else
     trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-    trans = glm::rotate(trans, (float)Engine::GetPtr()->GetTimeSinceInit(), glm::vec3(0.0f, 0.0f, 1.0f));
+    trans = glm::rotate(trans, m_Engine.GetTimeSinceInit(), glm::vec3(0.0f, 0.0f, 1.0f));
 #endif
 
     shaderProgram.Bind();
@@ -107,18 +111,22 @@ void HelloTransformDrawingProgram::Destroy()
 
 int main(int argc, char** argv)
 {
-    Engine engine;
+	sfge::Engine engine;
 
-    auto& config = engine.GetConfiguration();
-    config.screenWidth = 1024;
-    config.screenHeight = 1024;
-    //config.bgColor = sf::Color::Black;
-    config.windowName = "Hello Transform";
+	HelloTransformDrawingProgram helloTransform(engine);
 
-    engine.AddDrawingProgram(new HelloTransformDrawingProgram());
+	auto* graphics3dManager = engine.GetGraphics3dManager();
+	graphics3dManager->AddDrawingProgam(&helloTransform);
+	{
+		auto config = std::make_unique<sfge::Configuration>();
+		config->screenResolution.x = 1024;
+		config->screenResolution.y = 1024;
+		//config.bgColor = sf::Color::Black;
+		config->windowName = "Hello Transform";
+		engine.Init(std::move(config));
+	}
 
-    engine.Init();
-    engine.GameLoop();
+    engine.Start();
 
     return EXIT_SUCCESS;
 }

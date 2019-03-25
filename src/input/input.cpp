@@ -101,6 +101,12 @@ sf::Vector2i MouseManager::GetLocalPosition(sf::Window& window) const
 {
 	return sf::Mouse::getPosition(window);
 }
+
+float MouseManager::GetWheelDelta()
+{
+	return 0.0f;
+}
+
 sf::Vector2i MouseManager::GetPosition() const
 {
 	auto* windowPtr = m_Engine.GetGraphics2dManager()->GetWindow();

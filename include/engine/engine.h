@@ -111,13 +111,14 @@ public:
 	ctpl::thread_pool& GetThreadPool();
 	ProfilerFrameData& GetProfilerFrameData();
 	float GetTimeSinceInit();
+	float GetDeltaTime();
 	bool running = false;
 protected:
 	void InitModules();
 	ctpl::thread_pool m_ThreadPool;
 	sf::RenderWindow* m_Window = nullptr;
 	std::unique_ptr<Configuration> m_Config;
-
+	float m_DeltaTime = 0.0f;
 	sf::Clock m_EngineClock;
 	Remotery* rmt;
 	//

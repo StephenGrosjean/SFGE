@@ -230,6 +230,7 @@ void Engine::Start()
 			m_FrameData.graphicsTime = graphicsDt;
 			m_FrameData.frameTotalTime = dt;
 		}
+		m_DeltaTime = dt.asSeconds();
 	}
 
 	rmt_UnbindOpenGL();
@@ -345,5 +346,10 @@ ProfilerFrameData& Engine::GetProfilerFrameData()
 float Engine::GetTimeSinceInit()
 {
 	return m_EngineClock.getElapsedTime().asSeconds();
+}
+
+float Engine::GetDeltaTime()
+{
+	return m_DeltaTime;
 }
 }
