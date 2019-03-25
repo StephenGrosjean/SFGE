@@ -1,5 +1,6 @@
-#include <engine.h>
-#include <graphics.h>
+#include <engine/engine.h>
+#include <graphics/graphics3d.h>
+#include <input/input.h>
 
 #ifdef WIN32
 #define _USE_MATH_DEFINES
@@ -8,21 +9,22 @@
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
-#include "camera.h"
+#include "graphics/camera.h"
 #include <glm/gtc/type_ptr.hpp>
 
 
-class HelloLightDrawingProgram : public DrawingProgram
+class HelloLightDrawingProgram : public sfge::DrawingProgram
 {
 public:
-	void Init() override;
-	void Draw() override;
+	using sfge::DrawingProgram::DrawingProgram;
+	void OnEngineInit() override;
+	void OnDraw() override;
 	void Destroy() override;
 	void ProcessInput();
 
 private:
-	Shader objShaderProgram;
-	Shader lampShaderProgram;
+	sfge::Shader objShaderProgram;
+	sfge::Shader lampShaderProgram;
 
 	float vertices[6*36] = {
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -73,26 +75,25 @@ private:
 
 	glm::vec3 lightPos = { 2.0f, 0.0f, 2.0f };
 
-	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	sfge::Camera camera = sfge::Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	float lastX = 0;
 	float lastY = 0;
 };
 
-void HelloLightDrawingProgram::Init()
+void HelloLightDrawingProgram::OnEngineInit()
 {
 	programName = "HelloLight";
 
-	Engine* engine = Engine::GetPtr();
-	auto& config = engine->GetConfiguration();
-	lastX = config.screenWidth / 2.0f;
-	lastY = config.screenHeight / 2.0f;
+	auto* config = m_Engine.GetConfig();
+	lastX = config->screenResolution.x / 2.0f;
+	lastY = config->screenResolution.y / 2.0f;
 
 	objShaderProgram.Init(
-		"shaders/hello_light/light.vert",
-		"shaders/hello_light/light.frag");
+		"data/shaders/06_hello_light/light.vert",
+		"data/shaders/06_hello_light/light.frag");
 	lampShaderProgram.Init(
-		"shaders/hello_light/lamp.vert",
-		"shaders/hello_light/lamp.frag");
+		"data/shaders/06_hello_light/lamp.vert",
+		"data/shaders/06_hello_light/lamp.frag");
 	shaders.push_back(&objShaderProgram);
 	shaders.push_back(&lampShaderProgram);
 
@@ -121,14 +122,13 @@ void HelloLightDrawingProgram::Init()
 	glBindVertexArray(0);
 }
 
-void HelloLightDrawingProgram::Draw()
+void HelloLightDrawingProgram::OnDraw()
 {
 	ProcessInput();
 
-	Engine* engine = Engine::GetPtr();
-	auto& config = engine->GetConfiguration();
+	auto* config = m_Engine.GetConfig();
 
-	lightPos = glm::vec3(2.0f*sin(2.0f*M_PI / 3.0f*engine->GetTimeSinceInit()), lightPos.y, 2.0f*cos(2.0f*M_PI / 3.0f*engine->GetTimeSinceInit()));
+	lightPos = glm::vec3(2.0f*sin(2.0f*M_PI / 3.0f*m_Engine.GetTimeSinceInit()), lightPos.y, 2.0f*cos(2.0f*M_PI / 3.0f*m_Engine.GetTimeSinceInit()));
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -140,7 +140,7 @@ void HelloLightDrawingProgram::Draw()
 	glUniform1i(glGetUniformLocation(objShaderProgram.GetProgram(), "specularPow"), 256);
 	glUniform3fv(glGetUniformLocation(objShaderProgram.GetProgram(), "lightPos"), 1, &lightPos[0]);
 	glUniform3fv(glGetUniformLocation(objShaderProgram.GetProgram(), "viewPos"), 1, &camera.Position[0]);
-	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)config.screenWidth / (float)config.screenHeight, 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)config->screenResolution.x / (float)config->screenResolution.y, 0.1f, 100.0f);
 	glm::mat4 view = camera.GetViewMatrix();
 	glUniformMatrix4fv(glGetUniformLocation(objShaderProgram.GetProgram(), "projection"), 1, GL_FALSE, &projection[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(objShaderProgram.GetProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -178,49 +178,29 @@ void HelloLightDrawingProgram::Destroy()
 
 void HelloLightDrawingProgram::ProcessInput()
 {
-	Engine* engine = Engine::GetPtr();
-	auto& inputManager = engine->GetInputManager();
-	float dt = engine->GetDeltaTime();
+	auto* inputManager = m_Engine.GetInputManager();
+	auto& keyboardManager = inputManager->GetKeyboardManager();
+	float dt = m_Engine.GetDeltaTime();
 	float cameraSpeed = 1.0f;
-#ifdef USE_SFML2
-	if (inputManager.GetButton(sf::Keyboard::W))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::W))
 	{
-		camera.ProcessKeyboard(FORWARD, engine->GetDeltaTime());
+		camera.ProcessKeyboard(sfge::FORWARD, m_Engine.GetDeltaTime());
 	}
-	if (inputManager.GetButton(sf::Keyboard::S))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::S))
 	{
-		camera.ProcessKeyboard(BACKWARD, engine->GetDeltaTime());
+		camera.ProcessKeyboard(sfge::BACKWARD, m_Engine.GetDeltaTime());
 	}
-	if (inputManager.GetButton(sf::Keyboard::A))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::A))
 	{
-		camera.ProcessKeyboard(LEFT, engine->GetDeltaTime());
+		camera.ProcessKeyboard(sfge::LEFT, m_Engine.GetDeltaTime());
 	}
-	if (inputManager.GetButton(sf::Keyboard::D))
+	if (keyboardManager.IsKeyHeld(sf::Keyboard::D))
 	{
-		camera.ProcessKeyboard(RIGHT, engine->GetDeltaTime());
+		camera.ProcessKeyboard(sfge::RIGHT, m_Engine.GetDeltaTime());
 	}
-#endif
 
-#ifdef USE_SDL2
-	if (inputManager.GetButton(SDLK_w))
-	{
-		camera.ProcessKeyboard(FORWARD, engine->GetDeltaTime());
-	}
-	if (inputManager.GetButton(SDLK_s))
-	{
-		camera.ProcessKeyboard(BACKWARD, engine->GetDeltaTime());
-	}
-	if (inputManager.GetButton(SDLK_a))
-	{
-		camera.ProcessKeyboard(LEFT, engine->GetDeltaTime());
-	}
-	if (inputManager.GetButton(SDLK_d))
-	{
-		camera.ProcessKeyboard(RIGHT, engine->GetDeltaTime());
-	}
-#endif
-
-	auto mousePos = inputManager.GetMousePosition();
+	auto& mouseManager = inputManager->GetMouseManager();
+	auto mousePos = mouseManager.GetPosition();
 
 	float xoffset = mousePos.x - lastX;
 	float yoffset = lastY - mousePos.y; // reversed since y-coordinates go from bottom to top
@@ -229,7 +209,7 @@ void HelloLightDrawingProgram::ProcessInput()
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
 	
-	camera.ProcessMouseScroll(inputManager.GetMouseWheelDelta());
+	camera.ProcessMouseScroll(mouseManager.GetWheelDelta());
 
 
 }
@@ -237,15 +217,22 @@ void HelloLightDrawingProgram::ProcessInput()
 
 int main(int argc, char** argv)
 {
-	Engine engine;
-	auto& config = engine.GetConfiguration();
-	config.screenWidth = 1024;
-	config.screenHeight = 1024;
-	config.windowName = "Hello Light";
-	engine.AddDrawingProgram(new HelloLightDrawingProgram());
+	sfge::Engine engine;
 
-	engine.Init();
-	engine.GameLoop();
+	HelloLightDrawingProgram helloLight(engine);
+	auto* graphics3dManager = engine.GetGraphics3dManager();
+	graphics3dManager->AddDrawingProgam(&helloLight);
+
+	{
+		auto config = std::make_unique<sfge::Configuration>();
+		config->screenResolution.x = 1024;
+		config->screenResolution.y = 1024;
+		config->windowName = "Hello Light";
+
+		engine.Init(std::move(config));
+	}
+
+	engine.Start();
 
 	return EXIT_SUCCESS;
 }
