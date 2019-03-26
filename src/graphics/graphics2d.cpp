@@ -93,6 +93,7 @@ void Graphics2dManager::OnUpdate(float dt)
 
 void Graphics2dManager::OnDraw()
 {
+	rmt_ScopedCPUSample(Graphics2dDraw,0);
 	if(!m_Windowless)
 	{
 		m_SpriteManager.DrawSprites(*m_Window);

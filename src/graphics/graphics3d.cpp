@@ -30,6 +30,8 @@ SOFTWARE.
 #include <imgui.h>
 #include <glm/vec2.hpp>
 
+#include <Remotery.h>
+
 namespace sfge
 {
 
@@ -170,7 +172,7 @@ void Graphics3dManager::OnEngineInit()
 
 void Graphics3dManager::OnDraw()
 {
-
+	rmt_ScopedCPUSample(Graphics3dDraw,0);
 	for(auto* drawingProgram : m_DrawingPrograms)
 	{
 		drawingProgram->OnDraw();
