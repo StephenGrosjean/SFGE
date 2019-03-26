@@ -178,6 +178,7 @@ void Engine::Start()
 			if(event.type == sf::Event::Resized)
 			{
 				glViewport(0, 0, event.size.width, event.size.height);
+				m_Config->screenResolution = sf::Vector2i(event.size.width, event.size.height);
 			}
 			
 		}

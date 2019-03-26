@@ -90,6 +90,7 @@ protected:
 	editor::ToolsManager m_ToolWindow{m_Engine};
 	Entity selectedEntity = INVALID_ENTITY;
 	int selectedDrawingProgram = -1;
+	int selectedPySystem = -1;
 	std::set<editor::IDrawableManager*> m_DrawableObservers;
 #ifdef WIN32
 

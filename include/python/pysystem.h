@@ -45,6 +45,7 @@ public:
 	void OnDraw() override;
 	void OnEditorDraw() override;
 	void OnContact(ColliderData* c1, ColliderData* c2, bool enter) override;
+	std::string GetPySystemName();
 };
 
 class PySystemManager : public System

@@ -12,11 +12,11 @@ class MouseRaycastSystem(System):
     ray_nmb: int
 
     def init(self):
-        self.ray_nmb = 6
-        self.angles = [360 / 6 * i for i in range(6)]
+        self.ray_nmb = 20
+        self.angles = [360 / self.ray_nmb * i for i in range(self.ray_nmb)]
 
         self.max_length = 1000.0
-        self.lengths = [self.max_length for i in range(6)]
+        self.lengths = [self.max_length for i in range(self.ray_nmb)]
         self.mouse_pos = Vec2f()
 
     def fixed_update(self):

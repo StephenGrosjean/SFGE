@@ -91,11 +91,21 @@ void Editor::OnUpdate(float dt)
 			ImGui::SetNextWindowSize(ImVec2(150.0f, configPtr->screenResolution.y), ImGuiCond_FirstUseEver);
 			ImGui::Begin("Game Objects");
 
+            ImGui::Separator();
+            ImGui::Text("PySystems");
+            ImGui::Separator();
 			auto& systems = m_Engine.GetSceneManager()->GetSceneSystems();
 
-			for(auto* pySystem : systems)
+			for(int i = 0; i < systems.size();i++)
 			{
-				pySystem->OnEditorDraw();
+				auto* pySystem = systems[i];
+			    if(pySystem != nullptr)
+                {
+			        if(ImGui::Selectable(pySystem->GetPySystemName().c_str(), selectedPySystem == i))
+					{
+			        	selectedPySystem = i;
+					}
+                }
 			}
 
 			auto* graphics3dManager = m_Engine.GetGraphics3dManager();
@@ -135,6 +145,19 @@ void Editor::OnUpdate(float dt)
 			ImGui::SetNextWindowSize(ImVec2(150.0f, configPtr->screenResolution.y), ImGuiCond_FirstUseEver);
 			ImGui::Begin("Inspector");
 
+			ImGui::Separator();
+			if(selectedPySystem != -1)
+			{
+				systems[selectedPySystem]->OnEditorDraw();
+			}
+			ImGui::Separator();
+			if(selectedDrawingProgram != -1)
+			{
+				drawingPrograms[selectedDrawingProgram]->OnEditorDraw();
+			}
+
+			ImGui::Separator();
+
 			if(selectedEntity != INVALID_ENTITY)
 			{
 				auto& entityInfo = m_EntityManager->GetEntityInfo(selectedEntity);
@@ -146,10 +169,7 @@ void Editor::OnUpdate(float dt)
                 }
 
 			}
-			if(selectedDrawingProgram != -1)
-			{
-				drawingPrograms[selectedDrawingProgram]->OnEditorDraw();
-			}
+
 			ImGui::End();
 			m_ProfilerWindow.Update();
 			m_ToolWindow.OnUpdate(dt);

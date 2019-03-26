@@ -14,6 +14,8 @@
 
 #include <utility/log.h>
 
+#include <imgui.h>
+
 namespace sfge
 {
 
@@ -103,7 +105,14 @@ void PySystem::OnDraw()
 
 void PySystem::OnEditorDraw()
 {
-
+	const auto pySysObj = py::cast(this);
+	py::dict pySysAttrDict = pySysObj.attr("__dict__");
+	for(auto& elem : pySysAttrDict)
+	{
+		std::string key = py::str(elem.first);
+		std::string value = py::str(elem.second);
+		ImGui::LabelText(key.c_str(), value.c_str());
+	}
 }
 
 void PySystem::OnContact(ColliderData* c1, ColliderData* c2, bool enter)
@@ -128,6 +137,14 @@ void PySystem::OnContact(ColliderData* c1, ColliderData* c2, bool enter)
 		oss << "Python error on PySystem Contact\n" << e.what();
 		Log::GetInstance()->Error(oss.str());
 	}
+}
+
+std::string PySystem::GetPySystemName()
+{
+	std::string pySystemName;
+	auto pySystem = py::cast(this, py::return_value_policy::automatic_reference);
+	pySystemName = py::cast<std::string>(pySystem.attr("__class__").attr("__name__"));
+	return pySystemName;
 }
 
 void PySystemManager::OnEngineInit()
