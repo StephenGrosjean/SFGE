@@ -72,6 +72,7 @@ public:
 	void AddDrawingProgam(DrawingProgram* drawingProgram);
 	void OnEngineInit() override;
 	void OnDraw() override;
+	void Destroy() override;
 	std::vector<DrawingProgram*>& GetDrawingPrograms();
 private:
 	std::vector<DrawingProgram*> m_DrawingPrograms;

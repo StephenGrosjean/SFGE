@@ -179,6 +179,16 @@ void Graphics3dManager::OnDraw()
 	}
 }
 
+
+void Graphics3dManager::Destroy()
+{
+	for(int i = 0; i < m_DrawingPrograms.size();i++)
+	{
+		m_DrawingPrograms[i]->Destroy();
+	}
+	m_DrawingPrograms.clear();
+}
+
 std::vector<DrawingProgram*>& Graphics3dManager::GetDrawingPrograms()
 {
 	return m_DrawingPrograms;

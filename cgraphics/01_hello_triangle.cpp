@@ -29,7 +29,7 @@ SOFTWARE.
 #include <graphics/graphics3d.h>
 #include "utility/log.h"
 
-#define EBO_DOUBLE_TRIANGLE
+//#define EBO_DOUBLE_TRIANGLE
 
 class HelloTriangleDrawingProgram : public sfge::DrawingProgram
 {
@@ -139,7 +139,7 @@ void HelloTriangleDrawingProgram::Destroy()
 {
 	glDeleteVertexArrays(1, &VAO);
 #ifndef EBO_DOUBLE_TRIANGLE
-	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &VBO[0]);
 #else
 	glDeleteBuffers(2, &VBO[0]);
 	glDeleteBuffers(2, &EBO);

@@ -244,6 +244,7 @@ void Engine::Destroy()
 	m_SystemsContainer->pythonEngine.Destroy();
 	m_SystemsContainer->entityManager.Destroy();
 	m_SystemsContainer->graphics2dManager.Destroy();
+	m_SystemsContainer->graphics3dManager.Destroy();
 	m_SystemsContainer->audioManager.Destroy();
 	m_SystemsContainer->sceneManager.Destroy();
 	m_SystemsContainer->inputManager.Destroy();
@@ -257,6 +258,7 @@ void Engine::Clear()
 {
 	m_SystemsContainer->entityManager.OnBeforeSceneLoad();
 	m_SystemsContainer->graphics2dManager.OnBeforeSceneLoad();
+	m_SystemsContainer->graphics3dManager.OnBeforeSceneLoad();
 	m_SystemsContainer->audioManager.OnBeforeSceneLoad();
 	m_SystemsContainer->sceneManager.OnBeforeSceneLoad();
 	m_SystemsContainer->inputManager.OnBeforeSceneLoad();
@@ -270,6 +272,7 @@ void Engine::Collect()
 
 	m_SystemsContainer->entityManager.OnAfterSceneLoad();
 	m_SystemsContainer->graphics2dManager.OnAfterSceneLoad();
+	m_SystemsContainer->graphics3dManager.OnAfterSceneLoad();
 	m_SystemsContainer->audioManager.OnAfterSceneLoad();
 	m_SystemsContainer->sceneManager.OnAfterSceneLoad();
 	m_SystemsContainer->inputManager.OnAfterSceneLoad();
