@@ -23,7 +23,7 @@ SOFTWARE.
 */
 #include <p2body.h>
 
-p2Vec2 p2Body::GetLinearVelocity()
+p2Vec2 p2Body::GetLinearVelocity() const
 {
 	return linearVelocity;
 }
@@ -45,4 +45,18 @@ p2Vec2 p2Body::GetPosition()
 p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 {
 	return nullptr;
+}
+
+void p2Body::ApplyForceToCenter(const p2Vec2& force)
+{
+}
+
+p2BodyType p2Body::GetType() const
+{
+	return p2BodyType::STATIC;
+}
+
+float p2Body::GetMass() const
+{
+	return 0.0f;
 }

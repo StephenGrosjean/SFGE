@@ -60,4 +60,9 @@ private:
 	p2Vec2 m_Size;
 };
 
+class p2PolygonShape : public p2Shape
+{
+	
+};
+
 #endif
