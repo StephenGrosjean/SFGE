@@ -99,8 +99,10 @@ void HelloTransformDrawingProgram::OnDraw()
 
     shaderProgram.Bind();
 
-    unsigned int transformLoc = glGetUniformLocation(shaderProgram.GetProgram(), "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+    //unsigned int transformLoc = glGetUniformLocation(shaderProgram.GetProgram(), "transform");
+    //glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+	shaderProgram.SetMat4("transform", trans);
 
     glBindTexture(GL_TEXTURE_2D, textureWall);
     glBindVertexArray(VAO);

@@ -35,7 +35,7 @@ private:
 		1.0f, 1.0f,	  // top right
 		1.0f, 0.0f,   // bottom right
 		0.0f, 0.0f,   // bottom left
-		0.0f, 1.0f,   // bottom left
+		0.0f, 1.0f,   // top left
 	};
 	unsigned int indices[6] = {
 		// note that we start from 0!
@@ -86,7 +86,9 @@ void HelloTextureDrawingProgram::OnEngineInit()
 #endif
 #else
 	textureWall = LoadTexture("data/sprites/wall.jpg");
+#ifdef OTHER_TEXTURE
 	textureOtherPlay = LoadTexture("data/sprites/other_play.png");
+#endif
 #endif
 	glGenVertexArrays(1, &VAO);
 	// 1. bind Vertex Array Object
@@ -153,7 +155,7 @@ int HelloTextureDrawingProgram::LoadTexture(const std::string& filename)
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	if (extension == ".jpg")
 	{

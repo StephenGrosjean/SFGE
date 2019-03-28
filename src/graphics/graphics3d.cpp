@@ -217,8 +217,8 @@ void DrawingProgram::OnEditorDraw()
 		for (int j = 0; j < count; j++)
 		{
 			glGetActiveAttrib(shader->GetProgram(), (GLuint)j, bufSize, &length, &size, &type, name);
-
-			ImGui::Text("Attribute #%d Type: %u Name: %s", j, type, name);
+			int loc = glGetAttribLocation(shader->GetProgram(), name);
+			ImGui::Text("Attribute #%d Type: %u Name: %s", loc, type, name);
 		}
 
 		glGetProgramiv(shader->GetProgram(), GL_ACTIVE_UNIFORMS, &count);
@@ -226,8 +226,8 @@ void DrawingProgram::OnEditorDraw()
 		for (int j = 0; j < count; j++)
 		{
 			glGetActiveUniform(shader->GetProgram(), (GLuint)j, bufSize, &length, &size, &type, name);
-
-			ImGui::Text("Uniform #%d Type: %u Name: %s", j, type, name);
+			int loc = glGetUniformLocation(shader->GetProgram(), name);
+			ImGui::Text("Uniform #%d Type: %u Name: %s", loc, type, name);
 		}
 	}
 }
