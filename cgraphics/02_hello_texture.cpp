@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/Texture.hpp>
 #include "utility/file_utility.h"
+#include "utility/log.h"
 
 
 #define OTHER_TEXTURE
@@ -139,7 +140,13 @@ int HelloTextureDrawingProgram::LoadTexture(const std::string& filename)
 	int width, height, nrChannels;
 	
 	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrChannels, 0);
-
+	if (data == nullptr)
+	{
+		std::ostringstream oss;
+		oss << "[Error] Texture: cannot load " << filename << "\n";
+		sfge::Log::GetInstance()->Error(oss.str());
+		return 0;
+	}
 	unsigned int texture;
 	glGenTextures(1, &texture);
 
