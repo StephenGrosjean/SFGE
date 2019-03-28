@@ -37,12 +37,12 @@ namespace sfge
 
 void Shader::Init(std::string vertexShaderPath, std::string fragmentShaderPath)
 {
-	const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);//declare vertex shader
 	const auto vertexShaderProgram = LoadFile(vertexShaderPath);
 	const char* vertexShaderChar = vertexShaderProgram.c_str();
 
-	glShaderSource(vertexShader, 1, &vertexShaderChar, NULL);
-	glCompileShader(vertexShader);
+	glShaderSource(vertexShader, 1, &vertexShaderChar, NULL);//define vertex shader data
+	glCompileShader(vertexShader);//compile
 	//Check success status of shader compilation 
 	int  success;
 	char infoLog[512];
