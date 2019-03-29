@@ -29,6 +29,8 @@ SOFTWARE.
 #include <p2body.h>
 #include <p2contact.h>
 
+const size_t MAX_BODY_LEN = 256;
+
 /**
 * \brief Representation of the physical world in meter
 */
@@ -50,6 +52,8 @@ public:
 	void SetContactListener(p2ContactListener* contactListener);
 private:
 	p2Vec2 m_Gravity;
+	std::vector<p2Body> m_Bodies;
+	int m_BodyIndex = 0;
 };
 
 #endif

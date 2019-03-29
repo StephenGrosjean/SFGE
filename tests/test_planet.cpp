@@ -33,7 +33,7 @@ TEST(System, TestPlanetPySystem)
 {
 	sfge::Engine engine;
 	std::unique_ptr<sfge::Configuration> initConfig = std::make_unique<sfge::Configuration>();
-	initConfig->gravity.SetZero();
+	initConfig->gravity = p2Vec2();
 	initConfig->devMode = false;
 	initConfig->maxFramerate = 0;
 	engine.Init(std::move(initConfig));
@@ -54,7 +54,7 @@ TEST(System, TestPlanetPySystemCpp)
 {
 	sfge::Engine engine;
 	std::unique_ptr<sfge::Configuration> initConfig = std::make_unique<sfge::Configuration>();
-	initConfig->gravity.SetZero();
+	initConfig->gravity = p2Vec2();
 	initConfig->devMode = false;
 	initConfig->maxFramerate = 0;
 	engine.Init(std::move(initConfig));

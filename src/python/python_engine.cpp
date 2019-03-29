@@ -139,8 +139,9 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def("pixel2meter", [](sf::Vector2f v) {return pixel2meter(v); })
 		.def("pixel2meter", [](Vec2f v) {return pixel2meter(v); })
 		.def("meter2pixel", [](float v) {return meter2pixel(v); })
-		.def("meter2pixel", [](b2Vec2 v)->Vec2f {return meter2pixel(v); })
-		.def("raycast", &Physics2dManager::Raycast);
+		.def("meter2pixel", [](p2Vec2 v)->Vec2f {return meter2pixel(v); })
+		//.def("raycast", &Physics2dManager::Raycast)
+	;
 
 	py::class_<Body2dManager> body2dManager(m, "Body2dManager");
 	body2dManager
@@ -224,17 +225,17 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def_property_readonly("body_type", &Body2d::GetType)
 		.def_property_readonly("mass", &Body2d::GetMass);
 
-	py::class_<b2Body,std::unique_ptr<b2Body, py::nodelete>> body(m, "Body");
+	py::class_<p2Body,std::unique_ptr<p2Body, py::nodelete>> body(m, "Body");
 	body
-		.def_property("velocity", &b2Body::GetLinearVelocity, &b2Body::SetLinearVelocity)
-		.def("apply_force", &b2Body::ApplyForce)
-		.def_property_readonly("body_type", &b2Body::GetType)
-		.def_property_readonly("mass", &b2Body::GetMass);
+		.def_property("velocity", &p2Body::GetLinearVelocity, &p2Body::SetLinearVelocity)
+		.def("apply_force", &p2Body::ApplyForceToCenter)
+		.def_property_readonly("body_type", &p2Body::GetType)
+		.def_property_readonly("mass", &p2Body::GetMass);
 		
-	py::enum_<b2BodyType>(body, "BodyType")
-		.value("STATIC_BODY", b2_staticBody)
-		.value("KINEMATIC_BODY", b2_kinematicBody)
-		.value("DYNAMIC_BODY", b2_dynamicBody)
+	py::enum_<p2BodyType>(body, "BodyType")
+		.value("STATIC_BODY", p2BodyType::STATIC)
+		.value("KINEMATIC_BODY", p2BodyType::KINEMATIC)
+		.value("DYNAMIC_BODY", p2BodyType::DYNAMIC)
 		.export_values();
 		
 	py::class_<Sound> sound(m, "Sound");
@@ -359,20 +360,20 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 			return oss.str();
 		});
 
-	py::class_<b2Vec2> b2vec2(m, "b2Vec2");
+	py::class_<p2Vec2> b2vec2(m, "b2Vec2");
 	b2vec2
 		.def(py::init<>())
 		.def(py::init<float, float>())
-		.def_readwrite("x", &b2Vec2::x)
-		.def_readwrite("y", &b2Vec2::y)
+		.def_readwrite("x", &p2Vec2::x)
+		.def_readwrite("y", &p2Vec2::y)
 		.def(py::self += py::self)
 		.def(py::self -= py::self)
 		.def(py::self *= float())
-		.def_property_readonly("magnitude", [](const b2Vec2 & vec)
+		.def_property_readonly("magnitude", [](const p2Vec2 & vec)
 		{
 			return sqrtf(vec.x*vec.x + vec.y*vec.y);
 		})
-		.def("__repr__", [](const b2Vec2 &vec)
+		.def("__repr__", [](const p2Vec2 &vec)
 		{
 			std::ostringstream oss;
 			oss << "b2Vec2(" << vec.x << ", " << vec.y << ")";

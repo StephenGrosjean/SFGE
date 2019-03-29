@@ -196,18 +196,18 @@ void PlanetSystem::OnDraw()
 #endif
 }
 
-b2Vec2 PlanetSystem::CalculateInitSpeed(sf::Vector2f position) const
+p2Vec2 PlanetSystem::CalculateInitSpeed(sf::Vector2f position) const
 {
 	const auto deltaToCenter = screenSize / 2.0f - position;
 	auto velDir = sf::Vector2f(-deltaToCenter.y, deltaToCenter.x);
 	velDir /= Magnitude(velDir);
 
 	const auto speed = sqrtf(Magnitude(CalculateNewForce(position)) / planetMass * pixel2meter(Magnitude(deltaToCenter)));
-	return b2Vec2(velDir.x*speed, velDir.y*speed);
+	return p2Vec2(velDir.x*speed, velDir.y*speed);
 
 }
 
-b2Vec2 PlanetSystem::CalculateNewForce(sf::Vector2f position) const
+p2Vec2 PlanetSystem::CalculateNewForce(sf::Vector2f position) const
 {
 	const auto deltaToCenter = screenSize / 2.0f - position;
 	const auto r = Magnitude(deltaToCenter);
@@ -220,7 +220,7 @@ float PlanetSystem::Magnitude(sf::Vector2f v)
 	return sqrtf(v.x*v.x + v.y*v.y);
 }
 
-float PlanetSystem::Magnitude(b2Vec2 v)
+float PlanetSystem::Magnitude(p2Vec2 v)
 {
 	return sqrtf(v.x*v.x + v.y*v.y);
 }

@@ -27,11 +27,13 @@
 #include <pybind11/embed.h>// everything needed for embedding
 namespace py = pybind11;
 
+#include <string>
+
 namespace sfge
 {
 py::object import(const std::string& module, const std::string& path, py::object& globals);
 
-std::string module2class(std::string& module_name);
+std::string module2class(const std::string& module_name);
 
 }
 #endif

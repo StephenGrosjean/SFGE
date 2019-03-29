@@ -55,6 +55,11 @@ p2Vec2 p2Vec2::operator-=(p2Vec2 v)
 	return *this-v;
 }
 
+p2Vec2 p2Vec2::operator*=(float f)
+{
+	return (*this) * f;
+}
+
 p2Vec2 p2Vec2::operator/(float f)
 {
 	return p2Vec2(x/f, y/f);
@@ -67,23 +72,25 @@ p2Vec2 p2Vec2::operator*(float f)
 
 float p2Vec2::Dot(p2Vec2 v1, p2Vec2 v2)
 {
-	return v1.x*v2.x+v1.y*v2.y;
+	//TODO
+	return 0.0f;
 }
 
 float p2Vec2::GetMagnitude()
 {
-	return sqrt(x*x+y*y);
+	//TODO
+	return 0.0f;
 }
 
 p2Vec2 p2Vec2::Normalized()
 {
-	return *this/GetMagnitude();
+	//TODO
+	return p2Vec2();
 }
 
-void p2Vec2::Normalize()
+void p2Vec2::NormalizeSelf()
 {
-	x /= GetMagnitude();
-	y /= GetMagnitude();
+	//TODO
 }
 
 p2Vec3 p2Vec2::to3()
@@ -104,10 +111,12 @@ p2Vec3::p2Vec3(float x, float y, float z)
 
 float p2Vec3::Dot(p2Vec3 v1, p2Vec3 v2)
 {
-	return v1.x*v2.x+v1.y*v2.y;
+	//TODO
+	return 0.0f;
 }
 
 p2Vec3 p2Vec3::Cross(p2Vec3 v1, p2Vec3 v2)
 {
-	return p2Vec3(v1.y*v2.z-v1.z*v2.y, -v1.x*v2.z+v1.z*v2.x, v1.x*v2.y - v1.y*v2.x);
+	//TODO
+	return p2Vec3();
 }

@@ -30,7 +30,7 @@ namespace sfge
 {
 class Engine;
 enum class ComponentType : int;
-}
+
 //Editor components
 namespace editor
 {
@@ -42,19 +42,19 @@ struct ComponentInfo;
 class IDrawableInspector
 {
 public:
-	virtual ~IDrawableInspector(){};
-    void SetEntity(Entity entity);
-    Entity GetEntity();
-    virtual void DrawOnInspector() = 0;
+	virtual ~IDrawableInspector() {};
+	void SetEntity(Entity entity);
+	Entity GetEntity();
+	virtual void DrawOnInspector() = 0;
 protected:
-  	Entity m_Entity;
+	Entity m_Entity;
 
 };
 
 class IDrawableManager
 {
 public:
-  	virtual void DrawOnInspector(Entity entity) = 0;
+	virtual void DrawOnInspector(Entity entity) = 0;
 };
 
 struct NamableEditorComponent
@@ -76,6 +76,7 @@ struct ComponentInfo : NamableEditorComponent, IDrawableInspector
 {
 };
 
+}
 }
 
 #endif

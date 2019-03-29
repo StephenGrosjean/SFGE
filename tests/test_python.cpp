@@ -28,7 +28,7 @@ SOFTWARE.
 #include <engine/scene.h>
 #include <gtest/gtest.h>
 
-TEST(Python, TestPyComponent)
+TEST(OldPython, TestPyComponent)
 {
 	sfge::Engine engine;
 	engine.Init();

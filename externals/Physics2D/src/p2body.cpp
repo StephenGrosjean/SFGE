@@ -23,6 +23,11 @@ SOFTWARE.
 */
 #include <p2body.h>
 
+void p2Body::Init(p2BodyDef* bodyDef)
+{
+	m_Colliders.resize(MAX_COLLIDER_LEN);
+}
+
 p2Vec2 p2Body::GetLinearVelocity() const
 {
 	return linearVelocity;
@@ -44,7 +49,9 @@ p2Vec2 p2Body::GetPosition()
 
 p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 {
-	return nullptr;
+	p2Collider& collider = m_Colliders[m_ColliderIndex];
+	m_ColliderIndex++;
+	return &collider;
 }
 
 void p2Body::ApplyForceToCenter(const p2Vec2& force)

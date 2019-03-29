@@ -28,7 +28,7 @@ SOFTWARE.
 
 
 
-TEST(Physics, LinkPythonWithPhysics)
+TEST(OldPython, LinkPythonWithPhysics)
 {
 	sfge::Engine engine;
 	engine.Init();

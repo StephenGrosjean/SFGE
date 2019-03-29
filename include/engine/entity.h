@@ -53,7 +53,7 @@ class DestroyObserver
 
 using EntityMask = int;
 
-namespace sfge::editor
+namespace editor
 {
 
 struct EntityInfo : NamableEditorComponent, IDrawableInspector

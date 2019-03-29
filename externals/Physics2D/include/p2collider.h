@@ -58,7 +58,7 @@ public:
 	void GetShape();
 	void SetUserData(void* colliderData);
 private:
-	void* userData;
+	void* userData = nullptr;
 };
 
 

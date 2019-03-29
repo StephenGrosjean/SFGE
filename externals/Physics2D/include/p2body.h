@@ -26,6 +26,8 @@ SOFTWARE.
 #define SFGE_P2BODY_H
 
 #include <p2aabb.h>
+#include <vector>
+#include <p2collider.h>
 
 class p2Collider;
 struct p2ColliderDef;
@@ -49,12 +51,15 @@ struct p2BodyDef
 	
 };
 
+const size_t MAX_COLLIDER_LEN = 8;
+
 /**
 * \brief Rigidbody representation
 */
 class p2Body
 {
 public:
+	void Init(p2BodyDef* bodyDef);
 	p2Vec2 GetLinearVelocity() const;
 	
 	void SetLinearVelocity(p2Vec2 velocity);
@@ -76,6 +81,9 @@ private:
 	p2Vec2 position;
 	p2Vec2 linearVelocity;
 	float angularVelocity;
+
+	int m_ColliderIndex = 0;
+	std::vector<p2Collider> m_Colliders;
 };
 
 #endif

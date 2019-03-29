@@ -57,7 +57,7 @@ TEST(Physics, TestBallFallingToGround)
 	json rigidBodyJson1;
 	rigidBodyJson1["name"] = "Rigidbody";
 	rigidBodyJson1["type"] = sfge::ComponentType::BODY2D;
-	rigidBodyJson1["body_type"] = b2_dynamicBody;
+	rigidBodyJson1["body_type"] = p2BodyType::DYNAMIC;
 
 	json circleColliderJson;
 	circleColliderJson["name"] = "Circle Collider";
@@ -87,7 +87,7 @@ TEST(Physics, TestBallFallingToGround)
 	json rigidBodyJson2;
 	rigidBodyJson2["name"] = "Rigidbody";
 	rigidBodyJson2["type"] = sfge::ComponentType::BODY2D;
-	rigidBodyJson2["body_type"] = b2_staticBody;
+	rigidBodyJson2["body_type"] = p2BodyType::STATIC;
 
 	json rectColliderJson;
 	rectColliderJson["name"] = "Rect Collider";
@@ -116,7 +116,7 @@ TEST(Physics, TestShapeContact)
 {
 	sfge::Engine engine;
 	auto config = std::make_unique<sfge::Configuration>();
-	config->gravity = b2Vec2(0.0f, 0.0f);
+	config->gravity = p2Vec2(0.0f, 0.0f);
 	engine.Init(std::move(config));
 
 	auto* sceneManager = engine.GetSceneManager();
@@ -174,7 +174,7 @@ TEST(Physics, TestShapeContact)
 		{
 			{"name", "Rigidbody"},
 			{"type", sfge::ComponentType::BODY2D},
-			{"body_type", b2_dynamicBody},
+			{"body_type",  p2BodyType::DYNAMIC},
 			{"velocity", {rand() % 400, rand() % 400}}
 		};
 
