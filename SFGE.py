@@ -104,6 +104,9 @@ class System:
     def on_contact(self, c1:ColliderData, c2:ColliderData, enter:bool):
         pass
 
+    def on_draw(self):
+        pass
+
 class ComponentManager():
     def add_component(self, entity):
         pass

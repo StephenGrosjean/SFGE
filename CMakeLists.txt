@@ -219,7 +219,7 @@ ENDIF()
 #SFGE TEST
 SET(SFGE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
 file(GLOB TEST_FILES ${SFGE_TEST_DIR}/*.cpp )
-add_executable(SFGE_TEST ${TEST_FILES} tests/test_memory.cpp)
+add_executable(SFGE_TEST ${TEST_FILES})
 target_link_libraries(SFGE_TEST gtest gtest_main SFGE_COMMON)
 if(APPLE )
 	set_target_properties(SFGE_TEST PROPERTIES
@@ -286,27 +286,6 @@ execute_process(
 )
 target_link_libraries(SFGE_COMMON PUBLIC ${TOOL_LIBRARIES})
 target_sources(SFGE_COMMON PUBLIC ${CMAKE_SOURCE_DIR}/src/tools/tools_pch.cpp ${CMAKE_SOURCE_DIR}/include/tools/tools_pch.h)
-
-#SFGE COURSES
-SET(SFGE_COURSE_DIR ${CMAKE_SOURCE_DIR}/cgraphics)
-file(GLOB COURSE_FILES ${SFGE_COURSE_DIR}/*.cpp )
-foreach(course_file ${COURSE_FILES} )
-    # I used a simple string replace, to cut off .cpp.
-    file(RELATIVE_PATH course_relative_path ${SFGE_COURSE_DIR} ${course_file} )
-    string( REPLACE ".cpp" "" course_name ${course_relative_path} )
-	file(GLOB_RECURSE SHADERS_SRC data/shaders/${course_name}/*.vert data/shaders/${course_name}/*.frag)
-	source_group("Shaders" FILES ${SHADERS_SRC})
-
-    add_executable(${course_name} ${SFGE_COURSE_DIR}/${course_relative_path} ${SHADERS_SRC})
-    # Make sure YourLib is linked to each app
-    target_link_libraries(${course_name} PUBLIC SFGE_COMMON)
-	set_property(TARGET ${course_name} PROPERTY CXX_STANDARD 17)
-	IF(UNIX)
-		set_target_properties(${course_name} PROPERTIES COMPILE_FLAGS "-save-temps -ffast-math")
-	ENDIF(UNIX)
-	set_target_properties (${course_name} PROPERTIES
-    FOLDER Courses)
-endforeach()
 
 
 #copy folder to build
