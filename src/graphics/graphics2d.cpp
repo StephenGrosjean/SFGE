@@ -170,13 +170,14 @@ void Graphics2dManager::OnAfterSceneLoad()
 
 void Graphics2dManager::DrawVector(Vec2f drawingVector, Vec2f originPos, sf::Color color)
 {
+
     const Vec2f destination = originPos+drawingVector*debugVectorPixelResolution;
     //Draw length line
     DrawLine(originPos, destination, color);
     const Vec2f dir = drawingVector.Normalized();
     const float length = (drawingVector*debugVectorPixelResolution).GetMagnitude();
-    DrawLine(destination, dir.Rotate(135.0f)*length/5,color);
-    DrawLine(destination, dir.Rotate(-135.0f)*length/5,color);
+    DrawLine(destination, destination+dir.Rotate(135.0f)*length/5,color);
+    DrawLine(destination, destination+dir.Rotate(-135.0f)*length/5,color);
 
 }
 

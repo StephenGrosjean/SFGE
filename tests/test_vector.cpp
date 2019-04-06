@@ -30,21 +30,21 @@ SOFTWARE.
 
 TEST(Physics, TestVector)
 {
-sfge::Engine engine;
-std::unique_ptr<sfge::Configuration> initConfig = std::make_unique<sfge::Configuration>();
-initConfig->gravity.SetZero();
-initConfig->devMode = false;
-initConfig->maxFramerate = 0;
-engine.Init(std::move(initConfig));
-json sceneJson = {
-        { "name", "Test Vector" }
-};
-json systemJson = {
-        {"script_path", "scripts/vector_system.py"}
-};
-sceneJson["systems"] = json::array({ systemJson });
-auto* sceneManager = engine.GetSceneManager();
-sceneManager->LoadSceneFromJson(sceneJson);
+    sfge::Engine engine;
+    std::unique_ptr<sfge::Configuration> initConfig = std::make_unique<sfge::Configuration>();
+    initConfig->gravity.SetZero();
+    initConfig->devMode = false;
+    initConfig->maxFramerate = 0;
+    engine.Init(std::move(initConfig));
+    json sceneJson = {
+            { "name", "Test Vector" }
+    };
+    json systemJson = {
+            {"script_path", "scripts/vector_system.py"}
+    };
+    sceneJson["systems"] = json::array({ systemJson });
+    auto* sceneManager = engine.GetSceneManager();
+    sceneManager->LoadSceneFromJson(sceneJson);
 
-engine.Start();
+    engine.Start();
 }
