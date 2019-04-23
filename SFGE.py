@@ -1,5 +1,3 @@
-def auto_import():
-    from scripts import *
 
 
 class Color:
@@ -233,7 +231,7 @@ class Body2d:
     def apply_force(self, force:b2Vec2):
         pass
 
-def Collider:
+class Collider:
     pass
 
 class KeyboardManager:

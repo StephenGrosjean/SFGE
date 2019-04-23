@@ -77,24 +77,6 @@ if(MSVC)
     )
 endif()
 
-foreach(PYSYSTEM_SRC ${SFGE_PYSYSTEMS_SCRIPTS})
-	get_filename_component(FILE_NAME ${PYSYSTEM_SRC} NAME)
-	get_filename_component(PATH_NAME ${PYSYSTEM_SRC} DIRECTORY)
-	
-	#MESSAGE("GLSL PATH: ${PATH_NAME} NAME: ${FILE_NAME}")
-	set(PYSYSTEM_OUTPUT "${PROJECT_BINARY_DIR}/scripts/${FILE_NAME}")
-	add_custom_command(
-			OUTPUT ${PYSYSTEM_OUTPUT}
-			COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/scripts/"
-			COMMAND ${CMAKE_COMMAND} -E copy ${PYSYSTEM_SRC} ${PYSYSTEM_OUTPUT}
-			DEPENDS ${PYSYSTEM_SRC})
-			list(APPEND PYSYSTEMS_OUTPUT ${PYSYSTEM_OUTPUT})
-endforeach(PYSYSTEM_SRC)
-add_custom_target(
-		PySystems
-		DEPENDS ${PYSYSTEMS_OUTPUT}
-)
-
 #SFML
 set(SFML_DIR ${EXTERNAL_DIR}/SFML)
 set(SFML_BUILD_EXAMPLES FALSE)
@@ -177,6 +159,31 @@ ELSE()
 ENDIF()
 
 
+foreach(PYSYSTEM_SRC ${SFGE_PYSYSTEMS_SCRIPTS})
+	get_filename_component(FILE_NAME ${PYSYSTEM_SRC} NAME)
+	get_filename_component(PATH_NAME ${PYSYSTEM_SRC} DIRECTORY)
+	get_filename_component(EXTENSION ${PYSYSTEM_SRC} EXT)
+	string(REPLACE ${EXTENSION} "" MODULE_NAME ${FILE_NAME})
+	
+	#MESSAGE("GLSL PATH: ${PATH_NAME} NAME: ${FILE_NAME}")
+	set(PYSYSTEM_OUTPUT "${PROJECT_BINARY_DIR}/scripts/${FILE_NAME}")
+	set(PYCOMMAND "\"import os; os.chdir(\'${PROJECT_SOURCE_DIR}\'); import SFGE; import scripts.${MODULE_NAME}\"")
+	add_custom_command(
+			OUTPUT ${PYSYSTEM_OUTPUT}
+			COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/scripts/"
+			COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/SFGE.py" "${PROJECT_BINARY_DIR}/SFGE.py"
+			COMMAND ${CMAKE_COMMAND} -E copy ${PYSYSTEM_SRC} ${PYSYSTEM_OUTPUT}
+			COMMAND ${PYTHON_EXECUTABLE} -c "${PYCOMMAND}"
+			DEPENDS ${PYSYSTEM_SRC})
+			list(APPEND PYSYSTEMS_OUTPUT ${PYSYSTEM_OUTPUT})
+endforeach(PYSYSTEM_SRC)
+add_custom_target(
+		PySystems
+		DEPENDS ${PYSYSTEMS_OUTPUT}
+)
+
+
+
 if(APPLE)
 	set(boost_min_ver 1.50.0)
 	set(boost_libs system filesystem)
@@ -221,7 +228,7 @@ include_directories(extensions/include/)
 
 file(GLOB_RECURSE SFGE_EXTENSIONS_SRC extensions/src/*.cpp extensions/include/*.h)
 source_group("Extensions"            FILES ${SFGE_EXTENSIONS_SRC})
-add_library(SFGE_COMMON STATIC ${SFGE_SRC} ${SFGE_EXTENSIONS_SRC} src/engine/memory.cpp)
+add_library(SFGE_COMMON STATIC ${SFGE_SRC} ${SFGE_EXTENSIONS_SRC} SFGE.py)
 message("SFGE LIBRARIES : ${SFGE_LIBRARIES}")
 target_link_libraries(SFGE_COMMON PUBLIC ${SFGE_LIBRARIES})
 set_property(TARGET SFGE_COMMON PROPERTY CXX_STANDARD 17)
