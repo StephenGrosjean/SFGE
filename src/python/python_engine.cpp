@@ -372,7 +372,7 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def("rotate", &p2Vec2::Rotate)
 		.def_static("lerp", &p2Vec2::Lerp)
 		.def_static("angle_between", &p2Vec2::AngleBetween)
-		.def("magnitude", &p2Vec2::GetMagnitude)
+		.def_property_readonly("magnitude", &p2Vec2::GetMagnitude)
 		.def("normalized", &p2Vec2::Normalized)
 		.def("normalize_self", &p2Vec2::NormalizeSelf)
 		.def("__repr__", [](const p2Vec2 &vec)
@@ -381,6 +381,30 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 			oss << "p2Vec2(" << vec.x << ", " << vec.y << ")";
 			return oss.str();
 		});
+	py::class_<p2Vec3> p2vec3(m, "p2Vec3");
+	p2vec3
+		.def(py::init<>())
+		.def(py::init<float, float, float>())
+		.def_readwrite("x", &p2Vec3::x)
+		.def_readwrite("y", &p2Vec3::y)
+		.def_readwrite("z", &p2Vec3::z)
+		.def(py::self += py::self)
+		.def(py::self -= py::self)
+		.def(py::self *= float())
+		.def_static("dot", &p2Vec3::Dot)
+		.def_static("cross", &p2Vec3::Cross)
+		.def("rotate", &p2Vec3::Rotate)
+		.def_static("lerp", &p2Vec3::Lerp)
+		.def_static("angle_between", &p2Vec3::AngleBetween)
+		.def_property_readonly("magnitude", &p2Vec3::GetMagnitude)
+		.def("normalized", &p2Vec3::Normalized)
+		.def("normalize_self", &p2Vec3::NormalizeSelf)
+		.def("__repr__", [](const p2Vec3 &vec)
+	{
+		std::ostringstream oss;
+		oss << "p2Vec3(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
+		return oss.str();
+	});
 
 	ext::ExtendPython(m);
 	

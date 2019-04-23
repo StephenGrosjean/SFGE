@@ -54,6 +54,66 @@ class p2Vec2:
         self.y = 0.0
         self.magnitude = 0.0
 
+    @staticmethod
+    def dot(v1, v2):
+        pass
+
+    @staticmethod
+    def cross(v1, v2):
+        pass
+
+    @staticmethod
+    def lerp(v1, v2, f):
+        pass
+
+    @staticmethod
+    def angle_between(v1, v2):
+        pass
+
+    def rotate(self, angle):
+        pass
+
+    def normalized(self):
+        pass
+
+    def normalized_self(self):
+        pass
+
+
+class p2Vec3:
+    """Box2d Vector type used for physics related"""
+
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.magnitude = 0.0
+
+    @staticmethod
+    def dot(v1, v2):
+        pass
+
+    @staticmethod
+    def cross(v1, v2):
+        pass
+
+    @staticmethod
+    def lerp(v1, v2, f):
+        pass
+
+    @staticmethod
+    def angle_between(v1, v2):
+        pass
+
+    def rotate(self, angle):
+        pass
+
+    def normalized(self):
+        pass
+
+    def normalized_self(self):
+        pass
+
 
 class Sprite:
     def set_texture(self, texture):
