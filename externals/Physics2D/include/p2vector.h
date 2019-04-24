@@ -36,9 +36,9 @@ struct p2Vec2
 
 	p2Vec2(float x, float y);
 
-	p2Vec2 operator+(p2Vec2 v);
+	p2Vec2 operator+(p2Vec2 v) const;
 	p2Vec2 operator+=(p2Vec2 v);
-	p2Vec2 operator-(p2Vec2 v);
+	p2Vec2 operator-(p2Vec2 v) const;
 	p2Vec2 operator-=(p2Vec2 v);
 	p2Vec2 operator*=(float f);
 	p2Vec2 operator /(float f);
@@ -101,6 +101,9 @@ struct p2Vec3
 	p2Vec3 Rotate(float angle) const;
 	static p2Vec3 Lerp(const p2Vec3& v1, const p2Vec3& v2, float t);
 	static float AngleBetween(const p2Vec3& v1, const p2Vec3& v2);
+
+	p2Vec2 to2();
+
 	/**
 	* \brief Calculate the magnitude of the p2Vec2
 	*/

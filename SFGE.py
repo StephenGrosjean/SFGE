@@ -21,6 +21,10 @@ class Vector2f:
 
 class Vec2f:
     def __init__(self):
+        """
+
+        :rtype:
+        """
         self.x = 0.0
         self.y = 0.0
         self.magnitude = 0.0

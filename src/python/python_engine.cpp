@@ -365,6 +365,10 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 		.def_readwrite("x", &p2Vec2::x)
 		.def_readwrite("y", &p2Vec2::y)
 		.def(py::self += py::self)
+
+		.def(py::self + py::self)
+		.def(py::self - py::self)
+
 		.def(py::self -= py::self)
 		.def(py::self *= float())
 		.def_static("dot", &p2Vec2::Dot)

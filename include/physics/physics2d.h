@@ -31,7 +31,9 @@ SOFTWARE.
 #include <physics/collider2d.h>
 #include <physics/body2d.h>
 #include "p2contact.h"
+#include "p2vector.h"
 #include "p2world.h"
+
 
 namespace sfge
 {
