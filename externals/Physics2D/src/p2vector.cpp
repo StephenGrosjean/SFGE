@@ -34,32 +34,45 @@ p2Vec2::p2Vec2(float x, float y) {
 	this->y = y;
 }
 
-p2Vec2 p2Vec2::operator+(p2Vec2 v) const {
+p2Vec2 p2Vec2::operator+(const p2Vec2& v) const
+{
 	return p2Vec2(x + v.x, y + v.y);
 }
 
-p2Vec2 p2Vec2::operator+=(p2Vec2 v) {
-	return *this + v;
+p2Vec2& p2Vec2::operator+=(const p2Vec2& v)
+{
+	x += v.x;
+	y += v.y;
+	return *this;
 }
 
-p2Vec2 p2Vec2::operator-(p2Vec2 v) const {
-	return p2Vec2(x - v.x, y - v.y);
+p2Vec2 p2Vec2::operator-(const p2Vec2& v) const
+{
+	return p2Vec2(x-v.x, y-v.y);
 }
 
-p2Vec2 p2Vec2::operator-=(p2Vec2 v) {
-	return *this - v;
+p2Vec2& p2Vec2::operator-=(const p2Vec2& v)
+{
+	x -= v.x;
+	y -= v.y;
+	return *this;
 }
 
-p2Vec2 p2Vec2::operator*=(float f) {
-	return (*this) * f;
+p2Vec2& p2Vec2::operator*=(float f)
+{
+	x *= f;
+	y *= f;
+	return (*this);
 }
 
-p2Vec2 p2Vec2::operator/(float f) {
-	return p2Vec2(x / f, y / f);
+p2Vec2 p2Vec2::operator/(float f) const
+{
+	return p2Vec2(x/f, y/f);
 }
 
-p2Vec2 p2Vec2::operator*(float f){
-	return p2Vec2(x * f, y * f);
+p2Vec2 p2Vec2::operator*(float f) const
+{
+	return p2Vec2(x*f, y*f);
 }
 
 float p2Vec2::Dot(p2Vec2 v1, p2Vec2 v2) {
@@ -152,32 +165,48 @@ p2Vec3::p2Vec3(float x, float y, float z) {
 	this->z = z;
 }
 
-p2Vec3 p2Vec3::operator+(p2Vec3 v) {
+p2Vec3 p2Vec3::operator+(const p2Vec3& v)const
+{
 	return p2Vec3(x + v.x, y + v.y, z + v.z);
 }
 
-p2Vec3 p2Vec3::operator+=(p2Vec3 v) {
-	return *this + v;
+p2Vec3& p2Vec3::operator+=(const p2Vec3& v)
+{
+	x += v.x;
+	y += v.y;
+	z += v.z;
+	return *this;
 }
 
-p2Vec3 p2Vec3::operator-(p2Vec3 v) {
-	return p2Vec3(x - v.x, y - v.y, z - v.z);
+p2Vec3 p2Vec3::operator-(const p2Vec3& v) const
+{
+	return p2Vec3(x - v.x, y - v.y, z- v.z);
 }
 
-p2Vec3 p2Vec3::operator-=(p2Vec3 v) {
-	return *this - v;
+p2Vec3& p2Vec3::operator-=(const p2Vec3& v)
+{
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+	return *this;
 }
 
-p2Vec3 p2Vec3::operator*=(float f) {
-	return (*this) * f;
+p2Vec3& p2Vec3::operator*=(float f)
+{
+	x *= f;
+	y *= f;
+	z *= z;
+	return (*this);
 }
 
-p2Vec3 p2Vec3::operator/(float f) {
-	return p2Vec3(x / f, y / f, z / f);
+p2Vec3 p2Vec3::operator/(float f) const
+{
+	return p2Vec3(x / f, y / f, z/f);
 }
 
-p2Vec3 p2Vec3::operator*(float f) {
-	return p2Vec3(x * f, y * f, z * f);
+p2Vec3 p2Vec3::operator*(float f) const
+{
+	return p2Vec3(x*f, y*f, z*f);
 }
 
 float p2Vec3::Dot(p2Vec3 v1, p2Vec3 v2) {
