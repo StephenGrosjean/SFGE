@@ -77,7 +77,7 @@ p2Vec3 p2Vec2::Cross(p2Vec2 v1, p2Vec2 v2) {
 
 float p2Vec2::GetMagnitude() {
 	//TODO 
-	return sqrt(exp2(x) + exp2(y));
+	return sqrt(pow(x,2) + pow(y,2));
 }
 
 p2Vec2 p2Vec2::Normalized() {

@@ -8,7 +8,6 @@ class VectorSystem(System):
     v = Vec2f()
     result = Vec2f()
 
-
 	#Physical Vectors
     pu = p2Vec2()
     pv = p2Vec2()
@@ -29,6 +28,11 @@ class VectorSystem(System):
 
         self.result = Physics2dManager.meter2pixel(self.res2)
 
+        self.puMag = self.u.magnitude
+        self.pvMag = self.v.magnitude
+
+        print(self.pvMag)
+        print(self.puMag)
     def on_draw(self):
         graphics2d_manager.draw_vector(self.u, Vec2f(200,200), Color.Green)
         graphics2d_manager.draw_vector(self.v, Vec2f(200,200), Color.Blue)
