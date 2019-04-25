@@ -21,8 +21,8 @@ class VectorSystem(System):
 
     def update(self, dt):
         self.t += self.sign * dt
-        self.u = Vec2f(10, 0) #Set the graphical Vector
-        self.v = Vec2f(0,10)
+        self.u = Vec2f(12, -5) #Set the graphical Vector
+        self.v = Vec2f(5,5)
         self.pu = Physics2dManager.pixel2meter(self.u) #Convert the graphical vector to physical vector
         self.pv = Physics2dManager.pixel2meter(self.v)
 
@@ -49,22 +49,3 @@ class VectorSystem(System):
         graphics2d_manager.draw_vector(self.u, Vec2f(200,200), Color.Green)
         graphics2d_manager.draw_vector(self.v, Vec2f(200,200), Color.Blue)
         graphics2d_manager.draw_vector(self.result, Vec2f(200,200), Color.Red)
-
-        graphics2d_manager.draw_vector(self.v, Vec2f(400,400), Color.Green)
-        graphics2d_manager.draw_vector(self.u, Vec2f(400,400), Color.Green)
-        self.result = Physics2dManager.meter2pixel(
-            self.pu * p2Vec2.dot(self.pu, self.pv) / p2Vec2.dot(self.pv, self.pv))
-        graphics2d_manager.draw_vector(self.result,
-                                       Vec2f(400, 400), Color.Red)
-        self.result = Physics2dManager.meter2pixel(
-            self.pu + self.pv)
-        graphics2d_manager.draw_vector(self.v, Vec2f(600,400), Color.Green)
-        graphics2d_manager.draw_vector(self.u, Vec2f(600,400), Color.Green)
-        graphics2d_manager.draw_vector(self.result,
-                                       Vec2f(600, 400), Color.Red)
-        self.result = Physics2dManager.meter2pixel(
-            self.pu - self.pv)
-        graphics2d_manager.draw_vector(self.v, Vec2f(600, 200), Color.Green)
-        graphics2d_manager.draw_vector(self.u, Vec2f(600, 200), Color.Green)
-        graphics2d_manager.draw_vector(self.result,
-                                       Vec2f(600, 200), Color.Red)

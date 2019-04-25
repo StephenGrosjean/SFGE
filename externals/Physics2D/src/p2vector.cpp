@@ -76,12 +76,13 @@ p2Vec2 p2Vec2::operator*(float f) const
 }
 
 float p2Vec2::Dot(p2Vec2 v1, p2Vec2 v2) {
-	//TODO
+	//DONE
 	float result = (v1.x * v2.x) + (v1.y * v2.y);
 	return result;
 }
 
 p2Vec3 p2Vec2::Cross(p2Vec2 v1, p2Vec2 v2) {
+	//DONE
 	float x = (v1.y * 0) - (0 * v1.y);
 	float y = (0 * v2.x) - (v1.x * 0);
 	float z = (v1.x*v2.y) - (v1.y *v2.x);
@@ -108,8 +109,6 @@ p2Vec2 p2Vec2::Normalized() {
 
 	const p2Vec2 result = vector / magnitude;
 	return result;
-
-	//return p2Vec2();
 }
 
 void p2Vec2::NormalizeSelf() {
@@ -120,11 +119,12 @@ void p2Vec2::NormalizeSelf() {
 }
 
 p2Vec2 p2Vec2::Rotate(float angle) const {
+	//TODO
 	return p2Vec2();
 }
 
 p2Vec2 p2Vec2::Lerp(const p2Vec2& v1, const p2Vec2& v2, float t) {
-
+	//done
 	float x = (1 - t) * v1.x + t * v2.x;
 	float y = (1 - t) * v1.y + t * v2.y;
 
@@ -132,6 +132,8 @@ p2Vec2 p2Vec2::Lerp(const p2Vec2& v1, const p2Vec2& v2, float t) {
 }
 
 float p2Vec2::AngleBetween(const p2Vec2& v1, const p2Vec2& v2, int to_Deg=0) {
+	//DONE
+
 	//if to_Deg == 0 -> angle in Rad | if to_Deg == 1 -> angle in Deg
 	p2Vec2 vector1 = p2Vec2(v1.x, v1.y);
 	p2Vec2 vector2 = p2Vec2(v2.x, v2.y);
