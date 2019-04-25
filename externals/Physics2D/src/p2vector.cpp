@@ -24,7 +24,6 @@ SOFTWARE.
 
 #include <p2vector.h>
 #include <cmath>
-#include <vector>
 #include <corecrt_math_defines.h>
 
 p2Vec2::p2Vec2() {}
