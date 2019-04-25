@@ -67,9 +67,10 @@ float p2Vec2::Dot(p2Vec2 v1, p2Vec2 v2) {
 }
 
 p2Vec3 p2Vec2::Cross(p2Vec2 v1, p2Vec2 v2) {
-	float x = (v1.x*v2.y) - (v1.y *v2.x);
+	float x = (v1.y * 0) - (0 * v1.y);
 	float y = (0 * v2.x) - (v1.x * 0);
-	float z = (v1.y * 0) - (0 * v1.y);
+	float z = (v1.x*v2.y) - (v1.y *v2.x);
+
 	p2Vec3 result = p2Vec3(x, y, z);
 	return result;
 }
