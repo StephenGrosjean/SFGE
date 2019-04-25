@@ -66,7 +66,7 @@ struct p2Vec2
 
 	p2Vec2 Rotate(float angle) const;
 	static p2Vec2 Lerp(const p2Vec2& v1, const p2Vec2& v2, float t);
-	static float AngleBetween(const p2Vec2& v1, const p2Vec2& v2);
+	static float AngleBetween(const p2Vec2& v1, const p2Vec2& v2, int to_Deg);
 
 	/**
 	* \brief 

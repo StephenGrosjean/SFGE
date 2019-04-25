@@ -24,6 +24,8 @@ SOFTWARE.
 
 #include <p2vector.h>
 #include <cmath>
+#include <vector>
+#include <corecrt_math_defines.h>
 
 p2Vec2::p2Vec2() {}
 
@@ -76,12 +78,12 @@ p2Vec3 p2Vec2::Cross(p2Vec2 v1, p2Vec2 v2) {
 }
 
 float p2Vec2::GetMagnitude() {
-	//TODO 
+	//DONE 
 	return sqrt(pow(x,2) + pow(y,2));
 }
 
 p2Vec2 p2Vec2::Normalized() {
-	//TODO 
+	//DONE 
 
 	p2Vec2 vector = p2Vec2(x, y);
 
@@ -98,7 +100,7 @@ p2Vec2 p2Vec2::Normalized() {
 }
 
 void p2Vec2::NormalizeSelf() {
-	//TODO 
+	//DONE
 	p2Vec2 vector = p2Vec2(x, y);
 	vector = vector.Normalized();
 	*this = vector;
@@ -109,11 +111,29 @@ p2Vec2 p2Vec2::Rotate(float angle) const {
 }
 
 p2Vec2 p2Vec2::Lerp(const p2Vec2& v1, const p2Vec2& v2, float t) {
-	return p2Vec2();
+
+	float x = (1 - t) * v1.x + t * v2.x;
+	float y = (1 - t) * v1.y + t * v2.y;
+
+	return p2Vec2(x,y);
 }
 
-float p2Vec2::AngleBetween(const p2Vec2& v1, const p2Vec2& v2) {
-	return 0.0f;
+float p2Vec2::AngleBetween(const p2Vec2& v1, const p2Vec2& v2, int to_Deg=0) {
+	//if to_Deg == 0 -> angle in Rad | if to_Deg == 1 -> angle in Deg
+	p2Vec2 vector1 = p2Vec2(v1.x, v1.y);
+	p2Vec2 vector2 = p2Vec2(v2.x, v2.y);
+
+	float dotProduct = p2Vec2().Dot(v1, v2);
+	float magMulti = vector1.GetMagnitude() * vector2.GetMagnitude();
+	float div = dotProduct / magMulti;
+
+	
+	float angleBetween = acos(div);
+	if(to_Deg == 1) {
+		angleBetween *= 180 / M_PI;
+	}
+	
+	return angleBetween;
 }
 
 p2Vec2 p2Vec3::to2() {

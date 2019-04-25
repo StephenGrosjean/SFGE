@@ -12,27 +12,39 @@ class VectorSystem(System):
     pu = p2Vec2()
     pv = p2Vec2()
 
+    sign = int
 
 
     def init(self):
         self.t = 0.0
+        self.sign = 1
 
     def update(self, dt):
-        self.u = Vec2f(10, 15) #Set the graphical Vector
-        self.v = Vec2f(30,15)
+        self.t += self.sign * dt
+        self.u = Vec2f(10, 0) #Set the graphical Vector
+        self.v = Vec2f(0,10)
         self.pu = Physics2dManager.pixel2meter(self.u) #Convert the graphical vector to physical vector
         self.pv = Physics2dManager.pixel2meter(self.v)
 
-        self.res3 = p2Vec2.cross(self.pu, self.pv)
-        self.res2 = p2Vec2(self.res3.x, self.res3.y)
+        self.res = p2Vec2.lerp(self.pu, self.pv, self.t)
 
-        self.result = Physics2dManager.meter2pixel(self.res2)
+        self.result = Physics2dManager.meter2pixel(self.res)
 
-        self.puMag = self.u.magnitude
-        self.pvMag = self.v.magnitude
+        self.angle = p2Vec2.angle_between(self.res, self.pv, 1)
+        print(self.angle)
 
-        print(self.pvMag)
-        print(self.puMag)
+
+
+
+
+        if self.t > 1:
+            self.sign = -1
+
+        if self.t <= 0:
+            self.sign = 1
+
+
+
     def on_draw(self):
         graphics2d_manager.draw_vector(self.u, Vec2f(200,200), Color.Green)
         graphics2d_manager.draw_vector(self.v, Vec2f(200,200), Color.Blue)
