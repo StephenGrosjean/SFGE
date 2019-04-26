@@ -146,9 +146,12 @@ p2Mat33 p2Mat33::operator*(p2Mat33 m1)
 	return p2Mat33(r0, r1, r2);
 }
 
-p2Vec3 p2Mat33::operator*(p2Vec3)
+p2Vec3 p2Mat33::operator*(p2Vec3 v)
 {
-	return p2Vec3();
+	return p2Vec3(  (rows[0].x * v.x) + (rows[0].y * v.y) + (rows[0].z * v.z), 
+					(rows[1].x * v.x) + (rows[1].y * v.y) + (rows[1].z * v.z),
+					(rows[2].x * v.x) + (rows[2].y * v.y) + (rows[2].z * v.z));
+
 }
 
 p2Mat33 p2Mat33::operator*(float f)
