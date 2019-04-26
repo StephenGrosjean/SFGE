@@ -105,6 +105,10 @@ p2Mat33::p2Mat33()
 
 p2Mat33::p2Mat33(p2Vec3 r1, p2Vec3 r2, p2Vec3 r3)
 {
+	this->rows[0] = r1;
+	this->rows[1] = r2;
+	this->rows[2] = r3;
+
 }
 
 p2Mat33 p2Mat33::operator+(p2Mat33 m1)

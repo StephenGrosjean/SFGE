@@ -105,8 +105,6 @@ struct p2Vec3
 	static p2Vec3 Lerp(const p2Vec3& v1, const p2Vec3& v2, float t);
 	static float AngleBetween(const p2Vec3& v1, const p2Vec3& v2);
 
-	p2Vec2 to2();
-
 	/**
 	* \brief Calculate the magnitude of the p2Vec2
 	*/
