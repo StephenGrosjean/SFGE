@@ -51,10 +51,10 @@ p2Mat22 p2Mat22::operator-(p2Mat22 m1)
 
 p2Mat22 p2Mat22::operator*(p2Mat22 m1)
 {
-	p2Vec2 r0 = p2Vec2((rows[0].x * m1.rows[0].x) + (rows[0].y * m1.rows[1].x),
+	p2Vec2 r0 = p2Vec2( (rows[0].x * m1.rows[0].x) + (rows[0].y * m1.rows[1].x),
 						(rows[0].x * m1.rows[0].y) + (rows[0].y * m1.rows[1].y));
 
-	p2Vec2 r1 = p2Vec2((rows[1].x * m1.rows[0].x) + (rows[1].y * m1.rows[1].x),
+	p2Vec2 r1 = p2Vec2( (rows[1].x * m1.rows[0].x) + (rows[1].y * m1.rows[1].x),
 						(rows[1].x * m1.rows[0].y) + (rows[1].y * m1.rows[1].y));
 
 	return p2Mat22(r0, r1);
@@ -113,17 +113,37 @@ p2Mat33::p2Mat33(p2Vec3 r1, p2Vec3 r2, p2Vec3 r3)
 
 p2Mat33 p2Mat33::operator+(p2Mat33 m1)
 {
-	return p2Mat33();
+	p2Vec3 r0 = p2Vec3(rows[0].x + m1.rows[0].x, rows[0].y + m1.rows[0].y, rows[0].z + m1.rows[0].z);
+	p2Vec3 r1 = p2Vec3(rows[1].x + m1.rows[1].x, rows[1].y + m1.rows[1].y, rows[1].z + m1.rows[1].z);
+	p2Vec3 r2 = p2Vec3(rows[2].x + m1.rows[2].x, rows[2].y + m1.rows[2].y, rows[2].z + m1.rows[2].z);
+
+	return p2Mat33(r0, r1, r2);
 }
 
 p2Mat33 p2Mat33::operator-(p2Mat33 m1)
 {
-	return p2Mat33();
+	p2Vec3 r0 = p2Vec3(rows[0].x - m1.rows[0].x, rows[0].y - m1.rows[0].y, rows[0].z - m1.rows[0].z);
+	p2Vec3 r1 = p2Vec3(rows[1].x - m1.rows[1].x, rows[1].y - m1.rows[1].y, rows[1].z - m1.rows[1].z);
+	p2Vec3 r2 = p2Vec3(rows[2].x - m1.rows[2].x, rows[2].y - m1.rows[2].y, rows[2].z - m1.rows[2].z);
+
+	return p2Mat33(r0, r1, r2);
 }
 
 p2Mat33 p2Mat33::operator*(p2Mat33 m1)
 {
-	return p2Mat33();
+	p2Vec3 r0 = p2Vec3( (rows[0].x * m1.rows[0].x) + (rows[0].y * m1.rows[1].x) + (rows[0].z * m1.rows[2].x),
+						(rows[0].x * m1.rows[0].y) + (rows[0].y * m1.rows[1].y) + (rows[0].z * m1.rows[2].y),
+						(rows[0].x * m1.rows[0].z) + (rows[0].y * m1.rows[1].z) + (rows[0].z * m1.rows[2].z));
+
+	p2Vec3 r1 = p2Vec3( (rows[1].x * m1.rows[0].x) + (rows[1].y * m1.rows[1].x) + (rows[1].z * m1.rows[2].x),
+						(rows[1].x * m1.rows[0].y) + (rows[1].y * m1.rows[1].y) + (rows[1].z * m1.rows[2].y),
+						(rows[1].x * m1.rows[0].z) + (rows[1].y * m1.rows[1].z) + (rows[1].z * m1.rows[2].z));
+
+	p2Vec3 r2 = p2Vec3( (rows[2].x * m1.rows[0].x) + (rows[2].y * m1.rows[1].x) + (rows[2].z * m1.rows[2].x),
+						(rows[2].x * m1.rows[0].y) + (rows[2].y * m1.rows[1].y) + (rows[2].z * m1.rows[2].y),
+						(rows[2].x * m1.rows[0].z) + (rows[2].y * m1.rows[1].z) + (rows[2].z * m1.rows[2].z));
+
+	return p2Mat33(r0, r1, r2);
 }
 
 p2Vec3 p2Mat33::operator*(p2Vec3)
@@ -133,20 +153,98 @@ p2Vec3 p2Mat33::operator*(p2Vec3)
 
 p2Mat33 p2Mat33::operator*(float f)
 {
-	return p2Mat33();
+	p2Vec3 r0 = p2Vec3(rows[0].x * f, rows[0].y * f, rows[0].z * f);
+	p2Vec3 r1 = p2Vec3(rows[1].x * f, rows[1].y * f, rows[1].z * f);
+	p2Vec3 r2 = p2Vec3(rows[2].x * f, rows[2].y * f, rows[2].z * f);
+
+
+	return p2Mat33(r0, r1, r2);
 }
 
 p2Mat33 p2Mat33::operator/(float f)
 {
-	return p2Mat33();
+	p2Vec3 r0 = p2Vec3(rows[0].x / f, rows[0].y / f, rows[0].z / f);
+	p2Vec3 r1 = p2Vec3(rows[1].x / f, rows[1].y / f, rows[1].z / f);
+	p2Vec3 r2 = p2Vec3(rows[2].x / f, rows[2].y / f, rows[2].z / f);
+
+
+	return p2Mat33(r0, r1, r2);
 }
 
 p2Mat33 p2Mat33::Invert()
 {
-	return p2Mat33();
+	float deter = this->GetDeterminant();
+	if (deter == 0) return p2Mat33();
+
+	//FIRST STEP : CALCULATE MATRIX OF DETERMINANT
+
+	//First row
+	p2Mat22 x0 = p2Mat22(p2Vec2(rows[1].y, rows[1].z), 
+						 p2Vec2(rows[2].y, rows[2].z));
+
+	p2Mat22 y0 = p2Mat22(p2Vec2(rows[1].x, rows[1].z), 
+						 p2Vec2(rows[2].x, rows[2].z));
+
+	p2Mat22 z0 = p2Mat22(p2Vec2(rows[1].x, rows[1].y),
+						 p2Vec2(rows[2].x, rows[2].y));
+
+	//Second row
+	p2Mat22 x1 = p2Mat22(p2Vec2(rows[0].y, rows[0].z),
+						 p2Vec2(rows[2].y, rows[2].z));
+
+	p2Mat22 y1 = p2Mat22(p2Vec2(rows[0].x, rows[0].z),
+						 p2Vec2(rows[2].x, rows[2].z));
+
+	p2Mat22 z1 = p2Mat22(p2Vec2(rows[0].x, rows[0].y),
+						 p2Vec2(rows[2].x, rows[2].y));
+
+	//Third row
+	p2Mat22 x2 = p2Mat22(p2Vec2(rows[0].y, rows[0].z),
+						 p2Vec2(rows[1].y, rows[1].z));
+
+	p2Mat22 y2 = p2Mat22(p2Vec2(rows[0].x, rows[0].z),
+						 p2Vec2(rows[1].x, rows[1].z));
+
+	p2Mat22 z2 = p2Mat22(p2Vec2(rows[0].x, rows[0].y),
+						 p2Vec2(rows[1].x, rows[1].y));
+	//Calculating determinants
+	float dx0 = x0.GetDeterminant();
+	float dx1 = x1.GetDeterminant();
+	float dx2 = x2.GetDeterminant();
+
+	float dy0 = y0.GetDeterminant();
+	float dy1 = y1.GetDeterminant();
+	float dy2 = y2.GetDeterminant();
+
+	float dz0 = z0.GetDeterminant();
+	float dz1 = z1.GetDeterminant();
+	float dz2 = z2.GetDeterminant();
+
+	//SECOND STEP: MIRROR ALONG DIAGONAL (from dx0 to dz2 by dy1) AND REVERT SIGNS
+
+	//Creating new matrix of determinant with reverted signs
+	p2Vec3 r0 = p2Vec3(dx0, dx0, dx2) * -1;
+	p2Vec3 r1 = p2Vec3(dy0, dy1, dy2) * -1;
+	p2Vec3 r2 = p2Vec3(dz0, dz1, dz2) * -1;
+	
+	p2Mat33 matrix = p2Mat33(r0, r1, r2);
+
+	matrix = matrix * deter;
+
+	return matrix;
 }
 
 float p2Mat33::GetDeterminant()
 {
-	return 0.0f;
+	//Using rule of Sarrus
+	float m1 = rows[0].x * rows[1].y * rows[2].z;
+	float m2 = rows[0].y * rows[1].z * rows[2].x;
+	float m3 = rows[0].z * rows[1].x * rows[2].y;
+
+	float n1 = rows[2].x * rows[1].y * rows[0].z;
+	float n2 = rows[2].y * rows[1].z * rows[0].x;
+	float n3 = rows[2].z * rows[1].x * rows[0].y;
+
+	float deter = (m1 + m2 + m3) - (n1 + n2 + n3);
+	return deter;
 }
