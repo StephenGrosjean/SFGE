@@ -65,6 +65,7 @@ p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 {
 	p2Collider& collider = m_Colliders[m_ColliderIndex];
 	m_ColliderIndex++;
+	collider.Init(colliderDef);
 	return &collider;
 }
 
@@ -88,3 +89,8 @@ float p2Body::GetMass() const
 {
 	return this->mass;
 }
+
+p2Collider* p2Body::FindCollider(int colliderIndex) {
+	return &m_Colliders[colliderIndex];
+}
+

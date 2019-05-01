@@ -69,7 +69,7 @@ TEST(Physics, TestBallFallingToGround)
 	circleColliderJson["collider_type"] = sfge::ColliderType::CIRCLE;
 	circleColliderJson["radius"] = 50;
 	circleColliderJson["bouncing"] = 0.5;
-	circleColliderJson["sensor"] = false;
+	circleColliderJson["sensor"] = true;
 
 	entityBody1["components"] = { transformJson1, circleShapeJson, rigidBodyJson1, circleColliderJson };
 

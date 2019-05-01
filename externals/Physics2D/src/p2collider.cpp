@@ -10,7 +10,7 @@ void p2Collider::Init(p2ColliderDef* colliderDef) {
 
 bool p2Collider::IsSensor()
 {
-	return isSensor;
+	return this->isSensor;
 }
 
 void * p2Collider::GetUserData()

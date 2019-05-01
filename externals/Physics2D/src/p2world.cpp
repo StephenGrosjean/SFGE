@@ -36,8 +36,9 @@ void p2World::Step(float dt)
 			//body.SetLinearVelocity(body.GetLinearVelocity() + m_Gravity * dt);
 			body.ApplyForceToCenter(m_Gravity * dt);
 			body.SetPosition(body.GetPosition() + body.GetLinearVelocity() * dt);
-			std::cout << body.GetLinearVelocity().y << std::endl;
-			std::cout << body.GetMass() << std::endl;
+			//std::cout << body.GetLinearVelocity().y << std::endl;
+			std::cout << body.FindCollider(0)->IsSensor() << std::endl;
+
 		}
 	}
 }
