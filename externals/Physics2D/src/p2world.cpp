@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <p2world.h>
-
+#include <iostream>
 
 p2World::p2World(p2Vec2 gravity): m_Gravity(gravity)
 {
@@ -31,6 +31,15 @@ p2World::p2World(p2Vec2 gravity): m_Gravity(gravity)
 
 void p2World::Step(float dt)
 {
+	for (p2Body& body : m_Bodies) {
+		if (body.GetType() == p2BodyType::DYNAMIC) {
+			//body.SetLinearVelocity(body.GetLinearVelocity() + m_Gravity * dt);
+			body.ApplyForceToCenter(m_Gravity * dt);
+			body.SetPosition(body.GetPosition() + body.GetLinearVelocity() * dt);
+			std::cout << body.GetLinearVelocity().y << std::endl;
+			std::cout << body.GetMass() << std::endl;
+		}
+	}
 }
 
 p2Body * p2World::CreateBody(p2BodyDef* bodyDef)

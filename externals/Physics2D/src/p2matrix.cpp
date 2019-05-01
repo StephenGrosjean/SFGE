@@ -226,7 +226,7 @@ p2Mat33 p2Mat33::Invert()
 	//SECOND STEP: MIRROR ALONG DIAGONAL (from dx0 to dz2 by dy1) AND REVERT SIGNS
 
 	//Creating new matrix of determinant with reverted signs
-	p2Vec3 r0 = p2Vec3(dx0, dx0, dx2) * -1;
+	p2Vec3 r0 = p2Vec3(dx0, dx1, dx2) * -1;
 	p2Vec3 r1 = p2Vec3(dy0, dy1, dy2) * -1;
 	p2Vec3 r2 = p2Vec3(dz0, dz1, dz2) * -1;
 	

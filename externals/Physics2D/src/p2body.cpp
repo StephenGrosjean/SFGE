@@ -25,6 +25,14 @@ SOFTWARE.
 
 void p2Body::Init(p2BodyDef* bodyDef)
 {
+	//Setting the p2Body variables
+	type = bodyDef->type;
+	position = bodyDef->position;
+	linearVelocity = bodyDef->linearVelocity;
+	gravityScale = bodyDef->gravityScale;
+	mass = bodyDef->mass;
+
+	//Resizing collider array
 	m_Colliders.resize(MAX_COLLIDER_LEN);
 }
 
@@ -37,6 +45,7 @@ void p2Body::SetLinearVelocity(p2Vec2 velocity)
 {
 	linearVelocity = velocity;
 }
+
 float p2Body::GetAngularVelocity()
 {
 	return angularVelocity;
@@ -45,6 +54,11 @@ float p2Body::GetAngularVelocity()
 p2Vec2 p2Body::GetPosition()
 {
 	return position;
+}
+
+void p2Body::SetPosition(p2Vec2 position)
+{
+	this->position = position;
 }
 
 p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
@@ -56,14 +70,21 @@ p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 
 void p2Body::ApplyForceToCenter(const p2Vec2& force)
 {
+	if (mass < 1) {
+		mass = 1;
+	}
+	
+	linearVelocity += force/mass;
+	
 }
 
 p2BodyType p2Body::GetType() const
 {
-	return p2BodyType::STATIC;
+	return type;
+	//return p2BodyType::STATIC;
 }
 
 float p2Body::GetMass() const
 {
-	return 0.0f;
+	return this->mass;
 }

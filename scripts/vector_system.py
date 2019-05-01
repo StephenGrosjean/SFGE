@@ -21,8 +21,8 @@ class VectorSystem(System):
 
     def update(self, dt):
         self.t += self.sign * dt
-        self.u = Vec2f(12, -5) #Set the graphical Vector
-        self.v = Vec2f(5,5)
+        self.u = Vec2f(10, 0) #Set the graphical Vector
+        self.v = Vec2f(0,10)
         self.pu = Physics2dManager.pixel2meter(self.u) #Convert the graphical vector to physical vector
         self.pv = Physics2dManager.pixel2meter(self.v)
 

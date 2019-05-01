@@ -30,8 +30,10 @@ SOFTWARE.
 TEST(Physics, TestBallFallingToGround)
 {
 	sfge::Engine engine;
+	
 	auto config = std::make_unique<sfge::Configuration>();
 	config->devMode = false;
+	config->gravity = p2Vec2(0.0f, 9.81f);
 	engine.Init(std::move(config));
 
 	auto* sceneManager = engine.GetSceneManager();
@@ -58,6 +60,8 @@ TEST(Physics, TestBallFallingToGround)
 	rigidBodyJson1["name"] = "Rigidbody";
 	rigidBodyJson1["type"] = sfge::ComponentType::BODY2D;
 	rigidBodyJson1["body_type"] = p2BodyType::DYNAMIC;
+	rigidBodyJson1["mass"] = 2;
+
 
 	json circleColliderJson;
 	circleColliderJson["name"] = "Circle Collider";
@@ -119,7 +123,7 @@ TEST(Physics, TestShapeContact)
 {
 	sfge::Engine engine;
 	auto config = std::make_unique<sfge::Configuration>();
-	config->gravity = p2Vec2(0.0f, 0.0f);
+	config->gravity = p2Vec2(0.0f, 9.81f);
 	engine.Init(std::move(config));
 
 	auto* sceneManager = engine.GetSceneManager();
@@ -127,7 +131,7 @@ TEST(Physics, TestShapeContact)
 	json sceneJson;
 	sceneJson["name"] = "Contacts";
 
-	const int entitiesNmb = 10;
+	const int entitiesNmb = 2;
 	json entities[entitiesNmb];
 
 	json shapes[] =
