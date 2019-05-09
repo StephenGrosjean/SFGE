@@ -33,7 +33,7 @@ TEST(Physics, TestBallFallingToGround)
 	
 	auto config = std::make_unique<sfge::Configuration>();
 	config->devMode = false;
-	config->gravity = p2Vec2(0.0f, 9.81f);
+	config->gravity = p2Vec2(0.0f, 0.0f);
 	engine.Init(std::move(config));
 
 	auto* sceneManager = engine.GetSceneManager();
