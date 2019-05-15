@@ -147,7 +147,6 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	body2dManager
 	    .def("add_component", &Body2dManager::AddComponent, py::return_value_policy::reference)
 	    .def("get_component", &Body2dManager::GetComponentRef, py::return_value_policy::reference);
-
 	py::class_<Graphics2dManager> graphics2dManager(m, "Graphics2dManager");
 	graphics2dManager
 	    .def(py::init<Engine&>(), py::return_value_policy::reference)
@@ -218,20 +217,28 @@ PYBIND11_EMBEDDED_MODULE(SFGE, m)
 	colliderData
 		.def_readonly("body", &ColliderData::body)
 		.def_readonly("entity", &ColliderData::entity);
-	
+
 	py::class_<Body2d> body2d(m, "Body2d");
 	body2d
 		.def_property("velocity", &Body2d::GetLinearVelocity, &Body2d::SetLinearVelocity)
 		.def("apply_force", &Body2d::ApplyForce)
+		.def("get_body", &Body2d::GetBody)
 		.def_property_readonly("body_type", &Body2d::GetType)
 		.def_property_readonly("mass", &Body2d::GetMass);
+
+	py::class_<p2AABB> p2aabb(m, "p2AABB");
+	p2aabb
+		.def("get_center", &p2AABB::GetCenter)
+		.def("get_extends", &p2AABB::GetExtends);
+
 
 	py::class_<p2Body,std::unique_ptr<p2Body, py::nodelete>> body(m, "Body");
 	body
 		.def_property("velocity", &p2Body::GetLinearVelocity, &p2Body::SetLinearVelocity)
 		.def("apply_force", &p2Body::ApplyForceToCenter)
 		.def_property_readonly("body_type", &p2Body::GetType)
-		.def_property_readonly("mass", &p2Body::GetMass);
+		.def_property_readonly("mass", &p2Body::GetMass)
+		.def("get_AABB", &p2Body::GetAABB);
 		
 	py::enum_<p2BodyType>(body, "BodyType")
 		.value("STATIC_BODY", p2BodyType::STATIC)

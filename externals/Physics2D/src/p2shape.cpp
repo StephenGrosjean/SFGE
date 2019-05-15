@@ -33,3 +33,12 @@ void p2RectShape::SetSize(p2Vec2 size)
 {
 	this->m_Size = size;
 }
+
+p2Vec2 p2RectShape::GetSize() {
+	return m_Size;
+}
+
+float p2CircleShape::GetRadius() {
+	return m_Radius;
+}
+

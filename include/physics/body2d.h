@@ -77,6 +77,7 @@ public:
 	Body2d* AddComponent(Entity entity) override;
 	void CreateComponent(json& componentJson, Entity entity) override;
 	void DestroyComponent(Entity entity) override;
+	p2AABB GetAABB();
 
 	void OnResize(size_t new_size) override;
 

@@ -56,11 +56,11 @@ public:
 	* \brief Return the userData
 	*/
 	void* GetUserData();
-	void GetShape();
 	void SetUserData(void* colliderData);
+	p2Shape* shape;
 private:
 	void* userData = nullptr;
-	p2Shape* shape;
+
 	float restitution;
 	bool isSensor;
 };

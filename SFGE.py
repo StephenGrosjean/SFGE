@@ -288,6 +288,15 @@ class Sound:
     def stop(self):
         pass
 
+class p2AABB:
+    def get_center(self):
+        pass
+    def get_extends(self):
+        pass
+
+class p2Body:
+    def get_AABB(self):
+        pass
 
 class Body2d:
     def __init__(self):
@@ -297,8 +306,13 @@ class Body2d:
     def apply_force(self, force:p2Vec2):
         pass
 
+    def get_body(self):
+        pass
+
+
 class Collider:
-    pass
+    def get_Collider(self):
+        pass
 
 class KeyboardManager:
     class Key:

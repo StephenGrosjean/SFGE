@@ -21,33 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <p2world.h>
-#include <iostream>
 
-p2World::p2World(p2Vec2 gravity): m_Gravity(gravity)
-{
-	m_Bodies.resize(MAX_BODY_LEN);
-}
+#include <engine/engine.h>
+#include <engine/config.h>
+#include <engine/scene.h>
+#include <utility/json_utility.h>
+#include <gtest/gtest.h>
 
-void p2World::Step(float dt)
+TEST(Physics, TestAABB)
 {
-	for (p2Body& body : m_Bodies) {
-		if (body.GetType() == p2BodyType::DYNAMIC) {
-			//body.SetLinearVelocity(body.GetLinearVelocity() + m_Gravity * dt);
-			body.ApplyForceToCenter(m_Gravity * dt);
-			body.SetPosition(body.GetPosition() + body.GetLinearVelocity() * dt);
-		}
-	}
-}
+    sfge::Engine engine;
+    std::unique_ptr<sfge::Configuration> initConfig = std::make_unique<sfge::Configuration>();
+    initConfig->gravity = p2Vec2(0,0);
+    initConfig->devMode = false;
+    initConfig->maxFramerate = 0;
+    engine.Init(std::move(initConfig));
+    json sceneJson = {
+            { "name", "Test AABB" }
+    };
+    json systemJson = {
+            {"script_path", "scripts/aabb_system.py"}
+    };
+    sceneJson["systems"] = json::array({ systemJson });
+    auto* sceneManager = engine.GetSceneManager();
+    sceneManager->LoadSceneFromJson(sceneJson);
 
-p2Body * p2World::CreateBody(p2BodyDef* bodyDef)
-{
-	p2Body& body = m_Bodies[m_BodyIndex];
-	body.Init(bodyDef);
-	m_BodyIndex++;
-	return &body;
-}
-
-void p2World::SetContactListener(p2ContactListener * contactListener)
-{
+    engine.Start();
 }
