@@ -24,9 +24,10 @@ SOFTWARE.
 
 #include <sstream>
 #include <graphics/graphics2d.h>
-#include <engine/engine.h>
+#include <physics/physics2d.h>
+//#include <engine/engine.h>
 #include <utility/log.h>
-#include <engine/config.h>
+//#include <engine/config.h>
 
 //Dependencies includes
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -91,8 +92,24 @@ void Graphics2dManager::OnDraw()
 	rmt_ScopedCPUSample(Graphics2dDraw,0);
 	if(!m_Windowless)
 	{
+	
+		Physics2dManager* m_Physics = m_Engine.GetPhysicsManager();
+		std::vector<p2AABB*> aabbs = m_Physics->GetAABB();
+
+		for (int i = 0; i < aabbs.size(); i++) {
+			sf::Color rdmnColor(rand() % 256, rand() % 256, rand() % 256);
+			sf::Color color(255, 0, 0);
+			//std::cout << "TR " << aabbs[i]->topRight.x << ":" << aabbs[i]->topRight.y << std::endl;
+			DrawLine(meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->topRight.y)), meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->topRight.y)), color);
+			DrawLine(meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->topRight.y)), meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->bottomLeft.y)), color);
+			DrawLine(meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->bottomLeft.y)), meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->bottomLeft.y)), color);
+			DrawLine(meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->bottomLeft.y)), meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->topRight.y)), color);
+		}
+		
+
 		m_SpriteManager.DrawSprites(*m_Window);
 		m_ShapeManager.DrawShapes(*m_Window);
+		
 	}
 }
 

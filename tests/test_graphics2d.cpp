@@ -27,6 +27,7 @@ SOFTWARE.
 #include "engine/component.h"
 #include "graphics/texture.h"
 #include <graphics/graphics2d.h>
+#include <json.hpp>
 
 TEST(Graphics2d, TestSpriteAnimation)
 {
@@ -39,9 +40,9 @@ TEST(Graphics2d, TestSpriteAnimation)
 	animationJson["path"] = "data/animSaves/cowboy_walk.json";
 	animationJson["type"] = static_cast<int>(sfge::ComponentType::ANIMATION2D);
 
-	entityJson["components"] = json::array({ animationJson });
+	entityJson["components"] = nlohmann::json::array({ animationJson });
 
-	sceneJson["entities"] = json::array({ entityJson });
+	sceneJson["entities"] = nlohmann::json::array({ entityJson });
 	sceneJson["name"] = "Test Animation";
 	engine.GetSceneManager()->LoadSceneFromJson(sceneJson);
 
@@ -58,16 +59,16 @@ TEST(Graphics2d, TestSprite)
 	json spriteJson;
 	spriteJson["path"] = "data/sprites/roguelikeDungeon_transparent.png";
 	spriteJson["type"] = static_cast<int>(sfge::ComponentType::SPRITE2D);
-	entityJson["components"] = json::array({ spriteJson });
+	entityJson["components"] = nlohmann::json::array({ spriteJson });
 
 	json fakeEntityJson;
 	json fakeSpriteJson;
 	fakeSpriteJson["path"] = "fake/path/prout.jpg";
 	fakeSpriteJson["type"] = static_cast<int>(sfge::ComponentType::SPRITE2D);
-	fakeEntityJson["components"] = json::array({ fakeSpriteJson });
+	fakeEntityJson["components"] = nlohmann::json::array({ fakeSpriteJson });
 
 
-	sceneJson["entities"] = json::array({ entityJson, fakeEntityJson });
+	sceneJson["entities"] = nlohmann::json::array({ entityJson, fakeEntityJson });
 	sceneJson["name"] = "Test Sprite";
 	engine.GetSceneManager()->LoadSceneFromJson(sceneJson);
 

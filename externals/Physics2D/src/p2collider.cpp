@@ -3,6 +3,7 @@
 void p2Collider::Init(p2ColliderDef* colliderDef) {
 	userData = colliderDef->userData;
 	shape = colliderDef->shape;
+	colliderType = colliderDef->colliderType;
 	restitution = colliderDef->restitution;
 	isSensor = colliderDef->isSensor;
 

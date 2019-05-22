@@ -34,6 +34,8 @@ struct p2AABB
 {
 	p2Vec2 bottomLeft;
 	p2Vec2 topRight;
+	p2Vec2 size;
+	float radius;
 
 	/**
 	* \brief Calculate the center and return it
@@ -42,6 +44,12 @@ struct p2AABB
 	/**
 	* \brief Calculate the extends and return it
 	*/
-	p2Vec2 GetExtends();
+	 p2Vec2 GetExtends() const;
+
+
+	 void SetAABB(p2Vec2 rectSize, p2Vec2 position);
+	 void SetAABB(float circleRadius, p2Vec2 position);
+	 void UpdateAABB_Circle(p2Vec2 position);
+	 void UpdateAABB_Box(p2Vec2 position);
 };
 #endif // !SFGE_P2AABB:H

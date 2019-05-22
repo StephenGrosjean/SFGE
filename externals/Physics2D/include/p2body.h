@@ -81,7 +81,10 @@ public:
 	void ApplyForceToCenter(const p2Vec2& force);
 	p2BodyType GetType() const;
 	float GetMass() const;
+	p2AABB* GetAABB_Ref();
 	p2AABB GetAABB();
+
+	bool aabbDefined = false;
 
 private:
 	p2BodyType type;

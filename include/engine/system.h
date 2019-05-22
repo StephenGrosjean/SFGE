@@ -81,11 +81,12 @@ public:
 
 	Engine& GetEngine() const;
 	bool GetInitlialized() const;
+	Engine& m_Engine;
+
 protected:
 	bool m_Enable = true;
 	bool m_Initialized = false;
 
-	Engine& m_Engine;
 };
 }
 #endif //SFGE_SYSTEM_H

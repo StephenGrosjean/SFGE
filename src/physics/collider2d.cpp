@@ -91,6 +91,7 @@ void ColliderManager::CreateComponent(json& componentJson, Entity entity)
 			{
 			case ColliderType::CIRCLE:
 			{
+				fixtureDef.colliderType = p2ColliderType::CIRCLE;
 				auto circleShape = std::make_unique<p2CircleShape>();
 				if (CheckJsonNumber(componentJson, "radius"))
 				{
@@ -101,6 +102,7 @@ void ColliderManager::CreateComponent(json& componentJson, Entity entity)
 			break;
 			case ColliderType::BOX:
 			{
+				fixtureDef.colliderType = p2ColliderType::BOX;
 				auto boxShape = std::make_unique<p2RectShape>();
 				if (CheckJsonExists(componentJson, "size"))
 				{
@@ -135,9 +137,7 @@ void ColliderManager::CreateComponent(json& componentJson, Entity entity)
 			auto index = GetFreeComponentIndex();
 			if(index != -1)
 			{
-				std::cout << "TEST" << std::endl;
 				auto* fixture = body.GetBody()->CreateCollider(&fixtureDef);
-
 
 				ColliderData& colliderData = m_Components[index];
 				colliderData.entity = entity;

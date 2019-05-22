@@ -34,7 +34,6 @@ SOFTWARE.
 #include "p2vector.h"
 #include "p2world.h"
 
-
 namespace sfge
 {
 	
@@ -101,9 +100,11 @@ public:
 	void OnBeforeSceneLoad() override;
 	void OnAfterSceneLoad() override;
 
+	std::vector<p2AABB*> GetAABB();
 
 	Body2dManager* GetBodyManager();
 	ColliderManager* GetColliderManager();
+
 
 	//float Raycast(Vec2f startPoint, Vec2f direction, float rayLength);
 

@@ -69,22 +69,34 @@ p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 	p2Collider& collider = m_Colliders[m_ColliderIndex];
 	m_ColliderIndex++;
 	collider.Init(colliderDef);
+	p2ColliderType colliderType = collider.colliderType;
+	p2Vec2 BL, TR;
 
+	switch (colliderType) {
+		p2RectShape* boxShape;
+		p2CircleShape* circleShape;
 
-	if(static_cast<p2RectShape*>(collider.shape)) {
-		p2RectShape* shape = static_cast<p2RectShape*>(collider.shape);
-		shape->SetSize(p2Vec2(3, 4));
-		this->aabb.bottomLeft = p2Vec2(-shape->GetSize().x, shape->GetSize().y);
-		this->aabb.topRight = p2Vec2(shape->GetSize().x, -shape->GetSize().y);
-		std::cout << "Creating Rect" << std::endl;
-	}else {
-		p2CircleShape* shape = static_cast<p2CircleShape*>(collider.shape);
-		shape->SetRadius(1);
-		this->aabb.bottomLeft = p2Vec2(-shape->GetRadius(), shape->GetRadius());
-		this->aabb.topRight = p2Vec2(shape->GetRadius(), -shape->GetRadius());
-		std::cout << "Creating Circ" << std::endl;
+		case p2ColliderType::BOX:
+			boxShape = static_cast<p2RectShape*>(collider.shape);
+			if (!this->aabbDefined) {
+				this->aabb.SetAABB(boxShape->GetSize(), position);
+				this->aabbDefined = true;
+				std::cout << "Rectangle position: " << position.x << " , " << position.y << std::endl;
+				std::cout << "Rectangle aabb: " << aabb.GetExtends().x << " , " << aabb.GetExtends().y << std::endl;
+			}
+			break;
 
+		case p2ColliderType::CIRCLE:
+			circleShape = static_cast<p2CircleShape*>(collider.shape);
+			if (!this->aabbDefined) {
+				this->aabb.SetAABB(circleShape->GetRadius(), position);
+				std::cout << "Circle position: " << position.x << " , " << position.y << std::endl;
+				std::cout << "Circle aabb: " << aabb.GetExtends().x << " , " << aabb.GetExtends().y << std::endl;
+				this->aabbDefined = true;
+			}
+			break;
 	}
+	std::cout << "Finished Collider Creation" << std::endl;
 	return &collider;
 }
 
@@ -113,7 +125,10 @@ p2Collider* p2Body::FindCollider(int colliderIndex) {
 	return &m_Colliders[colliderIndex];
 }
 
+p2AABB* p2Body::GetAABB_Ref() {
+	return &aabb;
+}
+
 p2AABB p2Body::GetAABB() {
 	return aabb;
 }
-

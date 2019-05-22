@@ -23,14 +23,52 @@ SOFTWARE.
 */
 
 #include <p2aabb.h>
+#include <iostream>
+#include "p2collider.h"
 
 p2Vec2 p2AABB::GetCenter()
 {
 	 return (topRight - bottomLeft) / 2;
 }
 
-p2Vec2 p2AABB::GetExtends()
+p2Vec2 p2AABB::GetExtends() const
 {
-	p2Vec2 extends = { bottomLeft.x + topRight.x, bottomLeft.y + topRight.y };
-	return extends;
+	return { bottomLeft.x + topRight.x, bottomLeft.y + topRight.y };
 }
+
+void p2AABB::UpdateAABB_Circle(p2Vec2 position) {
+	p2Vec2 BL = p2Vec2(-radius, radius);
+	p2Vec2 TR = p2Vec2(radius, -radius);
+
+	this->topRight = position + TR;
+	this->bottomLeft = position + BL;
+}
+void p2AABB::UpdateAABB_Box(p2Vec2 position) {
+	p2Vec2 BL = p2Vec2(-size.x, size.y);
+	p2Vec2 TR = p2Vec2(size.x, -size.y);
+	this->topRight = position + TR;
+	this->bottomLeft = position + BL;
+}
+
+void p2AABB::SetAABB(p2Vec2 rectSize, p2Vec2 position){
+	p2Vec2 BL = p2Vec2(-rectSize.x, rectSize.y);
+	p2Vec2 TR = p2Vec2(rectSize.x, -rectSize.y);
+	this->topRight = position+TR;
+	this->bottomLeft = position +BL;
+	this->size = rectSize;
+	//std::cout << "Creating AABB : " << topRight.x << " , " << topRight.y << std::endl;
+
+
+}
+void p2AABB::SetAABB(float circleSize, p2Vec2 position) {
+//	std::cout << "SET AABB : position-> " << position.x << " , " << position.y << "size-> " << circleSize  <<std::endl;
+
+	p2Vec2 BL = p2Vec2(-circleSize, circleSize);
+	p2Vec2 TR = p2Vec2(circleSize, -circleSize);
+
+	this->topRight = position + TR;
+	this->bottomLeft = position + BL;
+	this->radius = circleSize;
+}
+
+

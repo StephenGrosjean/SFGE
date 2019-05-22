@@ -205,3 +205,7 @@ float32 RaycastCallback::ReportFixture(b2Fixture *fixture, const p2Vec2 &point, 
 }
 */
 }
+
+std::vector<p2AABB*> sfge::Physics2dManager::GetAABB() {
+	return m_World->GetAABB();
+}

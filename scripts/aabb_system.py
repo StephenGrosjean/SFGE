@@ -40,5 +40,5 @@ class AabbSystem(System):
             bodyp2: p2Body = body2d.get_body()
 
             aabb: p2AABB = bodyp2.get_AABB()
-            print(bodyp2.
+
 

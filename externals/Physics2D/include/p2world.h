@@ -50,6 +50,7 @@ public:
 	* \brief Set the contact listener
 	*/
 	void SetContactListener(p2ContactListener* contactListener);
+	std::vector<p2AABB*> GetAABB();
 private:
 	p2Vec2 m_Gravity;
 	std::vector<p2Body> m_Bodies;
