@@ -34,6 +34,9 @@ void p2Body::Init(p2BodyDef* bodyDef)
 	gravityScale = bodyDef->gravityScale;
 	mass = bodyDef->mass;
 
+	bodyDef->uniqueID = rand() %4096;
+	uniqueID = bodyDef->uniqueID;
+
 	//Resizing collider array
 	m_Colliders.resize(MAX_COLLIDER_LEN);
 
@@ -81,6 +84,7 @@ p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 			if (!this->aabbDefined) {
 				this->aabb.SetAABB(boxShape->GetSize(), position);
 				this->aabbDefined = true;
+				this->aabb.type = colliderType;
 				std::cout << "Rectangle position: " << position.x << " , " << position.y << std::endl;
 				std::cout << "Rectangle aabb: " << aabb.GetExtends().x << " , " << aabb.GetExtends().y << std::endl;
 			}
@@ -93,6 +97,8 @@ p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 				std::cout << "Circle position: " << position.x << " , " << position.y << std::endl;
 				std::cout << "Circle aabb: " << aabb.GetExtends().x << " , " << aabb.GetExtends().y << std::endl;
 				this->aabbDefined = true;
+				this->aabb.type = colliderType;
+
 			}
 			break;
 	}

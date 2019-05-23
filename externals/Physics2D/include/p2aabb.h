@@ -27,15 +27,23 @@ SOFTWARE.
 
 #include <p2vector.h>
 
+enum class p2ColliderType;
+
 /**
 * \brief Struct representing a Axis Aligned Bounding Box
 */
 struct p2AABB
 {
 	p2Vec2 bottomLeft;
+	p2Vec2 bottomRight;
 	p2Vec2 topRight;
+	p2Vec2 topLeft;
+
 	p2Vec2 size;
 	float radius;
+
+	bool isColliding;
+	p2ColliderType type;
 
 	/**
 	* \brief Calculate the center and return it
@@ -46,10 +54,16 @@ struct p2AABB
 	*/
 	 p2Vec2 GetExtends() const;
 
+	 void SetBottomLeft(p2Vec2 point) ;
+	 void SetBottomRight(p2Vec2 point) ;
+	 void SetTopLeft(p2Vec2 point) ;
+	 void SetTopRight(p2Vec2 point) ;
 
 	 void SetAABB(p2Vec2 rectSize, p2Vec2 position);
 	 void SetAABB(float circleRadius, p2Vec2 position);
 	 void UpdateAABB_Circle(p2Vec2 position);
 	 void UpdateAABB_Box(p2Vec2 position);
+
+	 bool CollisionDetection(p2AABB* otherAABB, p2ColliderType type);
 };
 #endif // !SFGE_P2AABB:H

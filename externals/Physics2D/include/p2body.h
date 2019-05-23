@@ -44,6 +44,7 @@ enum class p2BodyType
 */
 struct p2BodyDef
 {
+	int uniqueID;
 	p2BodyType type;
 	p2Vec2 position;
 	p2Vec2 linearVelocity;
@@ -85,6 +86,7 @@ public:
 	p2AABB GetAABB();
 
 	bool aabbDefined = false;
+	int uniqueID;
 
 private:
 	p2BodyType type;

@@ -98,12 +98,18 @@ void Graphics2dManager::OnDraw()
 
 		for (int i = 0; i < aabbs.size(); i++) {
 			sf::Color rdmnColor(rand() % 256, rand() % 256, rand() % 256);
-			sf::Color color(255, 0, 0);
+			sf::Color color;
+			if(aabbs[i]->isColliding) {
+				color = sf::Color(0, 255, 0);
+			}
+			else {
+				color = sf::Color(255, 0, 0);
+			}
 			//std::cout << "TR " << aabbs[i]->topRight.x << ":" << aabbs[i]->topRight.y << std::endl;
-			DrawLine(meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->topRight.y)), meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->topRight.y)), color);
-			DrawLine(meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->topRight.y)), meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->bottomLeft.y)), color);
-			DrawLine(meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->bottomLeft.y)), meter2pixel(p2Vec2(aabbs[i]->topRight.x, aabbs[i]->bottomLeft.y)), color);
-			DrawLine(meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->bottomLeft.y)), meter2pixel(p2Vec2(aabbs[i]->bottomLeft.x, aabbs[i]->topRight.y)), color);
+			DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->topLeft), color);
+			DrawLine(meter2pixel(aabbs[i]->bottomRight), meter2pixel(aabbs[i]->bottomLeft), color);
+			DrawLine(meter2pixel(aabbs[i]->topLeft), meter2pixel(aabbs[i]->bottomLeft), color);
+			DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->bottomRight), color);
 		}
 		
 

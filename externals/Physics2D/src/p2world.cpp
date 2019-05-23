@@ -35,6 +35,7 @@ void p2World::Step(float dt)
 {
 	for (p2Body& body : m_Bodies) {
 		if (body.GetType() == p2BodyType::DYNAMIC) {
+			
 			//body.SetLinearVelocity(body.GetLinearVelocity() + m_Gravity * dt);
 			body.ApplyForceToCenter(m_Gravity * dt);
 			body.SetPosition(body.GetPosition() + body.GetLinearVelocity() * dt);
@@ -44,19 +45,50 @@ void p2World::Step(float dt)
 
 			p2ColliderType colliderType = body.FindCollider(0)->colliderType;
 
-			switch(colliderType) {
-				case p2ColliderType::BOX:
-					p2RectShape* boxShape = static_cast<p2RectShape*>(body.FindCollider(0)->shape);
-					body.GetAABB_Ref()->UpdateAABB_Box(body.GetPosition());
+			p2CircleShape* circleShape;
+			p2RectShape* boxShape;
+			switch (colliderType) {
+			case p2ColliderType::BOX:
+				boxShape = static_cast<p2RectShape*>(body.FindCollider(0)->shape);
+				body.GetAABB_Ref()->UpdateAABB_Box(body.GetPosition());
 				break;
 
-				case p2ColliderType::CIRCLE:
-					p2CircleShape* circleShape = static_cast<p2CircleShape*>(body.FindCollider(0)->shape);
-					body.GetAABB_Ref()->UpdateAABB_Circle(body.GetPosition());
-					break;
+			case p2ColliderType::CIRCLE:
+				circleShape = static_cast<p2CircleShape*>(body.FindCollider(0)->shape);
+				body.GetAABB_Ref()->UpdateAABB_Circle(body.GetPosition());
+				break;
 			}
-			
-			
+
+
+			for(int i = 0; i < m_BodyIndex; i++) {
+				p2Body* otherBody = &m_Bodies[i];
+				p2AABB* otherAABB = otherBody->GetAABB_Ref();
+
+				if (otherBody->GetType() == p2BodyType::DYNAMIC || otherBody->GetType() == p2BodyType::STATIC) {
+					if (otherBody->uniqueID != body.uniqueID) {
+						if (body.GetAABB_Ref()->CollisionDetection(otherAABB, colliderType)) {
+							body.GetAABB_Ref()->isColliding = true;
+							otherAABB->isColliding = true;
+							std::cout << "COLLISION" << std::endl;
+						}else {
+							body.GetAABB_Ref()->isColliding = false;
+							otherAABB->isColliding = false;
+						}
+					}
+				}
+			}
+
+			/*for (p2Body& otherBody : m_Bodies) {
+				if (otherBody.GetPosition().x != body.GetPosition().x && otherBody.GetPosition().y != body.GetPosition().y) {
+					p2AABB* otherAABB = otherBody.GetAABB_Ref();
+					std::cout << otherAABB->topRight.x << std::endl;
+					if (body.GetAABB_Ref()->CollisionDetection(otherAABB, colliderType)) {
+
+						std::cout << "COLLISION" << std::endl;
+					}
+				}
+
+			}*/
 
 		}
 

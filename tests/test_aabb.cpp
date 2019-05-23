@@ -79,7 +79,7 @@ TEST(System, TestAABB)
 
 	json transformJson2;
 	transformJson2["type"] = sfge::ComponentType::TRANSFORM2D;
-	transformJson2["position"] = { 400,600 };
+	transformJson2["position"] = { 350,500 };
 	transformJson2["scale"] = { 1.0,1.0 };
 	transformJson2["angle"] = 0.0;
 
@@ -101,7 +101,7 @@ TEST(System, TestAABB)
 	rectColliderJson["size"] = { 800,200 };
 	rectColliderJson["sensor"] = false;
 
-	entityBody2["components"] = { transformJson2, rectShapeJson, rigidBodyJson2, rectColliderJson };
+	entityBody2["components"] = { transformJson2, circleShapeJson, rigidBodyJson2, circleColliderJson };
 
 	sceneJson["entities"] = { entityBody1, entityBody2 };
 	json contactDebugSystem = {
