@@ -1,12 +1,12 @@
 #include "..\include\p2collider.h"
 
-void p2Collider::Init(p2ColliderDef* colliderDef) {
+void p2Collider::Init(p2ColliderDef* colliderDef, p2Body* body) {
 	userData = colliderDef->userData;
 	shape = colliderDef->shape;
 	colliderType = colliderDef->colliderType;
 	restitution = colliderDef->restitution;
 	isSensor = colliderDef->isSensor;
-
+	this->body = body;
 }
 
 bool p2Collider::IsSensor()

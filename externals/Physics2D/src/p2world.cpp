@@ -33,15 +33,14 @@ p2World::p2World(p2Vec2 gravity): m_Gravity(gravity)
 
 void p2World::Step(float dt)
 {
+
 	for (p2Body& body : m_Bodies) {
 		if (body.GetType() == p2BodyType::DYNAMIC) {
-			
-			//body.SetLinearVelocity(body.GetLinearVelocity() + m_Gravity * dt);
 			body.ApplyForceToCenter(m_Gravity * dt);
+
+		
 			body.SetPosition(body.GetPosition() + body.GetLinearVelocity() * dt);
 
-			//std::cout << body.GetAABB().topRight.y << std::endl;
-			//std::cout << "POSY:" << body.GetPosition().y << std::endl;
 
 			p2ColliderType colliderType = body.FindCollider(0)->colliderType;
 
@@ -59,40 +58,13 @@ void p2World::Step(float dt)
 				break;
 			}
 
-
-			for(int i = 0; i < m_BodyIndex; i++) {
-				p2Body* otherBody = &m_Bodies[i];
-				p2AABB* otherAABB = otherBody->GetAABB_Ref();
-
-				if (otherBody->GetType() == p2BodyType::DYNAMIC || otherBody->GetType() == p2BodyType::STATIC) {
-					if (otherBody->uniqueID != body.uniqueID) {
-						if (body.GetAABB_Ref()->CollisionDetection(otherAABB, colliderType)) {
-							body.GetAABB_Ref()->isColliding = true;
-							otherAABB->isColliding = true;
-							std::cout << "COLLISION" << std::endl;
-						}else {
-							body.GetAABB_Ref()->isColliding = false;
-							otherAABB->isColliding = false;
-						}
-					}
-				}
-			}
-
-			/*for (p2Body& otherBody : m_Bodies) {
-				if (otherBody.GetPosition().x != body.GetPosition().x && otherBody.GetPosition().y != body.GetPosition().y) {
-					p2AABB* otherAABB = otherBody.GetAABB_Ref();
-					std::cout << otherAABB->topRight.x << std::endl;
-					if (body.GetAABB_Ref()->CollisionDetection(otherAABB, colliderType)) {
-
-						std::cout << "COLLISION" << std::endl;
-					}
-				}
-
-			}*/
+			
 
 		}
-
 	}
+
+	//Checking collisions
+	contactManager.CheckContactBetweenBodies(m_Bodies, m_BodyIndex, dt);
 }
 
 p2Body * p2World::CreateBody(p2BodyDef* bodyDef)
@@ -105,20 +77,25 @@ p2Body * p2World::CreateBody(p2BodyDef* bodyDef)
 
 void p2World::SetContactListener(p2ContactListener * contactListener)
 {
+	this->contactListener = contactListener;
+	this->contactManager = p2ContactManager();
+	contactManager.Init(contactListener);
 }
 
 std::vector<p2AABB*> p2World::GetAABB() {
 	std::vector<p2AABB*> aabbs;
 	aabbs.clear();
 
-	/*for(p2Body body : m_Bodies) {
-		aabbs.push_back(body.GetAABB());
-	}*/
 	for(int i = 0; i < m_BodyIndex; i++) {
 		aabbs.push_back(m_Bodies[i].GetAABB_Ref());
 
 	}
 	return aabbs;
+}
+
+
+p2ContactManager* p2World::GetContactManager() {
+	return &contactManager;
 }
 
 

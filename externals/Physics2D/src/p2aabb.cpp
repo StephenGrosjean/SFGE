@@ -111,7 +111,7 @@ void p2AABB::SetAABB(float circleSize, p2Vec2 position) {
 	this->radius = circleSize;
 }
 
-bool p2AABB::CollisionDetection(p2AABB* otherAABB, p2ColliderType type) {
+bool p2AABB::AABBOverlapDetection(p2AABB* otherAABB, p2ColliderType type) {
 	bool isCollision = false;
 	p2Vec2 currentPoint = this->bottomLeft;
 

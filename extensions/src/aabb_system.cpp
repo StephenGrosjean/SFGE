@@ -47,22 +47,14 @@ namespace sfge::ext
 		m_TextureManager = m_Engine.GetGraphics2dManager()->GetTextureManager();
 		m_Graphics2DManager = m_Engine.GetGraphics2dManager();
 		m_SpriteManager = m_Engine.GetGraphics2dManager()->GetSpriteManager();
+		m_Physics2dManager = m_Engine.GetPhysicsManager();
+	
 
 
 		auto config = m_Engine.GetConfig();
 		fixedDeltaTime = config->fixedDeltaTime;
 		screenSize = sf::Vector2f(config->screenResolution.x, config->screenResolution.y);
-		auto* entityManager = m_Engine.GetEntityManager();
-		entityManager->ResizeEntityNmb(entitiesNmb);
 
-		entities = entityManager->GetEntitiesWithType(ComponentType::BODY2D);
-
-		for (auto i = 0u; i < entitiesNmb; i++)
-		{
-			//auto body = m_Body2DManager->GetComponentPtr(entities[i]);
-			//bodies.push_back(body->GetBody());
-
-		}
 
 	}
 
@@ -74,18 +66,40 @@ namespace sfge::ext
 
 	void AABBSystem::OnFixedUpdate()
 	{
-		
+		//rmt_ScopedCPUSample(AabbTestFixedUpdate, 0);
 	}
 
 	void AABBSystem::OnDraw()
 	{
-		rmt_ScopedCPUSample(PlanetSystemDraw, 0);
-#ifdef WITH_VERTEXARRAY
-		sf::RenderStates renderStates;
-		renderStates.texture = texture;
-		auto window = m_Graphics2DManager->GetWindow();
-		window->draw(m_VertexArray, renderStates);
-#endif
+	Physics2dManager* m_Physics = m_Engine.GetPhysicsManager();
+		std::vector<p2AABB*> aabbs = m_Physics->GetAABB();
+
+		for (int i = 0; i < aabbs.size(); i++) {
+			sf::Color rdmnColor(rand() % 256, rand() % 256, rand() % 256);
+			sf::Color color;
+			color = sf::Color(255, 0, 0);
+
+			//std::cout << "TR " << aabbs[i]->topRight.x << ":" << aabbs[i]->topRight.y << std::endl;
+			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->topLeft), color);
+			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->bottomRight), meter2pixel(aabbs[i]->bottomLeft), color);
+			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->topLeft), meter2pixel(aabbs[i]->bottomLeft), color);
+			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->bottomRight), color);
+		}
+		std::vector<p2Contact> contacts = m_Physics2dManager->Getp2World()->GetContactManager()->contacts;
+		
+		for (p2Contact contact : contacts) {
+			if (contact.GetColliderA() != nullptr) {
+				p2Vec2 position = contact.GetColliderA()->body->GetPosition();
+				p2Vec2 contactPosition = contact.contactPoint + position;
+				float crossSize = 0.1;
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(crossSize, crossSize)), sf::Color::Blue);
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(-crossSize, crossSize)), sf::Color::Blue);
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(crossSize, -crossSize)), sf::Color::Blue);
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(-crossSize, -crossSize)), sf::Color::Blue);
+
+			}
+		}
+
 	}
 
 }

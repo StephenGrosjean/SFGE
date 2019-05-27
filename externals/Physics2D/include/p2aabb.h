@@ -26,6 +26,7 @@ SOFTWARE.
 #define SFGE_P2AABB_H
 
 #include <p2vector.h>
+#include "p2collider.h"
 
 enum class p2ColliderType;
 
@@ -64,6 +65,6 @@ struct p2AABB
 	 void UpdateAABB_Circle(p2Vec2 position);
 	 void UpdateAABB_Box(p2Vec2 position);
 
-	 bool CollisionDetection(p2AABB* otherAABB, p2ColliderType type);
+	 bool AABBOverlapDetection(p2AABB* otherAABB, p2ColliderType type);
 };
 #endif // !SFGE_P2AABB:H

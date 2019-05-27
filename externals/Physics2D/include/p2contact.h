@@ -26,6 +26,7 @@ SOFTWARE.
 #define SFGE_P2CONTACT_H
 
 #include <p2collider.h>
+#include "p2body.h"
 
 /**
 * \brief Representation of a contact given as argument in a p2ContactListener
@@ -33,8 +34,19 @@ SOFTWARE.
 class p2Contact
 {
 public:
+	void Init(p2Body* bodyA, p2Body* bodyB);
+	static bool CheckIfEqual(p2Contact contactA, p2Contact contactB);
+	void SetContactPoint(p2Body* bodyA, p2Body* bodyB);
+	p2Vec2 GetContactPoint();
+
 	p2Collider* GetColliderA();
 	p2Collider* GetColliderB();
+
+	p2Collider* colliderA;
+	p2Collider* colliderB;
+
+	p2Vec2 contactPoint;
+	
 };
 
 /**
@@ -52,6 +64,12 @@ public:
 */
 class p2ContactManager
 {
-
+public:
+	void Init(p2ContactListener* contactListener);
+	std::vector<p2Contact> contacts;
+	void CheckContactBetweenBodies(std::vector<p2Body>& bodies, int bodiesSize, float dt);
+	
+private:
+	p2ContactListener* contactListener;
 };
 #endif

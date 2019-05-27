@@ -86,6 +86,7 @@ public:
 	* \brief Get The World
 	*/
 	std::weak_ptr<p2World> GetWorld() const;
+	p2World* Getp2World() const;
 	/**
 	 * \brief Called each frame to update the b2World if not in editor mode
 	 * @param dt Delta time since last frame

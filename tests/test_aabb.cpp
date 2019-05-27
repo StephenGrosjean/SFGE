@@ -34,16 +34,16 @@ TEST(System, TestAABB)
 
 	auto config = std::make_unique<sfge::Configuration>();
 	config->devMode = false;
-	config->gravity = p2Vec2(0.0f, 1.0f);
+	config->gravity = p2Vec2(0.0f, 9.81f);
 	engine.Init(std::move(config));
-	
+
 	auto* sceneManager = engine.GetSceneManager();
 
 	json sceneJson;
 	sceneJson["name"] = "Test AABB";
 
-	json entityBody1;
-	entityBody1["name"] = "Body1";
+	json circleBody1;
+	circleBody1["name"] = "Static Circle";
 
 	json transformJson1;
 	transformJson1["type"] = sfge::ComponentType::TRANSFORM2D;
@@ -57,11 +57,17 @@ TEST(System, TestAABB)
 	circleShapeJson["shape_type"] = sfge::ShapeType::CIRCLE;
 	circleShapeJson["radius"] = 50;
 
-	json rigidBodyJson1;
-	rigidBodyJson1["name"] = "Rigidbody";
-	rigidBodyJson1["type"] = sfge::ComponentType::BODY2D;
-	rigidBodyJson1["body_type"] = p2BodyType::DYNAMIC;
-	rigidBodyJson1["mass"] = 2;
+	json rigidBodyJsonDynamic;
+	rigidBodyJsonDynamic["name"] = "Rigidbody";
+	rigidBodyJsonDynamic["type"] = sfge::ComponentType::BODY2D;
+	rigidBodyJsonDynamic["body_type"] = p2BodyType::DYNAMIC;
+	rigidBodyJsonDynamic["mass"] = 1;
+
+	json rigidBodyJsonStatic;
+	rigidBodyJsonStatic["name"] = "Rigidbody";
+	rigidBodyJsonStatic["type"] = sfge::ComponentType::BODY2D;
+	rigidBodyJsonStatic["body_type"] = p2BodyType::STATIC;
+	rigidBodyJsonStatic["mass"] = 1;
 
 
 	json circleColliderJson;
@@ -72,38 +78,33 @@ TEST(System, TestAABB)
 	circleColliderJson["bouncing"] = 0.5;
 	circleColliderJson["sensor"] = true;
 
-	entityBody1["components"] = { transformJson1, circleShapeJson, rigidBodyJson1, circleColliderJson };
+	circleBody1["components"] = { transformJson1, circleShapeJson, rigidBodyJsonStatic, circleColliderJson };
 
-	json entityBody2;
-	entityBody2["name"] = "Ground";
+	json circleBody2;
+	circleBody2["name"] = "DynamicCircle";
 
-	json transformJson2;
-	transformJson2["type"] = sfge::ComponentType::TRANSFORM2D;
-	transformJson2["position"] = { 350,500 };
-	transformJson2["scale"] = { 1.0,1.0 };
-	transformJson2["angle"] = 0.0;
+	json transformJson3;
+	transformJson3["type"] = sfge::ComponentType::TRANSFORM2D;
+	transformJson3["position"] = { 200,100 };
+	transformJson3["scale"] = { 1.0,1.0 };
+	transformJson3["angle"] = 0.0;
 
-	json rectShapeJson;
-	rectShapeJson["name"] = "Rect Shape Component";
-	rectShapeJson["type"] = sfge::ComponentType::SHAPE2D;
-	rectShapeJson["shape_type"] = sfge::ShapeType::RECTANGLE;
-	rectShapeJson["size"] = { 800,200 };
+	json circleShapeJson3;
+	circleShapeJson3["name"] = "Circle Shape Component";
+	circleShapeJson3["type"] = sfge::ComponentType::SHAPE2D;
+	circleShapeJson3["shape_type"] = sfge::ShapeType::CIRCLE;
+	circleShapeJson3["radius"] = 60;
 
-	json rigidBodyJson2;
-	rigidBodyJson2["name"] = "Rigidbody";
-	rigidBodyJson2["type"] = sfge::ComponentType::BODY2D;
-	rigidBodyJson2["body_type"] = p2BodyType::STATIC;
+	json circleColliderJson3;
+	circleColliderJson3["name"] = "Circle Collider";
+	circleColliderJson3["type"] = sfge::ComponentType::COLLIDER2D;
+	circleColliderJson3["collider_type"] = sfge::ColliderType::CIRCLE;
+	circleColliderJson3["radius"] = 60;
+	circleColliderJson3["bouncing"] = 0.5;
+	circleColliderJson3["sensor"] = true;
+	circleBody2["components"] = { transformJson3, circleShapeJson3, rigidBodyJsonDynamic, circleColliderJson3 };
 
-	json rectColliderJson;
-	rectColliderJson["name"] = "Rect Collider";
-	rectColliderJson["type"] = sfge::ComponentType::COLLIDER2D;
-	rectColliderJson["collider_type"] = sfge::ColliderType::BOX;
-	rectColliderJson["size"] = { 800,200 };
-	rectColliderJson["sensor"] = false;
-
-	entityBody2["components"] = { transformJson2, circleShapeJson, rigidBodyJson2, circleColliderJson };
-
-	sceneJson["entities"] = { entityBody1, entityBody2 };
+	sceneJson["entities"] = { circleBody1, circleBody2 };
 	json contactDebugSystem = {
 		{ "script_path", "scripts/contact_debug_system.py" }
 	};
@@ -114,7 +115,12 @@ TEST(System, TestAABB)
 		"nothing"
 	}
 	};
-	sceneJson["systems"] = json::array({ contactDebugSystem, raycastDebugJson });
+	json systemAABB = {
+		{"systemClassName", "aabbSystem"}
+
+	};
+
+	sceneJson["systems"] = json::array({ contactDebugSystem, systemAABB});
 	sceneManager->LoadSceneFromJson(sceneJson);
 	engine.Start();
 }

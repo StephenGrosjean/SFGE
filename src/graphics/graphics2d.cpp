@@ -92,27 +92,6 @@ void Graphics2dManager::OnDraw()
 	rmt_ScopedCPUSample(Graphics2dDraw,0);
 	if(!m_Windowless)
 	{
-	
-		Physics2dManager* m_Physics = m_Engine.GetPhysicsManager();
-		std::vector<p2AABB*> aabbs = m_Physics->GetAABB();
-
-		for (int i = 0; i < aabbs.size(); i++) {
-			sf::Color rdmnColor(rand() % 256, rand() % 256, rand() % 256);
-			sf::Color color;
-			if(aabbs[i]->isColliding) {
-				color = sf::Color(0, 255, 0);
-			}
-			else {
-				color = sf::Color(255, 0, 0);
-			}
-			//std::cout << "TR " << aabbs[i]->topRight.x << ":" << aabbs[i]->topRight.y << std::endl;
-			DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->topLeft), color);
-			DrawLine(meter2pixel(aabbs[i]->bottomRight), meter2pixel(aabbs[i]->bottomLeft), color);
-			DrawLine(meter2pixel(aabbs[i]->topLeft), meter2pixel(aabbs[i]->bottomLeft), color);
-			DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->bottomRight), color);
-		}
-		
-
 		m_SpriteManager.DrawSprites(*m_Window);
 		m_ShapeManager.DrawShapes(*m_Window);
 		

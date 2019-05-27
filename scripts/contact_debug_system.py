@@ -31,6 +31,7 @@ class ContactDebugSystem(System):
             self.contact_count[self.entities.index(c1.entity)] += 1
             self.contact_count[self.entities.index(c2.entity)] += 1
 
+
         else:
             self.contact_count[self.entities.index(c1.entity)] -= 1
             self.contact_count[self.entities.index(c2.entity)] -= 1

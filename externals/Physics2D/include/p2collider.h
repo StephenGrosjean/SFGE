@@ -28,6 +28,7 @@ SOFTWARE.
 
 #include <p2shape.h>
 #include "engine/entity.h"
+class p2Body;
 
 enum class p2ColliderType {
 	NONE,
@@ -55,7 +56,7 @@ struct p2ColliderDef
 class p2Collider
 {
 public:
-	void Init(p2ColliderDef* colliderDef);
+	void Init(p2ColliderDef* colliderDef, p2Body* body);
 	/**
 	* \brief Check if the p2Collider is a sensor
 	*/
@@ -67,6 +68,7 @@ public:
 	void SetUserData(void* colliderData);
 	p2Shape* shape;
 	p2ColliderType colliderType;
+	p2Body* body;
 private:
 	void* userData = nullptr;
 

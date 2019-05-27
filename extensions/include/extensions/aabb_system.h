@@ -37,7 +37,10 @@ class Transform2dManager;
 class Body2dManager;
 class TextureManager;
 class SpriteManager;
+class Physics2dManager;
+
 }
+
 namespace sfge::ext
 {
 
@@ -61,6 +64,7 @@ private:
 	TextureManager* m_TextureManager;
 	SpriteManager* m_SpriteManager;
 	Graphics2dManager* m_Graphics2DManager;
+	Physics2dManager* m_Physics2dManager;
 
 
 	float fixedDeltaTime = 0.0f;

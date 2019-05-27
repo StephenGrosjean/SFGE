@@ -51,10 +51,14 @@ public:
 	*/
 	void SetContactListener(p2ContactListener* contactListener);
 	std::vector<p2AABB*> GetAABB();
+	p2ContactManager* GetContactManager();
 private:
 	p2Vec2 m_Gravity;
 	std::vector<p2Body> m_Bodies;
 	int m_BodyIndex = 0;
+
+	p2ContactListener* contactListener;
+	p2ContactManager contactManager;
 };
 
 #endif

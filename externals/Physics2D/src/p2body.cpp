@@ -71,7 +71,7 @@ p2Collider * p2Body::CreateCollider(p2ColliderDef * colliderDef)
 {
 	p2Collider& collider = m_Colliders[m_ColliderIndex];
 	m_ColliderIndex++;
-	collider.Init(colliderDef);
+	collider.Init(colliderDef, this);
 	p2ColliderType colliderType = collider.colliderType;
 	p2Vec2 BL, TR;
 
