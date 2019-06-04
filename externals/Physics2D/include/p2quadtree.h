@@ -37,6 +37,7 @@ SOFTWARE.
 class p2QuadTree
 {
 public:
+	p2QuadTree();
 	p2QuadTree(int nodeLevel, p2AABB bounds);
 	~p2QuadTree();
 
@@ -61,7 +62,12 @@ public:
 	* Return a list of all the p2Body that might collide
 	*/
 	void Retrieve();
+	p2AABB* GetBounds();
+	p2QuadTree* GetNode(int index);
+
+	bool defined = true;
 	
+
 private:
 
 
@@ -72,6 +78,7 @@ private:
 	p2QuadTree* nodes[CHILD_TREE_NMB] = { nullptr };
 	std::list<p2Body*> m_Objects;
 	p2AABB m_Bounds;
+	p2QuadTree* m_Parent;
 };
 
 #endif

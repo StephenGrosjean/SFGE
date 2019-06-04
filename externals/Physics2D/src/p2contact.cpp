@@ -54,8 +54,8 @@ void p2Contact::SetContactPoint(p2Body* bodyA, p2Body* bodyB) {
 	if(bodyA->GetAABB_Ref()->type == p2ColliderType::CIRCLE 
 		&& bodyB->GetAABB_Ref()->type == p2ColliderType::CIRCLE) 
 	{
-		radius = bodyA->GetAABB_Ref()->radius;
-		contactPoint = (bodyB->GetPosition() - bodyA->GetPosition()).Normalized()*radius;
+		radius = bodyB->GetAABB_Ref()->radius;
+		contactPoint = (bodyA->GetPosition() - bodyB->GetPosition()).Normalized()*radius;
 	}
 	else if (bodyA->GetAABB_Ref()->type == p2ColliderType::BOX
 		&& bodyB->GetAABB_Ref()->type == p2ColliderType::CIRCLE)
@@ -199,10 +199,10 @@ void p2ContactManager::CheckContactBetweenBodies(std::vector<p2Body>& bodies, in
 						}
 
 						if(MTV.x != 0 || MTV.y != 0) {
-							if (bodyA->GetType() != p2BodyType::STATIC) {
+							if (bodyA->GetType() == p2BodyType::DYNAMIC && !bodyA->FindCollider(0)->IsSensor()) {
 								bodyA->SetPosition(bodyA->GetPosition() - MTV);
 							}
-							if (bodyB->GetType() != p2BodyType::STATIC) {
+							if (bodyB->GetType() == p2BodyType::DYNAMIC && !bodyB->FindCollider(0)->IsSensor()) {
 								bodyB->SetPosition(bodyB->GetPosition() - MTV);
 							}
 							p2Vec2 velocityA = bodyA->GetLinearVelocity();
@@ -214,13 +214,12 @@ void p2ContactManager::CheckContactBetweenBodies(std::vector<p2Body>& bodies, in
 							bodyA->GetAABB_Ref()->MTV = MTV * -1;
 							bodyB->GetAABB_Ref()->MTV = MTV;
 
-							if(bodyA->GetType() != p2BodyType::STATIC) {
+							if(bodyA->GetType() == p2BodyType::DYNAMIC && !bodyA->FindCollider(0)->IsSensor()) {
 								bodyA->SetLinearVelocity(reflexA);
 
 							}
-							if (bodyB->GetType() != p2BodyType::STATIC) {
+							if (bodyB->GetType() == p2BodyType::DYNAMIC && !bodyB->FindCollider(0)->IsSensor()) {
 								bodyB->SetLinearVelocity(reflexB);
-
 							}
 							
 
@@ -262,7 +261,7 @@ p2Vec2 p2Contact::FindMTVCircleCircle(p2Body bodyA, p2Body bodyB) {
 	float radiusA = bodyA.GetAABB_Ref()->radius;
 	float radiusB = bodyB.GetAABB_Ref()->radius;
 
-	p2Vec2 vectorBetweenBody = bodyB.GetPosition() - bodyA.GetPosition();
+	p2Vec2 vectorBetweenBody = bodyA.GetPosition() - bodyB.GetPosition();
 
 	if(vectorBetweenBody.GetMagnitude() < radiusA+radiusB) {
 		p2Vec2 vectorBetweenBodyNorm = vectorBetweenBody.Normalized();
@@ -333,13 +332,9 @@ p2Vec2 p2Contact::FindMTVCircleBox(p2Body circleBody, p2Body boxBody, p2Contact*
 
 }
 
-p2Vec2 p2Contact::FindMTVBoxCircle(p2Body bodyA, p2Body bodyB) {
-	return p2Vec2();
-}
-
 p2Vec2 p2Contact::FindMTVBoxBox(p2Body bodyA, p2Body bodyB) {
+	
 	return p2Vec2();
-
 }
 
 

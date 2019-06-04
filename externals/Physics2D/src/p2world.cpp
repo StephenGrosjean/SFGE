@@ -25,10 +25,29 @@ SOFTWARE.
 #include <iostream>
 
 
+
 p2World::p2World(p2Vec2 gravity): m_Gravity(gravity)
 {
 
 	m_Bodies.resize(MAX_BODY_LEN);
+
+	/*if(!m_quadTree.defined) {
+		p2AABB quadTreeAABB = p2AABB();
+		
+		quadTreeAABB.SetBottomLeft(p2Vec2(0, screenSize.y));
+		quadTreeAABB.SetBottomRight(screenSize);
+		quadTreeAABB.SetTopLeft(p2Vec2(0, 0));
+		quadTreeAABB.SetTopRight(p2Vec2(screenSize.x, 0));
+
+		p2QuadTree quadTree = p2QuadTree(0, quadTreeAABB);
+		quadTree.defined = true;
+		m_quadTree = quadTree;
+
+		m_quadTree.Split();
+		
+	}*/
+
+
 }
 
 void p2World::Step(float dt)
@@ -58,13 +77,20 @@ void p2World::Step(float dt)
 				break;
 			}
 
-			
+			if(body.GetLinearVelocity().y < 0.01 && body.GetLinearVelocity().y >-0.01) {
+				body.SetLinearVelocity(p2Vec2(body.GetLinearVelocity().x, 0));
+			}
+
+			if (body.GetLinearVelocity().x < 0.01 && body.GetLinearVelocity().x >-0.01) {
+				body.SetLinearVelocity(p2Vec2(0, body.GetLinearVelocity().y));
+			}
 
 		}
 	}
 
 	//Checking collisions
 	contactManager.CheckContactBetweenBodies(m_Bodies, m_BodyIndex, dt, m_Gravity);
+
 }
 
 p2Body * p2World::CreateBody(p2BodyDef* bodyDef)
@@ -96,6 +122,11 @@ std::vector<p2AABB*> p2World::GetAABB() {
 
 p2ContactManager* p2World::GetContactManager() {
 	return &contactManager;
+}
+
+
+p2QuadTree* p2World::GetQuadTree() {
+	return &m_quadTree;
 }
 
 

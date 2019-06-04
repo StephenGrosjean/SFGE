@@ -134,7 +134,7 @@ bool p2AABB::AABBOverlapDetection(p2AABB* otherAABB, p2ColliderType type) {
 			break;
 		}
 		//std::cout << "OTHER : " << otherAABB->topRight.y << std::endl;
-		if ((currentPoint.x > otherAABB->topLeft.x && currentPoint.x < otherAABB->topRight.x) && (currentPoint.y < otherAABB->bottomLeft.y && currentPoint.y > otherAABB->topLeft.y)) {
+		if ((currentPoint.x >= otherAABB->topLeft.x && currentPoint.x <= otherAABB->topRight.x) && (currentPoint.y <= otherAABB->bottomLeft.y && currentPoint.y >= otherAABB->topLeft.y)) {
 			isCollision = true;
 		}
 	}

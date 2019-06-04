@@ -123,7 +123,7 @@ TEST(Physics, TestShapeContact)
 {
 	sfge::Engine engine;
 	auto config = std::make_unique<sfge::Configuration>();
-	config->gravity = p2Vec2(0.0f, 9.81f);
+	config->gravity = p2Vec2(0.0f, 0.0f);
 	engine.Init(std::move(config));
 
 	auto* sceneManager = engine.GetSceneManager();
@@ -131,7 +131,7 @@ TEST(Physics, TestShapeContact)
 	json sceneJson;
 	sceneJson["name"] = "Contacts";
 
-	const int entitiesNmb = 2;
+	const int entitiesNmb = 20;
 	json entities[entitiesNmb];
 
 	json shapes[] =
@@ -140,13 +140,13 @@ TEST(Physics, TestShapeContact)
 			{"name","Rect Shape Component"},
 			{"type",sfge::ComponentType::SHAPE2D},
 			{"shape_type", sfge::ShapeType::RECTANGLE},
-			{"size",{100,100}}
+			{"size",{50,50}}
 		},
 		{
 			{"name","Rect Shape Component"},
 			{"type",sfge::ComponentType::SHAPE2D},
 			{"shape_type", sfge::ShapeType::CIRCLE},
-			{"radius",100}
+			{"radius",50}
 		}
 	};
 	json colliders[] =
@@ -155,14 +155,14 @@ TEST(Physics, TestShapeContact)
 			{"name","Rect Collider"},
 			{"type", sfge::ComponentType::COLLIDER2D},
 			{"collider_type",sfge::ColliderType::BOX},
-			{"size",{100,100}},
+			{"size",{50,50}},
 			{"sensor",true}
 		},
 		{
 			{"name","Circle Collider"},
 			{"type", sfge::ComponentType::COLLIDER2D},
 			{"collider_type",sfge::ColliderType::CIRCLE},
-			{"radius",100},
+			{"radius",50},
 			{"sensor",true}
 		}
 	};

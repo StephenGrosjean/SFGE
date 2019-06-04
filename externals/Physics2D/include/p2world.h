@@ -28,6 +28,7 @@ SOFTWARE.
 #include <p2vector.h>
 #include <p2body.h>
 #include <p2contact.h>
+#include "p2quadtree.h"
 
 const size_t MAX_BODY_LEN = 256;
 
@@ -52,6 +53,7 @@ public:
 	void SetContactListener(p2ContactListener* contactListener);
 	std::vector<p2AABB*> GetAABB();
 	p2ContactManager* GetContactManager();
+	p2QuadTree* GetQuadTree();
 private:
 	p2Vec2 m_Gravity;
 	std::vector<p2Body> m_Bodies;
@@ -59,6 +61,8 @@ private:
 
 	p2ContactListener* contactListener;
 	p2ContactManager contactManager;
+	p2QuadTree m_quadTree;
+	p2Vec2 screenSize = p2Vec2(2,3);
 };
 
 #endif

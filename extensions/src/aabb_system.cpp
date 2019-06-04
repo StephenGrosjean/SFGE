@@ -48,7 +48,7 @@ namespace sfge::ext
 		m_Graphics2DManager = m_Engine.GetGraphics2dManager();
 		m_SpriteManager = m_Engine.GetGraphics2dManager()->GetSpriteManager();
 		m_Physics2dManager = m_Engine.GetPhysicsManager();
-	
+		
 
 
 		auto config = m_Engine.GetConfig();
@@ -79,11 +79,11 @@ namespace sfge::ext
 			sf::Color color;
 			color = sf::Color(255, 0, 0);
 
-			//std::cout << "TR " << aabbs[i]->topRight.x << ":" << aabbs[i]->topRight.y << std::endl;
 			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->topLeft), color);
 			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->bottomRight), meter2pixel(aabbs[i]->bottomLeft), color);
 			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->topLeft), meter2pixel(aabbs[i]->bottomLeft), color);
 			m_Graphics2DManager->DrawLine(meter2pixel(aabbs[i]->topRight), meter2pixel(aabbs[i]->bottomRight), color);
+		
 		}
 		std::vector<p2Contact> contacts = m_Physics2dManager->Getp2World()->GetContactManager()->contacts;
 		
@@ -105,6 +105,34 @@ namespace sfge::ext
 				
 			}
 		}
+
+
+		//DRAW QUAD
+		/*p2World* m_world = m_Physics2dManager->Getp2World();
+		p2QuadTree* quadTree = m_world->GetQuadTree();
+		p2AABB* quadBounds = quadTree->GetBounds();
+
+
+		m_Graphics2DManager->DrawLine(meter2pixel(quadBounds->topRight), meter2pixel(quadBounds->topLeft));
+		m_Graphics2DManager->DrawLine(meter2pixel(quadBounds->bottomRight), meter2pixel(quadBounds->bottomLeft));
+		m_Graphics2DManager->DrawLine(meter2pixel(quadBounds->topLeft), meter2pixel(quadBounds->bottomLeft));
+		m_Graphics2DManager->DrawLine(meter2pixel(quadBounds->topRight), meter2pixel(quadBounds->bottomRight));
+	
+
+
+		std::vector<p2QuadTree*> quads;
+		for(int i = 0; i < 3; i++) {
+			quads.push_back(quadTree->GetNode(i));
+		}
+
+		for (int i = 0; i < quads.size() - 1; i++) {
+			p2AABB* currentTreeBounds = quads[i]->GetBounds();
+			m_Graphics2DManager->DrawLine(meter2pixel(currentTreeBounds->topRight), meter2pixel(currentTreeBounds->topLeft), sf::Color::Green);
+			m_Graphics2DManager->DrawLine(meter2pixel(currentTreeBounds->bottomRight), meter2pixel(currentTreeBounds->bottomLeft), sf::Color::Green);
+			m_Graphics2DManager->DrawLine(meter2pixel(currentTreeBounds->topLeft), meter2pixel(currentTreeBounds->bottomLeft), sf::Color::Green);
+			m_Graphics2DManager->DrawLine(meter2pixel(currentTreeBounds->topRight), meter2pixel(currentTreeBounds->bottomRight), sf::Color::Green);
+		}*/
+		
 
 	}
 

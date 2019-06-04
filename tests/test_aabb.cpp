@@ -34,7 +34,7 @@ TEST(System, TestAABB)
 
 	auto config = std::make_unique<sfge::Configuration>();
 	config->devMode = false;
-	config->gravity = p2Vec2(4, 9.81f);
+	config->gravity = p2Vec2(0, 9.81f);
 	config->maxFramerate = 60;
 	engine.Init(std::move(config));
 
@@ -43,12 +43,13 @@ TEST(System, TestAABB)
 	json sceneJson;
 	sceneJson["name"] = "Test AABB";
 
+//STATIC ENTITIES
 	json groundEntity;
 	groundEntity["name"] = "Ground";
 
 	json groundTransform;
 	groundTransform["type"] = sfge::ComponentType::TRANSFORM2D;
-	groundTransform["position"] = { 400,300 };
+	groundTransform["position"] = { 480,601 };
 	groundTransform["scale"] = { 1.0,1.0 };
 	groundTransform["angle"] = 0.0;
 
@@ -78,7 +79,7 @@ TEST(System, TestAABB)
 
 	json wallTransform;
 	wallTransform["type"] = sfge::ComponentType::TRANSFORM2D;
-	wallTransform["position"] = { 750,200 };
+	wallTransform["position"] = { 750,450 };
 	wallTransform["scale"] = { 1.0,1.0 };
 	wallTransform["angle"] = 0.0;
 
@@ -107,7 +108,7 @@ TEST(System, TestAABB)
 
 	json wallTransform2;
 	wallTransform2["type"] = sfge::ComponentType::TRANSFORM2D;
-	wallTransform2["position"] = { 300,150 };
+	wallTransform2["position"] = { 200,450 };
 	wallTransform2["scale"] = { 1.0,1.0 };
 	wallTransform2["angle"] = 0.0;
 
@@ -130,13 +131,15 @@ TEST(System, TestAABB)
 	wallCollider2["sensor"] = false;
 
 	wallEntity2["components"] = { wallTransform2, wallShape2, wallRigidBody2, wallCollider2};
+//END STATIC ENTITIES
 
+//DYNAMIC ENTITIES
 	json circleEntity;
 	circleEntity["name"] = "DynamicCircle";
 
 	json circleTransform;
 	circleTransform["type"] = sfge::ComponentType::TRANSFORM2D;
-	circleTransform["position"] = { 500,180 };
+	circleTransform["position"] = { 500,500 };
 	circleTransform["scale"] = { 1.0,1.0 };
 	circleTransform["angle"] = 0.0;
 
@@ -144,15 +147,15 @@ TEST(System, TestAABB)
 	circleShape["name"] = "Circle Shape Component";
 	circleShape["type"] = sfge::ComponentType::SHAPE2D;
 	circleShape["shape_type"] = sfge::ShapeType::CIRCLE;
-	circleShape["radius"] = 60;
+	circleShape["radius"] = 30;
 
 	json circleCollider;
 	circleCollider["name"] = "Circle Collider";
 	circleCollider["type"] = sfge::ComponentType::COLLIDER2D;
 	circleCollider["collider_type"] = sfge::ColliderType::CIRCLE;
-	circleCollider["radius"] = 60;
+	circleCollider["radius"] = 30;
 	circleCollider["bouncing"] = 0.5;
-	circleCollider["sensor"] = true;
+	circleCollider["sensor"] = false;
 
 	json circleRigidBody;
 	circleRigidBody["name"] = "Rigidbody";
@@ -162,7 +165,38 @@ TEST(System, TestAABB)
 
 	circleEntity["components"] = { circleTransform, circleShape, circleRigidBody, circleCollider };
 
-	sceneJson["entities"] = { groundEntity, circleEntity, wallEntity, wallEntity2 };
+	json circleEntity2;
+	circleEntity2["name"] = "DynamicCircle";
+
+	json circleTransform2;
+	circleTransform2["type"] = sfge::ComponentType::TRANSFORM2D;
+	circleTransform2["position"] = { 400, 500 };
+	circleTransform2["scale"] = { 1.0,1.0 };
+	circleTransform2["angle"] = 0.0;
+
+	json circleShape2;
+	circleShape2["name"] = "Circle Shape Component";
+	circleShape2["type"] = sfge::ComponentType::SHAPE2D;
+	circleShape2["shape_type"] = sfge::ShapeType::CIRCLE;
+	circleShape2["radius"] = 30;
+
+	json circleCollider2;
+	circleCollider2["name"] = "Circle Collider";
+	circleCollider2["type"] = sfge::ComponentType::COLLIDER2D;
+	circleCollider2["collider_type"] = sfge::ColliderType::CIRCLE;
+	circleCollider2["radius"] = 30;
+	circleCollider2["bouncing"] = 0.5;
+	circleCollider2["sensor"] = false;
+
+	json circleRigidBody2;
+	circleRigidBody2["name"] = "Rigidbody";
+	circleRigidBody2["type"] = sfge::ComponentType::BODY2D;
+	circleRigidBody2["body_type"] = p2BodyType::DYNAMIC;
+	circleRigidBody2["mass"] = 1;
+
+	circleEntity2["components"] = { circleTransform2, circleShape2, circleRigidBody2, circleCollider2 };
+
+	sceneJson["entities"] = { groundEntity, circleEntity,circleEntity2, wallEntity, wallEntity2 };
 	json contactDebugSystem = {
 		{ "script_path", "scripts/contact_debug_system.py" }
 	};
