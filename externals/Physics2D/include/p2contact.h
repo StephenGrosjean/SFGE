@@ -37,6 +37,12 @@ public:
 	void Init(p2Body* bodyA, p2Body* bodyB);
 	static bool CheckIfEqual(p2Contact contactA, p2Contact contactB);
 	void SetContactPoint(p2Body* bodyA, p2Body* bodyB);
+	static p2Vec2 FindMTVCircleCircle(p2Body bodyA, p2Body bodyB);
+	static p2Vec2 FindMTVCircleBox(p2Body circleBody, p2Body boxBody, p2Contact* contact);
+	static p2Vec2 FindMTVBoxCircle(p2Body bodyA, p2Body bodyB);
+	static p2Vec2 FindMTVBoxBox(p2Body bodyA, p2Body bodyB);
+
+
 	p2Vec2 GetContactPoint();
 
 	p2Collider* GetColliderA();
@@ -46,6 +52,11 @@ public:
 	p2Collider* colliderB;
 
 	p2Vec2 contactPoint;
+
+	bool topContact;
+	bool bottomContact;
+	bool rightContact;
+	bool leftContact;
 	
 };
 
@@ -67,7 +78,7 @@ class p2ContactManager
 public:
 	void Init(p2ContactListener* contactListener);
 	std::vector<p2Contact> contacts;
-	void CheckContactBetweenBodies(std::vector<p2Body>& bodies, int bodiesSize, float dt);
+	void CheckContactBetweenBodies(std::vector<p2Body>& bodies, int bodiesSize, float dt, p2Vec2 m_Gravity);
 	
 private:
 	p2ContactListener* contactListener;

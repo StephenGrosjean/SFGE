@@ -64,7 +64,7 @@ void p2World::Step(float dt)
 	}
 
 	//Checking collisions
-	contactManager.CheckContactBetweenBodies(m_Bodies, m_BodyIndex, dt);
+	contactManager.CheckContactBetweenBodies(m_Bodies, m_BodyIndex, dt, m_Gravity);
 }
 
 p2Body * p2World::CreateBody(p2BodyDef* bodyDef)

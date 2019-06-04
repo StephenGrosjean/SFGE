@@ -89,14 +89,20 @@ namespace sfge::ext
 		
 		for (p2Contact contact : contacts) {
 			if (contact.GetColliderA() != nullptr) {
-				p2Vec2 position = contact.GetColliderA()->body->GetPosition();
+				p2Vec2 position = contact.GetColliderB()->body->GetPosition();
 				p2Vec2 contactPosition = contact.contactPoint + position;
+				p2Vec2 MTV_B = contact.GetColliderB()->body->GetAABB_Ref()->MTV.Normalized()/100;
+				p2Vec2 MTV_A = contact.GetColliderA()->body->GetAABB_Ref()->MTV.Normalized()/100;
 				float crossSize = 0.1;
-				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(crossSize, crossSize)), sf::Color::Blue);
-				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(-crossSize, crossSize)), sf::Color::Blue);
-				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(crossSize, -crossSize)), sf::Color::Blue);
-				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(-crossSize, -crossSize)), sf::Color::Blue);
+				//m_Graphics2DManager->DrawVector(meter2pixel(forcePosition + contact.GetColliderB()->body->GetPosition(), meter2pixel(contactPosition), ), sf::Color::Red);
+				m_Graphics2DManager->DrawVector(meter2pixel(MTV_A), meter2pixel(contactPosition));
+				m_Graphics2DManager->DrawVector(meter2pixel(MTV_B), meter2pixel(contactPosition));
 
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(crossSize, crossSize)), sf::Color::White);
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(-crossSize, crossSize)), sf::Color::White);
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(crossSize, -crossSize)), sf::Color::White);
+				m_Graphics2DManager->DrawLine(meter2pixel(contactPosition), meter2pixel(contactPosition + p2Vec2(-crossSize, -crossSize)), sf::Color::White);
+				
 			}
 		}
 

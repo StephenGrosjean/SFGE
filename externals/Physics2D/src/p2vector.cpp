@@ -150,6 +150,16 @@ float p2Vec2::AngleBetween(const p2Vec2& v1, const p2Vec2& v2, int to_Deg=0) {
 	return angleBetween;
 }
 
+float p2Vec2::DistanceBetween(p2Vec2 v1, p2Vec2 v2) {
+	return sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2));
+}
+
+p2Vec2 p2Vec2::Normal() {
+	//TODO
+	return p2Vec2();
+}
+
+
 p2Vec3 p2Vec2::to3() {
 	return p2Vec3(x, y, 0.0f);
 }

@@ -42,6 +42,7 @@ struct p2AABB
 
 	p2Vec2 size;
 	float radius;
+	p2Vec2 MTV;
 
 	bool isColliding;
 	p2ColliderType type;
