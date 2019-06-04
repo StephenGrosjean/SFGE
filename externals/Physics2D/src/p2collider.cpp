@@ -23,3 +23,7 @@ void p2Collider::SetUserData(void* colliderData)
 {
 	userData = colliderData;
 }
+
+float p2Collider::GetRestitution() {
+	return restitution;
+}

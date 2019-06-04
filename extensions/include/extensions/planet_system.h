@@ -73,9 +73,9 @@ private:
 
 	float fixedDeltaTime = 0.0f;
 	const float gravityConst = 1000.0f;
-	const float centerMass = 1000.0f;
-	const float planetMass = 1.0f;
-	const size_t entitiesNmb = 10'000;
+	const float centerMass = 500.0f;
+	const float planetMass = 1.5f;
+	const size_t entitiesNmb = 500;
 
 #ifndef WITH_PHYSICS
 	std::vector<Vec2f> m_Velocities{entitiesNmb};

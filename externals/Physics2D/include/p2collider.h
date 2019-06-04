@@ -66,6 +66,7 @@ public:
 	*/
 	void* GetUserData();
 	void SetUserData(void* colliderData);
+	float GetRestitution();
 	p2Shape* shape;
 	p2ColliderType colliderType;
 	p2Body* body;

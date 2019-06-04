@@ -215,11 +215,11 @@ void p2ContactManager::CheckContactBetweenBodies(std::vector<p2Body>& bodies, in
 							bodyB->GetAABB_Ref()->MTV = MTV;
 
 							if(bodyA->GetType() == p2BodyType::DYNAMIC && !bodyA->FindCollider(0)->IsSensor()) {
-								bodyA->SetLinearVelocity(reflexA);
+								bodyA->SetLinearVelocity(reflexA * bodyA->FindCollider(0)->GetRestitution());
 
 							}
 							if (bodyB->GetType() == p2BodyType::DYNAMIC && !bodyB->FindCollider(0)->IsSensor()) {
-								bodyB->SetLinearVelocity(reflexB);
+								bodyB->SetLinearVelocity(reflexB * bodyB->FindCollider(0)->GetRestitution());
 							}
 							
 
@@ -261,7 +261,7 @@ p2Vec2 p2Contact::FindMTVCircleCircle(p2Body bodyA, p2Body bodyB) {
 	float radiusA = bodyA.GetAABB_Ref()->radius;
 	float radiusB = bodyB.GetAABB_Ref()->radius;
 
-	p2Vec2 vectorBetweenBody = bodyA.GetPosition() - bodyB.GetPosition();
+	p2Vec2 vectorBetweenBody = bodyB.GetPosition() - bodyA.GetPosition();
 
 	if(vectorBetweenBody.GetMagnitude() < radiusA+radiusB) {
 		p2Vec2 vectorBetweenBodyNorm = vectorBetweenBody.Normalized();
